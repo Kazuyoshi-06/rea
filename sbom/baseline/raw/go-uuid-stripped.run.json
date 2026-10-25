@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "go-uuid-stripped.json.gz",
       "output_bytes": 4484,
-      "elapsed_ms": 2039,
-      "cpu_ms": 2600,
-      "peak_rss_kb": 372860,
+      "elapsed_ms": 1789,
+      "cpu_ms": 2410,
+      "peak_rss_kb": 366336,
       "stderr_tail": []
     }
   ]

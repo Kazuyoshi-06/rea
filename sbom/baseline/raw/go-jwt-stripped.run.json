@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "go-jwt-stripped.json.gz",
       "output_bytes": 4103,
-      "elapsed_ms": 1909,
-      "cpu_ms": 2600,
-      "peak_rss_kb": 340756,
+      "elapsed_ms": 1675,
+      "cpu_ms": 2210,
+      "peak_rss_kb": 365680,
       "stderr_tail": []
     }
   ]

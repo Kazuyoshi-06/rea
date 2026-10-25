@@ -6,10 +6,10 @@
       "command": "rea inspect-artifact corpus/out/py-yaml/py-yaml --format json",
       "exit_code": 0,
       "output_file": "py-yaml.json.gz",
-      "output_bytes": 287828,
-      "elapsed_ms": 2943,
-      "cpu_ms": 4240,
-      "peak_rss_kb": 507372,
+      "output_bytes": 287817,
+      "elapsed_ms": 3167,
+      "cpu_ms": 4220,
+      "peak_rss_kb": 468660,
       "stderr_tail": []
     }
   ]

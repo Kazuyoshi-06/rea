@@ -1,13 +1,13 @@
 04f79700c4d9291f2927b2e9400f3ec38b28245195d532edd8f3e99e6a4151e1  ./dotnet-json/Newtonsoft.Json.dll
 5bbdbb8437c843321daf318cd896749e49c02d2821fd4719a2857292461d056e  ./dotnet-json/dotnet-json
 c4db60a1d8ac14dd789c6d4b231ca24f72e76a14b7eab0caf7ecb913312380e0  ./dotnet-json/dotnet-json.deps.json
-70c2509920be4c01eeb0646d090d3c58cdac7daa07e639ce6aacbd71a3592c9c  ./dotnet-json/dotnet-json.dll
+4c3a74c3fd83dc3c039edec56e714f306b4592f631bae5ff547eb08e822797b3  ./dotnet-json/dotnet-json.dll
 97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df  ./dotnet-json/dotnet-json.runtimeconfig.json
 30b79981ef4ebd976a74f74a608c89700d043efe441763678e0ba987fb421a7f  ./dotnet-serilog/Serilog.Sinks.Console.dll
 6b67fb3f104513036a7446ce4da3b49449ec9cea00437c38333910e47bfa41cb  ./dotnet-serilog/Serilog.dll
 6701824c31fce0018e02018468c6f9520e0e2cba6c9c28f004ad5806f978ed08  ./dotnet-serilog/dotnet-serilog
 a2b7263d67130152db850e68edcb0143239fa19b7d73a623571e6583c647435e  ./dotnet-serilog/dotnet-serilog.deps.json
-9401c96ba596aaabc5d97282696aa643c52b03134644e4f20fad0af72317c527  ./dotnet-serilog/dotnet-serilog.dll
+9d36539c4f2395cc5bfc498cef8b75c334f8db2d4d9ebc29deb136ed31c804bc  ./dotnet-serilog/dotnet-serilog.dll
 97c9700542b659150b230c3578b29530fd76ab01ec66a92cd16945e0245713df  ./dotnet-serilog/dotnet-serilog.runtimeconfig.json
 0844e6bd752974a26f0adda73e1e9d66f23d65d16f96d7bb6300a5df8e1a7808  ./go-jwt-stripped/go-jwt
 28eb2cc9f74f4a2d1c1f3cda37b08784ac784ad0300d6a6dadbcebca0f5482ca  ./go-jwt/go-jwt
@@ -16,6 +16,6 @@ b26b352e4cec662e71c00584dde9f5c36451a9798d374766183255bda9c21703  ./go-uuid-stri
 1ae886276618991867f36b441635793d6e9b4a97f4205f98ff437855fc681b3f  ./npm-cli/app.asar
 89cf33a64319e246fa4ca54c0f49bdf998280066c7f30072a498b14733701c8b  ./npm-electron/app.asar
 a47dde2e450553570fedaa93ceb2a3d2df8f4bb74e908d92e61de7eca28cdb5b  ./py-requests/py-requests
-02871ff94c92f7df01bc2eb3b5545f4a2546b8363480d83b3ad56633ece787a0  ./py-yaml/py-yaml
+5181c542dafbd8418a24114884f8df17d854bfbadc3e8aa78e05bd6d5f350a7a  ./py-yaml/py-yaml
 b7ee33e7ea53a98e3894682759cab9206937616920fc9c0df3672fe39f04bd88  ./rust-small/rust-small
 4a3a2a683813a88355f20a31650715f303a9473948229cb3b18fffdaaf552ccb  ./rust-vuln/rust-vuln

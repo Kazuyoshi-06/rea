@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "go-jwt.json.gz",
       "output_bytes": 4067,
-      "elapsed_ms": 2033,
-      "cpu_ms": 2770,
-      "peak_rss_kb": 378728,
+      "elapsed_ms": 1721,
+      "cpu_ms": 2450,
+      "peak_rss_kb": 345928,
       "stderr_tail": []
     }
   ]

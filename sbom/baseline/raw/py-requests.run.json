@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "py-requests.json.gz",
       "output_bytes": 416291,
-      "elapsed_ms": 3151,
-      "cpu_ms": 4610,
-      "peak_rss_kb": 487368,
+      "elapsed_ms": 2826,
+      "cpu_ms": 3880,
+      "peak_rss_kb": 474708,
       "stderr_tail": []
     }
   ]

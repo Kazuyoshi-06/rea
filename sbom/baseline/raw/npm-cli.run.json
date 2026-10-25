@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "npm-cli.json.gz",
       "output_bytes": 14721900,
-      "elapsed_ms": 11969,
-      "cpu_ms": 16220,
-      "peak_rss_kb": 503456,
+      "elapsed_ms": 11341,
+      "cpu_ms": 15300,
+      "peak_rss_kb": 500632,
       "stderr_tail": []
     }
   ]

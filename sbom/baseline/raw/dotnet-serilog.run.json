@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "dotnet-serilog.Serilog.Sinks.Console.dll.json.gz",
       "output_bytes": 62440,
-      "elapsed_ms": 2238,
-      "cpu_ms": 3030,
-      "peak_rss_kb": 400116,
+      "elapsed_ms": 2500,
+      "cpu_ms": 3230,
+      "peak_rss_kb": 415924,
       "stderr_tail": []
     },
     {
@@ -18,9 +18,9 @@
       "exit_code": 0,
       "output_file": "dotnet-serilog.Serilog.dll.json.gz",
       "output_bytes": 510874,
-      "elapsed_ms": 2361,
-      "cpu_ms": 3160,
-      "peak_rss_kb": 421404,
+      "elapsed_ms": 2272,
+      "cpu_ms": 3230,
+      "peak_rss_kb": 427316,
       "stderr_tail": []
     },
     {
@@ -29,9 +29,9 @@
       "exit_code": 0,
       "output_file": "dotnet-serilog.dotnet-serilog.dll.json.gz",
       "output_bytes": 7886,
-      "elapsed_ms": 2541,
-      "cpu_ms": 3290,
-      "peak_rss_kb": 418088,
+      "elapsed_ms": 2271,
+      "cpu_ms": 2960,
+      "peak_rss_kb": 413416,
       "stderr_tail": []
     }
   ]

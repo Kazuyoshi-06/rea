@@ -30,8 +30,8 @@ de commande) ou **[supposé]** (interprétation non vérifiée).
 2. **npm : la bonne réponse est noyée.** [constaté]
    Les 9 paquets sont exacts (nom + version depuis chaque `node_modules/*/package.json`), mais
    `analyze-javascript-application` fait une reconstruction sémantique complète : pour `npm-electron`
-   (lodash + ms, ASAR de 1,7 Mio), 97 267 840 octets de JSON dont 4 119 octets de nœuds `package`
-   (0,004 %), 205 s, 239 s CPU, 947 Mio RSS. Pour `npm-cli`, 14,7 Mo dont 11 Ko utiles.
+   (lodash + ms, ASAR de 1,7 Mio), ~97,3 Mo de JSON dont 4 119 octets de nœuds `package`
+   (0,004 %), 205–230 s de temps mur sur 6 exécutions, ~240–250 s CPU, 892–947 Mio RSS (2 mesures). Pour `npm-cli`, 14,7 Mo dont 11 Ko utiles.
    `inspect-artifact` sur le même ASAR répond en ~3 s mais ne donne que des chemins
    (`node_modules/lodash/package.json`), sans version.
    Aucune option `--view` « packages » n'est proposée par `analyze-javascript-application` (seul
@@ -55,14 +55,17 @@ de commande) ou **[supposé]** (interprétation non vérifiée).
    (`-s -w` ne retire pas `.go.buildinfo`). Sources ici `go version -m` = même donnée embarquée : la
    vérité n'est pas indépendante du binaire (voir TRUTH_RULES.md).
 
-6. **Coût fixe du CLI.** [constaté] ~1,6–1,8 s et 340–375 Mio RSS pour lire 4 Ko de métadonnées Go ou
+6. **Coût fixe du CLI.** [constaté] ~1,6–2,0 s et 338–375 Mio RSS pour lire 4 Ko de métadonnées Go ou
    Rust. Le pic RSS est mesuré par `/usr/bin/time` sur le processus CLI ; la part démarrage vs analyse
    n'a pas été séparée.
 
 7. **Reproductibilité.** [constaté] 19/21 fichiers identiques sur 3 builds ; les 2 binaires
    PyInstaller alternent entre deux sorties (nom de l'entrée libpython `libpython3.13.so.1.0` vs
    `libpython3.13.so`). Go demande `-buildvcs=false` (sinon `vcs.revision`/`vcs.modified` du dépôt
-   hôte sont embarqués).
+   hôte sont embarqués). Depuis un clone dans un autre chemin, il a fallu `PathMap` pour la DLL .NET
+   de l'application et la suppression de répertoires de scope vides laissés par
+   `npm ci --omit=dev` pour retrouver les mêmes octets. Aucune de ces variations n'a changé le résultat
+   REA (précision/rappel identiques entre dépôt et clone).
 
 ## Ce qui n'a pas été mesuré
 

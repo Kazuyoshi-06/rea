@@ -43,6 +43,7 @@ build_dotnet() {
   for f in dotnet-json dotnet-serilog; do
     rm -rf "$OUT/$f"
     (cd "$SRC/$f" && dotnet publish -c Release -p:RestoreLockedMode=true -p:DebugType=none \
+      -p:PathMap="$SBOM=/sbom" \
       -p:BaseIntermediateOutputPath="$WORK/dotnet-$f/obj/" \
       -p:BaseOutputPath="$WORK/dotnet-$f/bin/" -o "$OUT/$f" --nologo -v q)
     rm -rf "$SRC/$f/obj" "$SRC/$f/bin"
@@ -58,6 +59,9 @@ build_npm() {
     (cd "$SRC/$f" && cp package.json package-lock.json ./*.js "$stage/")
     # Production dependencies only: devDependencies (electron) are never packed.
     (cd "$stage" && "$NODE_BIN/npm" ci --omit=dev --ignore-scripts --no-audit --no-fund --silent)
+    # npm ci --omit=dev was observed leaving empty scope directories of omitted dev packages
+    # (@electron, @types, ...) in some builds only; they hold no package, drop them for stable bytes.
+    find "$stage/node_modules" -mindepth 1 -type d -empty -delete
     rm -f "$OUT/$f/app.asar"
     "$SBOM/tools/node_modules/.bin/asar" pack "$stage" "$OUT/$f/app.asar"
   done

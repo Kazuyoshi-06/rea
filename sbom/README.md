@@ -58,8 +58,14 @@ scanner dans S1.
 - Go : `CGO_ENABLED=0 -trimpath -buildvcs=false`. Sans `-buildvcs=false`, le binaire embarque
   `vcs.revision`, `vcs.time`, `vcs.modified` du dépôt REA (constaté) : il change à chaque commit.
 - Rust : `cargo auditable build --release --locked`, `--remap-path-prefix` sur la source et `$HOME`.
-- .NET : `dotnet publish -c Release -p:RestoreLockedMode=true -p:DebugType=none`, `<Deterministic>`.
-- npm : `npm ci --omit=dev --ignore-scripts` dans un répertoire de staging, puis `asar pack`.
+- .NET : `dotnet publish -c Release -p:RestoreLockedMode=true -p:DebugType=none -p:PathMap=<sbom>=/sbom`,
+  `<Deterministic>`. Sans `PathMap`, la DLL de l'application change avec le chemin du clone (constaté :
+  clone dans `/tmp` ≠ dépôt original) ; les DLL NuGet, copiées telles quelles, ne changent pas.
+- npm : `npm ci --omit=dev --ignore-scripts` dans un répertoire de staging, suppression des répertoires
+  vides, puis `asar pack`. Sans la suppression, un build depuis un clone propre contenait des
+  répertoires de scope vides (`@electron`, `@types`, `@sindresorhus`, `@szmarczak`, restes des
+  devDependencies omises) absents d'un autre build (constaté ; cause côté npm non isolée). Les paquets
+  eux-mêmes étaient identiques et REA donnait le même résultat.
 - PyInstaller : `--onefile --clean`, `SOURCE_DATE_EPOCH=0`. **Non déterministe malgré cela** (constaté) :
   les builds successifs alternent entre deux sorties (A, B, A…) pour `py-yaml` comme pour `py-requests`.
   `pyi-archive_viewer` montre une seule différence de TOC : l'entrée libpython s'appelle
@@ -68,5 +74,7 @@ scanner dans S1.
   non investiguée. Conséquence : `DIGESTS.txt` des fixtures PyInstaller dépend du build, et le champ
   REA `format_metadata.python_library` aussi.
 
-Résultat de `make repro` (3 builds) : voir `corpus/REPRO.txt`. Un `make repro` à 2 builds avait
-conclu « 21/21 identiques » : il est tombé sur deux builds du même état.
+Résultat de `make repro` (3 builds, même chemin) : voir `corpus/REPRO.txt`. Un `make repro` à 2 builds
+avait conclu « 21/21 identiques » : il est tombé sur deux builds du même état. Hors PyInstaller,
+les artefacts sont identiques entre le dépôt et un clone propre dans un autre chemin (constaté après
+les correctifs `PathMap` et répertoires vides).

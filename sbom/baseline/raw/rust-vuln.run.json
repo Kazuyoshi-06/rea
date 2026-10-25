@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "rust-vuln.json.gz",
       "output_bytes": 3903,
-      "elapsed_ms": 1751,
-      "cpu_ms": 2300,
-      "peak_rss_kb": 365372,
+      "elapsed_ms": 2045,
+      "cpu_ms": 2640,
+      "peak_rss_kb": 372552,
       "stderr_tail": []
     }
   ]

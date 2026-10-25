@@ -13,9 +13,9 @@
     "extra": [],
     "signals": [],
     "output_bytes": 4448,
-    "elapsed_ms": 1849,
-    "cpu_ms": 2370,
-    "peak_rss_kb": 366300,
+    "elapsed_ms": 1821,
+    "cpu_ms": 2340,
+    "peak_rss_kb": 366260,
     "exit_codes": [0]
   },
   {
@@ -32,9 +32,9 @@
     "extra": [],
     "signals": [],
     "output_bytes": 4484,
-    "elapsed_ms": 2039,
-    "cpu_ms": 2600,
-    "peak_rss_kb": 372860,
+    "elapsed_ms": 1789,
+    "cpu_ms": 2410,
+    "peak_rss_kb": 366336,
     "exit_codes": [0]
   },
   {
@@ -51,9 +51,9 @@
     "extra": [],
     "signals": [],
     "output_bytes": 4067,
-    "elapsed_ms": 2033,
-    "cpu_ms": 2770,
-    "peak_rss_kb": 378728,
+    "elapsed_ms": 1721,
+    "cpu_ms": 2450,
+    "peak_rss_kb": 345928,
     "exit_codes": [0]
   },
   {
@@ -70,9 +70,9 @@
     "extra": [],
     "signals": [],
     "output_bytes": 4103,
-    "elapsed_ms": 1909,
-    "cpu_ms": 2600,
-    "peak_rss_kb": 340756,
+    "elapsed_ms": 1675,
+    "cpu_ms": 2210,
+    "peak_rss_kb": 365680,
     "exit_codes": [0]
   },
   {
@@ -115,9 +115,9 @@
     ],
     "signals": [],
     "output_bytes": 5143,
-    "elapsed_ms": 1874,
-    "cpu_ms": 2480,
-    "peak_rss_kb": 387148,
+    "elapsed_ms": 1807,
+    "cpu_ms": 2420,
+    "peak_rss_kb": 369920,
     "exit_codes": [0]
   },
   {
@@ -140,9 +140,9 @@
     ],
     "signals": [],
     "output_bytes": 3903,
-    "elapsed_ms": 1751,
-    "cpu_ms": 2300,
-    "peak_rss_kb": 365372,
+    "elapsed_ms": 2045,
+    "cpu_ms": 2640,
+    "peak_rss_kb": 372552,
     "exit_codes": [0]
   },
   {
@@ -177,9 +177,9 @@
       "AssemblyRef System.Console 8.0.0.0"
     ],
     "output_bytes": 468299,
-    "elapsed_ms": 4752,
-    "cpu_ms": 6450,
-    "peak_rss_kb": 416844,
+    "elapsed_ms": 4408,
+    "cpu_ms": 5870,
+    "peak_rss_kb": 422352,
     "exit_codes": [0, 0]
   },
   {
@@ -224,9 +224,9 @@
       "AssemblyRef Serilog.Sinks.Console 5.0.1.0"
     ],
     "output_bytes": 581200,
-    "elapsed_ms": 7140,
-    "cpu_ms": 9480,
-    "peak_rss_kb": 421404,
+    "elapsed_ms": 7043,
+    "cpu_ms": 9420,
+    "peak_rss_kb": 427316,
     "exit_codes": [0, 0, 0]
   },
   {
@@ -242,10 +242,10 @@
     "missing": [],
     "extra": [],
     "signals": [],
-    "output_bytes": 97274703,
-    "elapsed_ms": 226217,
-    "cpu_ms": 262960,
-    "peak_rss_kb": 979084,
+    "output_bytes": 97276116,
+    "elapsed_ms": 215453,
+    "cpu_ms": 248200,
+    "peak_rss_kb": 913240,
     "exit_codes": [0]
   },
   {
@@ -262,9 +262,9 @@
     "extra": [],
     "signals": [],
     "output_bytes": 14721900,
-    "elapsed_ms": 11969,
-    "cpu_ms": 16220,
-    "peak_rss_kb": 503456,
+    "elapsed_ms": 11341,
+    "cpu_ms": 15300,
+    "peak_rss_kb": 500632,
     "exit_codes": [0]
   },
   {
@@ -391,9 +391,9 @@
       "module zipfile"
     ],
     "output_bytes": 416291,
-    "elapsed_ms": 3151,
-    "cpu_ms": 4610,
-    "peak_rss_kb": 487368,
+    "elapsed_ms": 2826,
+    "cpu_ms": 3880,
+    "peak_rss_kb": 474708,
     "exit_codes": [0]
   },
   {
@@ -482,10 +482,10 @@
       "module yaml",
       "module zipfile"
     ],
-    "output_bytes": 287828,
-    "elapsed_ms": 2943,
-    "cpu_ms": 4240,
-    "peak_rss_kb": 507372,
+    "output_bytes": 287817,
+    "elapsed_ms": 3167,
+    "cpu_ms": 4220,
+    "peak_rss_kb": 468660,
     "exit_codes": [0]
   }
 ]

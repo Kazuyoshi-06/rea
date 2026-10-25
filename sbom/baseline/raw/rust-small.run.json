@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "rust-small.json.gz",
       "output_bytes": 5143,
-      "elapsed_ms": 1874,
-      "cpu_ms": 2480,
-      "peak_rss_kb": 387148,
+      "elapsed_ms": 1807,
+      "cpu_ms": 2420,
+      "peak_rss_kb": 369920,
       "stderr_tail": []
     }
   ]

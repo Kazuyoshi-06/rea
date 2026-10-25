@@ -7,9 +7,9 @@
       "exit_code": 0,
       "output_file": "dotnet-json.Newtonsoft.Json.dll.json.gz",
       "output_bytes": 460145,
-      "elapsed_ms": 2462,
-      "cpu_ms": 3260,
-      "peak_rss_kb": 416844,
+      "elapsed_ms": 2009,
+      "cpu_ms": 2730,
+      "peak_rss_kb": 422352,
       "stderr_tail": []
     },
     {
@@ -18,9 +18,9 @@
       "exit_code": 0,
       "output_file": "dotnet-json.dotnet-json.dll.json.gz",
       "output_bytes": 8154,
-      "elapsed_ms": 2290,
-      "cpu_ms": 3190,
-      "peak_rss_kb": 407076,
+      "elapsed_ms": 2399,
+      "cpu_ms": 3140,
+      "peak_rss_kb": 415280,
       "stderr_tail": []
     }
   ]
