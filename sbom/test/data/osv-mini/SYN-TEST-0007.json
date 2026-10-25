@@ -1,0 +1,26 @@
+{
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "Some-Pkg"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            }
+          ],
+          "repo": "https://example.invalid/x",
+          "type": "GIT"
+        }
+      ],
+      "versions": ["1.0", "1.1.post1"]
+    }
+  ],
+  "id": "SYN-TEST-0007",
+  "modified": "2026-01-01T00:00:00Z",
+  "schema_version": "1.6.0",
+  "summary": "synthetic test record SYN-TEST-0007"
+}

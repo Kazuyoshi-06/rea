@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// S5 measurements: Go and Rust scans with the in-house readers (no REA). RUNS runs (default 5)
+// S5 measurements: Go and Rust scans with the in-house readers. RUNS runs (default 5)
 // of `sbom-scan --format cyclonedx --timings` per target under GNU `/usr/bin/time -v`: wall,
 // CPU (user + system), peak RSS, and the reader time reported by --timings. First run = "cold"
 // (page cache not controlled), median of the others = "warm". Targets: the Go/Rust fixtures and

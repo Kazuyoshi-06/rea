@@ -165,11 +165,11 @@ test("index: lookups use the model identity (PEP 503, NuGet case) and verify the
   assert.equal(d.snapshot.id, SNAPSHOT.id);
   assert.deepEqual(
     d.lookup("pypi", "some.PKG").value.map((a) => a.id),
-    ["REA-TEST-0002", "REA-TEST-0003", "REA-TEST-0007"],
+    ["SYN-TEST-0002", "SYN-TEST-0003", "SYN-TEST-0007"],
   );
   assert.deepEqual(
     d.lookup("nuget", "SERILOG").value.map((a) => a.id),
-    ["REA-TEST-0004"],
+    ["SYN-TEST-0004"],
   );
   assert.deepEqual(d.lookup("npm", "Serilog").value, [], "npm names are exact");
   assert.deepEqual(d.lookup("cargo", "absent").value, []);
@@ -260,24 +260,24 @@ test("matcher: alerts inherit confidence; withdrawn, no-purl and unknowns never 
   const result = matchComponents(components, db());
   assert.deepEqual(ids(result), [
     "GO-2025-4006 stdlib@1.24.7",
-    "REA-TEST-0001 multi@1.1.0",
-    "REA-TEST-0001 multi@2.1.0",
-    "REA-TEST-0004 Serilog@3.1.1",
-    "REA-TEST-0006 example.com/mod@v2.0.0+incompatible",
-    "REA-TEST-0007 some_pkg@1.0.0",
+    "SYN-TEST-0001 multi@1.1.0",
+    "SYN-TEST-0001 multi@2.1.0",
+    "SYN-TEST-0004 Serilog@3.1.1",
+    "SYN-TEST-0006 example.com/mod@v2.0.0+incompatible",
+    "SYN-TEST-0007 some_pkg@1.0.0",
   ]);
   const byName = (n) => result.alerts.find((a) => a.component.name === n);
   assert.equal(byName("multi").confidence, "medium");
   assert.equal(byName("some_pkg").confidence, "low");
   assert.deepEqual(byName("multi").fixed, ["1.2.0"]);
-  assert.equal(result.stats.withdrawnIgnored, 1, "REA-TEST-0003 is withdrawn");
+  assert.equal(result.stats.withdrawnIgnored, 1, "SYN-TEST-0003 is withdrawn");
   assert.equal(result.stats.skippedNoPurl, 1, "git-sourced crate not matched");
-  // RUSTSEC-2022-0013 fixes regex in 1.5.5; REA-TEST-0005 has an unparseable event
+  // RUSTSEC-2022-0013 fixes regex in 1.5.5; SYN-TEST-0005 has an unparseable event
   assert.deepEqual(
     result.unevaluated.map(
       (u) => `${u.id} ${u.component.name}@${u.component.version}`,
     ),
-    ["REA-TEST-0002 some_pkg@1.0.0", "REA-TEST-0005 regex@1.5.5"],
+    ["SYN-TEST-0002 some_pkg@1.0.0", "SYN-TEST-0005 regex@1.5.5"],
   );
   // An unknown is not a component: there is nothing to pass to the matcher.
   const unknown = makeUnknown({
@@ -319,7 +319,7 @@ const EXPECTED = {
   "npm-electron": ["CVE-2021-23337"],
   "npm-cli": ["CVE-2021-44906"],
   "dotnet-json": ["CVE-2024-21907"],
-  "dotnet-serilog": ["REA-TEST-0004"],
+  "dotnet-serilog": ["SYN-TEST-0004"],
   "py-requests": ["CVE-2023-45803", "CVE-2024-35195"],
   "py-yaml": ["CVE-2020-14343"],
 };
@@ -475,7 +475,7 @@ test("unknowns are never matched: .NET fallback with pre-release candidates agai
   assert.deepEqual(
     bom.vulnerabilities,
     [],
-    "REA-TEST-0004 affects every Serilog version",
+    "SYN-TEST-0004 affects every Serilog version",
   );
 });
 

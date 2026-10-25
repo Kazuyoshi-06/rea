@@ -4,8 +4,8 @@
       "ecosystem_specific": {
         "imports": [
           {
-            "goarch": ["arm64"],
-            "path": "runtime"
+            "goos": ["windows"],
+            "path": "os"
           }
         ]
       },
@@ -28,8 +28,8 @@
       ]
     }
   ],
-  "aliases": [],
-  "id": "REA-PLAT-0003",
+  "aliases": ["SYN-PLAT-0002"],
+  "id": "SYN-PLAT-0001",
   "modified": "2026-01-01T00:00:00Z",
-  "summary": "synthetic REA-PLAT-0003"
+  "summary": "synthetic SYN-PLAT-0001"
 }

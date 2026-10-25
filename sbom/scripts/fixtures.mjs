@@ -1,4 +1,4 @@
-// Single fixture registry shared by truth generation, REA runs and measurement.
+// Single fixture registry shared by truth generation, oracle runs and measurement.
 // id: corpus/out/<id>/, artifact: file inside it, source: corpus/src/<source>/.
 // rea: CLI command and target selection; "each-dll" runs once per published assembly.
 export const FIXTURES = [

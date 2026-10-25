@@ -3,14 +3,42 @@
 // (make sbom-test-diff) checks that both give the same facts, and scripts/measure_s2.mjs reuses
 // the exact REA invocation.
 //
-// REA is invoked through its public CLI (scripts/rea.mjs of this repository, built with
-// `npm ci && npm run build:cached`). Overrides: REA_CLI (entry script), REA_NODE (Node binary).
+// Optional (S7 C): this module is the only place that knows where REA is. REA is invoked through
+// its public CLI (scripts/rea.mjs of a REA checkout built with `npm ci && npm run build:cached`).
+// Location: SBOM_REA_ROOT, else the parent directory when this tree sits inside a REA checkout
+// (it has scripts/rea.mjs); none → the oracle is unavailable (reaAvailability says why).
+// Overrides: REA_CLI (entry script), REA_NODE (Node binary).
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { err, ok } from "../lib/result.mjs";
 
-const REPO = join(dirname(fileURLToPath(import.meta.url)), "../..");
+const PARENT = join(dirname(fileURLToPath(import.meta.url)), "../..");
+const REPO =
+  process.env.SBOM_REA_ROOT ||
+  (existsSync(join(PARENT, "scripts/rea.mjs")) ? PARENT : null);
+
+/** Result<REA root>: the oracle can run only when a built REA checkout is found. */
+export function reaAvailability() {
+  const how =
+    "set SBOM_REA_ROOT to a REA checkout built with `npm ci && npm run build:cached` (only the differential tests and the S1 baseline need it; make sbom-test does not)";
+  if (REPO === null)
+    return err("rea-oracle-missing", `REA oracle not found: ${how}`);
+  if (!existsSync(join(REPO, "dist/cli-runtime")))
+    return err(
+      "rea-oracle-not-built",
+      `REA oracle at ${REPO} is not built (no dist/cli-runtime): ${how}`,
+    );
+  return ok(REPO);
+}
+
+/** REA checkout root (scripts/run_rea.mjs); throws with the reason when there is none. */
+export function reaRoot() {
+  const found = reaAvailability();
+  if (!found.ok) throw new Error(found.error.message);
+  return found.value;
+}
 const MAX_REPORT_BYTES = 32 << 20; // REA bounds these reports to 8 MiB.
 const TIMEOUT_MS = 120_000;
 
@@ -19,7 +47,7 @@ export function reaInvocation(command, artifactPath) {
   return {
     node: process.env.REA_NODE || process.execPath,
     args: [
-      process.env.REA_CLI || join(REPO, "scripts/rea.mjs"),
+      process.env.REA_CLI || join(reaRoot(), "scripts/rea.mjs"),
       command,
       resolve(artifactPath),
       "--format",
@@ -36,7 +64,7 @@ function runRea(command, artifactPath) {
   const res = spawnSync(node, args, {
     maxBuffer: MAX_REPORT_BYTES,
     timeout: TIMEOUT_MS,
-    cwd: REPO,
+    cwd: reaRoot(),
   });
   const elapsedMs = Math.round(Number(process.hrtime.bigint() - started) / 1e6);
   const call = { command: commandLabel(command), elapsedMs };

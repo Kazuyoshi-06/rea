@@ -1,5 +1,4 @@
-// Go build information reader, written from the format description (see NOTICE.md); no code
-// from REA or from the Go standard library.
+// Go build information reader, written from the format description (provenance: NOTICE.md).
 //
 // The Go linker (1.13+) writes a 32-byte header aligned on 16 bytes:
 //   0..13   magic "\xff Go buildinf:"
@@ -317,7 +316,7 @@ function agreeingSlices(allImages, images, read) {
 /**
  * Read the Go build information of the file at `path`.
  * Result tags: packed-executable, no-go-buildinfo, go-buildinfo-pointer-format,
- * malformed-go-buildinfo, fat-slices-differ. Value: facts with the fields of the former REA adapter (goVersion,
+ * malformed-go-buildinfo, fat-slices-differ. Value: facts (goVersion,
  * moduleLocation, main, dependencies with replacements, complete, unparsedLines,
  * unparsedBinaryLines) plus headerOffset, locatedBy and settings; a fat Mach-O
  * adds `slices` (see agreeingSlices).

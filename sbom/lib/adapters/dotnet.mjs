@@ -1,4 +1,4 @@
-// .NET adapter (NuGet). Two sources, strongest first; no REA involved.
+// .NET adapter (NuGet). Two sources, strongest first.
 //
 // 1. *.deps.json (dotnet publish): "libraries" entries of type "package" carry the exact NuGet
 //    id and version in their key ("Serilog/3.1.1") and the .nupkg sha512. Confidence "high".

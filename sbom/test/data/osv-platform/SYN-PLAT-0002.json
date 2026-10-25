@@ -2,24 +2,26 @@
   "affected": [
     {
       "package": {
-        "ecosystem": "PyPI",
-        "name": "some.pkg"
+        "ecosystem": "Go",
+        "name": "stdlib"
       },
       "ranges": [
         {
           "events": [
             {
               "introduced": "0"
+            },
+            {
+              "fixed": "9.0.0"
             }
           ],
-          "type": "ECOSYSTEM"
+          "type": "SEMVER"
         }
       ]
     }
   ],
-  "id": "REA-TEST-0003",
+  "aliases": ["SYN-PLAT-0001"],
+  "id": "SYN-PLAT-0002",
   "modified": "2026-01-01T00:00:00Z",
-  "schema_version": "1.6.0",
-  "summary": "synthetic test record REA-TEST-0003",
-  "withdrawn": "2026-02-01T00:00:00Z"
+  "summary": "synthetic SYN-PLAT-0002"
 }

@@ -4,9 +4,11 @@
       "ecosystem_specific": {
         "imports": [
           {
-            "goarch": ["arm64"],
-            "goos": ["linux"],
-            "path": "syscall"
+            "goos": ["windows"],
+            "path": "os"
+          },
+          {
+            "path": "net"
           }
         ]
       },
@@ -30,7 +32,7 @@
     }
   ],
   "aliases": [],
-  "id": "REA-PLAT-0005",
+  "id": "SYN-PLAT-0004",
   "modified": "2026-01-01T00:00:00Z",
-  "summary": "synthetic REA-PLAT-0005"
+  "summary": "synthetic SYN-PLAT-0004"
 }

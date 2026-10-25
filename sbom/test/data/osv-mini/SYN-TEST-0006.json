@@ -1,17 +1,9 @@
 {
   "affected": [
     {
-      "ecosystem_specific": {
-        "imports": [
-          {
-            "goos": ["windows"],
-            "path": "os"
-          }
-        ]
-      },
       "package": {
         "ecosystem": "Go",
-        "name": "stdlib"
+        "name": "example.com/mod"
       },
       "ranges": [
         {
@@ -20,7 +12,7 @@
               "introduced": "0"
             },
             {
-              "fixed": "9.0.0"
+              "fixed": "2.0.1-0.20200101000000-abcdefabcdef+incompatible"
             }
           ],
           "type": "SEMVER"
@@ -28,8 +20,8 @@
       ]
     }
   ],
-  "aliases": ["REA-PLAT-0002"],
-  "id": "REA-PLAT-0001",
+  "id": "SYN-TEST-0006",
   "modified": "2026-01-01T00:00:00Z",
-  "summary": "synthetic REA-PLAT-0001"
+  "schema_version": "1.6.0",
+  "summary": "synthetic test record SYN-TEST-0006"
 }

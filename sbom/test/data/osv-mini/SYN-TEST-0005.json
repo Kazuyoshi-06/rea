@@ -2,25 +2,26 @@
   "affected": [
     {
       "package": {
-        "ecosystem": "PyPI",
-        "name": "Some-Pkg"
+        "ecosystem": "crates.io",
+        "name": "regex"
       },
       "ranges": [
         {
           "events": [
             {
               "introduced": "0"
+            },
+            {
+              "fixed": "1.x"
             }
           ],
-          "repo": "https://example.invalid/x",
-          "type": "GIT"
+          "type": "SEMVER"
         }
-      ],
-      "versions": ["1.0", "1.1.post1"]
+      ]
     }
   ],
-  "id": "REA-TEST-0007",
+  "id": "SYN-TEST-0005",
   "modified": "2026-01-01T00:00:00Z",
   "schema_version": "1.6.0",
-  "summary": "synthetic test record REA-TEST-0007"
+  "summary": "synthetic test record SYN-TEST-0005"
 }

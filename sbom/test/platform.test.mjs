@@ -68,10 +68,10 @@ const COMPONENTS = [
 const ALL = [
   "CVE-2026-39824", // GO-2026-5024, x/sys, goos windows
   "CVE-2026-56857", // GO-2026-6604, stdlib, goos windows
-  "REA-PLAT-0001", // windows-only record + alias twin without platform information
-  "REA-PLAT-0003", // goarch arm64
-  "REA-PLAT-0004", // one windows import, one unrestricted
-  "REA-PLAT-0005", // linux/arm64 on one import
+  "SYN-PLAT-0001", // windows-only record + alias twin without platform information
+  "SYN-PLAT-0003", // goarch arm64
+  "SYN-PLAT-0004", // one windows import, one unrestricted
+  "SYN-PLAT-0005", // linux/arm64 on one import
 ];
 const run = (platforms, options = {}) =>
   matchComponents(COMPONENTS, db, { platforms, ...options });
@@ -86,9 +86,9 @@ test("B1: the index keeps goos / goarch restrictions; entries without them carry
     { goos: ["windows"] },
     { goos: ["windows"] },
   ]);
-  assert.equal(byId.get("REA-PLAT-0002"), undefined);
-  assert.deepEqual(byId.get("REA-PLAT-0004"), [{ goos: ["windows"] }, {}]);
-  assert.deepEqual(byId.get("REA-PLAT-0005"), [
+  assert.equal(byId.get("SYN-PLAT-0002"), undefined);
+  assert.deepEqual(byId.get("SYN-PLAT-0004"), [{ goos: ["windows"] }, {}]);
+  assert.deepEqual(byId.get("SYN-PLAT-0005"), [
     { goarch: ["arm64"], goos: ["linux"] },
   ]);
 });
@@ -99,17 +99,17 @@ test("B1: GO-2026-5024 and GO-2026-6604 (windows only) are absent for linux, pre
   assert.deepEqual(removed(linux), [
     "CVE-2026-39824",
     "CVE-2026-56857",
-    "REA-PLAT-0003",
-    "REA-PLAT-0005",
+    "SYN-PLAT-0003",
+    "SYN-PLAT-0005",
   ]);
-  assert.deepEqual(kept(linux), ["REA-PLAT-0001", "REA-PLAT-0004"]);
+  assert.deepEqual(kept(linux), ["SYN-PLAT-0001", "SYN-PLAT-0004"]);
   const windows = run([{ goos: "windows", goarch: "amd64" }]);
-  assert.deepEqual(kept(windows), without("REA-PLAT-0003", "REA-PLAT-0005"));
+  assert.deepEqual(kept(windows), without("SYN-PLAT-0003", "SYN-PLAT-0005"));
   assert.deepEqual(kept(run([{ goos: "linux", goarch: "arm64" }])), [
-    "REA-PLAT-0001",
-    "REA-PLAT-0003",
-    "REA-PLAT-0004",
-    "REA-PLAT-0005",
+    "SYN-PLAT-0001",
+    "SYN-PLAT-0003",
+    "SYN-PLAT-0004",
+    "SYN-PLAT-0005",
   ]);
   // Removed groups keep their records and components: nothing disappears without a trace.
   const gone = linux.platform.filtered.find((g) => g.id === "CVE-2026-39824");
@@ -135,10 +135,10 @@ test("B1: without platform information, or with --all-platforms, every alert sta
   assert.deepEqual(removed(disabled), []);
   // An unknown GOARCH excludes nothing on that axis.
   assert.deepEqual(kept(run([{ goos: "linux", goarch: null }])), [
-    "REA-PLAT-0001",
-    "REA-PLAT-0003",
-    "REA-PLAT-0004",
-    "REA-PLAT-0005",
+    "SYN-PLAT-0001",
+    "SYN-PLAT-0003",
+    "SYN-PLAT-0004",
+    "SYN-PLAT-0005",
   ]);
 });
 
@@ -150,7 +150,7 @@ test("B1: a fat binary keeps an alert that concerns any of its slices", () => {
   assert.deepEqual(removed(fat), [
     "CVE-2026-39824",
     "CVE-2026-56857",
-    "REA-PLAT-0005",
+    "SYN-PLAT-0005",
   ]);
   assert.equal(
     platformExcluded(
@@ -231,14 +231,14 @@ test("B2: go-uuid (linux/amd64): filtered alerts listed in metadata, --all-platf
         requires: { goos: ["windows"] },
       },
       {
-        id: "REA-PLAT-0003",
-        records: ["REA-PLAT-0003"],
+        id: "SYN-PLAT-0003",
+        records: ["SYN-PLAT-0003"],
         affects: ["pkg:golang/stdlib@1.24.7"],
         requires: { goarch: ["arm64"] },
       },
       {
-        id: "REA-PLAT-0005",
-        records: ["REA-PLAT-0005"],
+        id: "SYN-PLAT-0005",
+        records: ["SYN-PLAT-0005"],
         affects: ["pkg:golang/stdlib@1.24.7"],
         requires: { goarch: ["arm64"], goos: ["linux"] },
       },
@@ -246,7 +246,7 @@ test("B2: go-uuid (linux/amd64): filtered alerts listed in metadata, --all-platf
   );
   assert.deepEqual(
     bom.vulnerabilities.map((v) => v.id),
-    ["REA-PLAT-0001", "REA-PLAT-0004"],
+    ["SYN-PLAT-0001", "SYN-PLAT-0004"],
   );
   assert.deepEqual(meta(bom, "rea-sbom:vuln-count"), ["2"]);
   const all = JSON.parse(

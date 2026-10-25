@@ -51,3 +51,28 @@ tranche. Constaté sur les binaires réels (pas lu dans une source) : l'octet de
 buildinfo vaut 3 (gros-boutien + inline) sur linux/s390x et linux/ppc64, 2 ailleurs ; la taille
 de pointeur vaut 4 sur linux/386. La structure de `ecosystem_specific.imports[].goos / goarch` a
 été lue dans les enregistrements de l'export OSV Go (données, CC-BY 4.0), pas dans du code.
+
+## S7 — provenance des fichiers de ce répertoire (extraction autonome)
+
+Aucune nouvelle source de format lue. Pour la comparaison avec syft (S7 A), seules les
+**sorties** de syft v1.42.0 et grype v0.104.0 (Apache-2.0, construits par `go install` dans
+`.work/`, non commités) ont été lues ; aucun code de syft n'a été lu ni copié.
+
+Fichiers de ce répertoire dont l'origine n'est pas ce répertoire, vérifiés pour `scripts/extract.sh` :
+
+| Fichier                                          | Origine                                                                                             | Licence                                                |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `.nvmrc`                                         | Même contenu (`24.22.1`) que `.nvmrc` de REA, recopié en S5 pour épingler la même version de Node   | celle de REA (MIT) pour une ligne de pin               |
+| `baseline/raw/*.json.gz`                         | **Sorties** de la CLI REA sur le corpus (S1), lues par `test/binary-adapters.test.mjs`              | celle de REA (MIT)                                     |
+| `BASELINE.md`, `baseline/summary.json`           | Mesures de REA (S1), générées par `scripts/measure_baseline.mjs`                                    | ce répertoire                                          |
+| `schemas/*.gz`                                   | Schémas CycloneDX 1.6 de `@cyclonedx/cyclonedx-library@10.3.0` (détail : `schemas/README.md`)       | Apache-2.0                                             |
+| `test/data/osv-mini/`, `test/data/osv-platform/` | Enregistrements OSV copiés (`GO-*`, `GHSA-*`, …) et synthétiques (`SYN-*`, écrits ici)              | OSV : CC-BY 4.0 / par source ; `SYN-*` : ce répertoire |
+| `test/data/risky-ranges.json`                    | Réponses de api.osv.dev enregistrées (S5)                                                           | OSV : CC-BY 4.0 / par source                           |
+| `corpus/src/*` (lockfiles, manifestes)           | Écrits ici ; les dépendances qu'ils épinglent sont téléchargées à la construction, jamais commitées | ce répertoire                                          |
+
+**Non copié depuis REA** (constaté par `scripts/extract.sh` + liste des fichiers en S7) : aucune
+configuration de formatage ou de lint (`.oxfmtrc.json`, `.oxlintrc.json` restent à la racine de
+REA), aucun `LICENSE` ni répertoire `licenses/`, aucun fichier de `src/` ou `scripts/` de REA.
+Le formatage des fichiers de ce répertoire était appliqué par le crochet de commit de REA
+(`oxfmt` avec `.oxfmtrc.json` de REA) : la copie autonome n'en hérite pas (voir
+`DECISIONS_PROPRIETAIRE.md`).

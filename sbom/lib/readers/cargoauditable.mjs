@@ -1,4 +1,4 @@
-// cargo-auditable reader, written from the format description (see NOTICE.md); no code from REA.
+// cargo-auditable reader, written from the format description (provenance: NOTICE.md).
 //
 // `cargo auditable build` stores the resolved dependency graph as zlib-compressed JSON in a
 // linker section: ".dep-v0" in ELF and PE, "__dep_v0" in Mach-O (any segment). JSON:

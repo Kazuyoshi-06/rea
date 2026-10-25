@@ -3,26 +3,23 @@
     {
       "package": {
         "ecosystem": "PyPI",
-        "name": "Some_Pkg"
+        "name": "some.pkg"
       },
       "ranges": [
         {
           "events": [
             {
               "introduced": "0"
-            },
-            {
-              "fixed": "abc123"
             }
           ],
-          "repo": "https://example.invalid/x",
-          "type": "GIT"
+          "type": "ECOSYSTEM"
         }
       ]
     }
   ],
-  "id": "REA-TEST-0002",
+  "id": "SYN-TEST-0003",
   "modified": "2026-01-01T00:00:00Z",
   "schema_version": "1.6.0",
-  "summary": "synthetic test record REA-TEST-0002"
+  "summary": "synthetic test record SYN-TEST-0003",
+  "withdrawn": "2026-02-01T00:00:00Z"
 }

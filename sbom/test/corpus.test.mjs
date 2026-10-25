@@ -1,4 +1,4 @@
-// End-to-end: public CLI on every S2 corpus fixture (in-house Go and Rust readers, no REA).
+// End-to-end: public CLI on every S2 corpus fixture (in-house Go and Rust readers).
 // Requires the built corpus (make sbom-test builds it); skipped per fixture otherwise.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";

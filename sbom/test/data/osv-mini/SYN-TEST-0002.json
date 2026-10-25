@@ -2,8 +2,8 @@
   "affected": [
     {
       "package": {
-        "ecosystem": "crates.io",
-        "name": "regex"
+        "ecosystem": "PyPI",
+        "name": "Some_Pkg"
       },
       "ranges": [
         {
@@ -12,16 +12,17 @@
               "introduced": "0"
             },
             {
-              "fixed": "1.x"
+              "fixed": "abc123"
             }
           ],
-          "type": "SEMVER"
+          "repo": "https://example.invalid/x",
+          "type": "GIT"
         }
       ]
     }
   ],
-  "id": "REA-TEST-0005",
+  "id": "SYN-TEST-0002",
   "modified": "2026-01-01T00:00:00Z",
   "schema_version": "1.6.0",
-  "summary": "synthetic test record REA-TEST-0005"
+  "summary": "synthetic test record SYN-TEST-0002"
 }

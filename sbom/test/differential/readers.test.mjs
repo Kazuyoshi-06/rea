@@ -2,24 +2,21 @@
 // and cargo-auditable readers must extract exactly the facts REA extracts, field by field, on
 // every Go and Rust fixture (stripped ones included) and on the extra binaries listed in
 // SBOM_DIFF_BINARIES (colon-separated paths, e.g. the real binaries of scripts/real_binaries.mjs).
-// Needs REA built (npm run build:cached at the repository root); skipped otherwise, failed under
-// SBOM_REQUIRE_REA=1.
+// Needs a built REA (oracle/rea.mjs: SBOM_REA_ROOT or the enclosing REA checkout); skipped with
+// the reason otherwise, failed under SBOM_REQUIRE_REA=1.
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
-import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { readCargoAuditable } from "../../lib/readers/cargoauditable.mjs";
 import { readGoBuildInfo } from "../../lib/readers/gobuildinfo.mjs";
 import * as rea from "../../oracle/rea.mjs";
-import { S2_FIXTURES, SBOM, fixtureGate, fixturePath } from "../support.mjs";
+import { S2_FIXTURES, fixtureGate, fixturePath } from "../support.mjs";
 
-const REA_BUILT = existsSync(join(dirname(SBOM), "dist/cli-runtime"));
+const REA = rea.reaAvailability();
 
 function reaGate(t) {
-  if (REA_BUILT) return true;
-  if (process.env.SBOM_REQUIRE_REA === "1")
-    throw new Error("REA is not built (make rea)");
-  t.skip("REA not built");
+  if (REA.ok) return true;
+  if (process.env.SBOM_REQUIRE_REA === "1") throw new Error(REA.error.message);
+  t.skip(REA.error.message);
   return false;
 }
 

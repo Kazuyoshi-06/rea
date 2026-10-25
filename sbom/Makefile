@@ -1,12 +1,13 @@
-# SBOM S1 corpus: build fixtures, generate ground truth, measure raw REA.
-# Toolchains are bring-your-own (see PROBE.md). Run from sbom/: `make baseline`.
+# SBOM scanner: fixtures and ground truth (S1), tests (make sbom-test), offline
+# vulnerability index (make vulndb), measurements and comparisons (S2–S7). Toolchains are
+# bring-your-own (see PROBE.md). Run from this directory. The comparison oracle is optional:
+# oracle/rea.mk (included at the end) holds its targets.
 SHELL := /bin/bash
 .SHELLFLAGS := -euo pipefail -c
 
 SBOM := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
-REPO := $(abspath $(SBOM)/..)
-# sbom/ must work copied alone (S5 B7): the repository's .nvmrc when there is one, else sbom/.nvmrc.
-NODE_VERSION := $(shell cat $(REPO)/.nvmrc 2>/dev/null || cat $(SBOM)/.nvmrc)
+# This tree must work on its own (S5 B7, S7 C): only its own .nvmrc is read.
+NODE_VERSION := $(shell cat $(SBOM)/.nvmrc)
 NVM_NODE_DIR := /opt/nvm/versions/node/v$(NODE_VERSION)/bin
 # Prefer the pinned Node from nvm when present, then whatever is on PATH.
 export PATH := $(if $(wildcard $(NVM_NODE_DIR)/node),$(NVM_NODE_DIR):,)$(PATH)
@@ -14,11 +15,10 @@ export NODE_BIN := $(dir $(shell command -v node))
 
 OUT := $(SBOM)/corpus/out
 STAMP := $(OUT)/.built
-REA_DIST := $(REPO)/dist/cli-runtime
-OXFMT := $(REPO)/node_modules/.bin/oxfmt
 
-.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-test-diff sbom-real sbom-oracle-s5 sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
-all: baseline
+.PHONY: all corpus truth repro clean sbom-test sbom-real sbom-oracle-s5 sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle sbom-compare-syft extract
+# Default: the test suite (S7; it was `baseline` before, which needs the optional oracle).
+all: sbom-test
 
 $(STAMP):
 	scripts/build_corpus.sh
@@ -33,19 +33,6 @@ corpus:
 # Regenerate sbom/truth/*.json from native ecosystem tools (needs built Go binaries).
 truth: $(STAMP)
 	node scripts/gen_truth.mjs
-
-$(REA_DIST):
-	cd $(REPO) && npm ci --no-audit --no-fund && npm run build:cached
-
-rea: $(REA_DIST)
-
-# Run REA on every fixture, keep raw outputs, compare with committed truth, write BASELINE.md.
-baseline: $(STAMP) $(REA_DIST)
-	@ls truth/*.json >/dev/null 2>&1 || node scripts/gen_truth.mjs
-	node scripts/run_rea.mjs
-	node scripts/measure_baseline.mjs
-	@# Keep generated files byte-stable under the repository formatter (lint-staged runs oxfmt).
-	@if [ -x $(OXFMT) ]; then $(OXFMT) BASELINE.md baseline/summary.json >/dev/null; fi
 
 # Rebuild twice from scratch and report artifacts whose sha256 differs between builds.
 repro:
@@ -68,21 +55,12 @@ $(TEST_STAMP):
 node_modules/.package-lock.json: package.json package-lock.json
 	npm ci --no-audit --no-fund
 
-# S5: no REA needed (in-house Go buildinfo and cargo-auditable readers).
+# In-house readers only; no oracle, no network once the fixtures are built.
 sbom-test: $(TEST_STAMP) node_modules/.package-lock.json
 	SBOM_REQUIRE_FIXTURES=1 node --test 'test/*.test.mjs'
 
-# S5: differential test, in-house readers vs REA (oracle/rea.mjs) on every Go and Rust fixture,
-# stripped ones included, plus test/data/real-binaries.txt when present. Needs REA built.
-sbom-test-diff: $(TEST_STAMP) $(REA_DIST) node_modules/.package-lock.json
-	SBOM_REQUIRE_FIXTURES=1 SBOM_REQUIRE_REA=1 node --test 'test/differential/*.test.mjs'
-
-# Time and peak RSS per REA call and per sbom-scan run (writes s2/measurements.json).
-sbom-measure: $(TEST_STAMP) $(REA_DIST)
-	node scripts/measure_s2.mjs
-
 # S3: precision/recall, time and peak RSS (/usr/bin/time -v) of .NET and PyInstaller scans,
-# including the .NET variant without deps.json (writes s3/measurements.json). No REA needed.
+# including the .NET variant without deps.json (writes s3/measurements.json).
 sbom-measure-s3: $(TEST_STAMP) node_modules/.package-lock.json
 	node scripts/measure_s3.mjs
 
@@ -121,3 +99,22 @@ sbom-oracle-s5: $(TEST_STAMP)
 	test -x .work/real/cargo/bin/cargo-audit || cargo install cargo-audit --locked --version 0.22.2 --root .work/real/cargo
 	node scripts/oracle_s5.mjs
 	node scripts/risky_ranges.mjs
+
+# --- S7: comparison with syft (A) and standalone extraction (C). ---
+# syft v1.42.0 (latest release whose go.mod accepts go1.24.7) via go install into .work/s7/tools,
+# then sbom-scan and syft on the corpus, the S5 real binaries and 3 cross targets against the
+# ground truth → s7/compare.json; timings cold / warm (needs root for drop_caches) → s7/measurements.json.
+SYFT_VERSION := v1.42.0
+sbom-compare-syft: $(TEST_STAMP)
+	test -x .work/s7/tools/syft || GOTOOLCHAIN=local GOBIN=$(SBOM)/.work/s7/tools go install github.com/anchore/syft/cmd/syft@$(SYFT_VERSION)
+	scripts/build_real_binaries.sh
+	scripts/build_cross.sh windows/amd64 darwin/arm64 linux/s390x
+	node scripts/compare_syft_s7.mjs
+	node scripts/measure_s7.mjs
+
+# Standalone copy: make extract DEST=<empty dir> NAME=<npm name> (see DECISIONS_PROPRIETAIRE.md).
+extract:
+	scripts/extract.sh "$(DEST)" "$(NAME)"
+
+# Optional oracle targets (rea, baseline, sbom-test-diff, sbom-measure).
+include $(SBOM)/oracle/rea.mk

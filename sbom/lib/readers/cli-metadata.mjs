@@ -1,5 +1,5 @@
 // Minimal ECMA-335 reader: PE header → CLI header → metadata tables, just enough to read the
-// assembly identity and its version attributes. Pure Node, no REA.
+// assembly identity and its version attributes. Pure Node.
 //
 //   PE        MZ, e_lfanew, "PE\0\0", COFF header, optional header (PE32 / PE32+), section table
 //   CLI       data directory 14 (COM descriptor): metadata RVA/size, entry point token

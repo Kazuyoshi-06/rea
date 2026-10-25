@@ -1,6 +1,6 @@
 // In-house executable, Go buildinfo and cargo-auditable readers (S5 part B) on synthetic
 // containers of every supported layout, plus structure-based detection in lib/scan.mjs.
-// Real binaries: corpus.test.mjs (end to end) and test/differential/ (against REA).
+// Real binaries: corpus.test.mjs (end to end) and test/differential/ (against the optional oracle).
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { cpSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

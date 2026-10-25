@@ -1,5 +1,5 @@
 // End-to-end: public CLI on every S3 fixture (.NET publish directories, PyInstaller onefile).
-// No REA is involved in these scans. Fixtures come from `make sbom-test`.
+// In-house readers only. Fixtures come from `make sbom-test`.
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
@@ -76,7 +76,7 @@ for (const fx of [...S3_DOTNET_FIXTURES, ...S3_PYTHON_FIXTURES]) {
       assert.ok(c.purl.startsWith(`pkg:${fx.ecosystem}/`), c.purl);
     }
     assert.deepEqual(prop(bom, "rea-sbom:unknown-count"), ["0"]);
-    // The BOM names the reader that produced the facts: no REA command anywhere.
+    // The BOM names the reader that produced the facts: in-house readers only, no oracle command.
     assert.equal(
       prop(bom, "rea-sbom:reader").some((r) => r.startsWith("rea ")),
       false,

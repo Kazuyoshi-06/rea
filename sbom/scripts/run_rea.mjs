@@ -13,10 +13,11 @@ import {
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
+import { reaRoot } from "../oracle/rea.mjs";
 import { FIXTURES } from "./fixtures.mjs";
 
 const SBOM = join(dirname(fileURLToPath(import.meta.url)), "..");
-const REPO = join(SBOM, "..");
+const REPO = reaRoot();
 const OUT = join(SBOM, "corpus/out");
 const RAW = join(SBOM, "baseline/raw");
 const REA = join(REPO, "scripts/rea.mjs");
