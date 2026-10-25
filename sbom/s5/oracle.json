@@ -1,0 +1,213 @@
+{
+  "tools": {
+    "govulncheck": [
+      "Go: go1.24.7",
+      "Scanner: govulncheck@v1.1.4",
+      "DB: https://vuln.go.dev",
+      "DB updated: 2026-10-21 00:27:29 +0000 UTC",
+      "",
+      "No vulnerabilities found."
+    ],
+    "cargoAudit": "cargo-audit 0.22.2"
+  },
+  "go": [
+    {
+      "id": "go-uuid",
+      "ours": 60,
+      "oursRuntime": 59,
+      "govulncheck": 58,
+      "govulncheckLevels": {
+        "module": 53,
+        "package": 5,
+        "symbol": 0
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 58,
+      "oursAtSymbolLevel": 0,
+      "gapReachability": 60,
+      "gapReachabilityRuntime": 59,
+      "oursNotReportedByGovulncheck": [
+        "CVE-2026-39824 (golang.org/x/sys@v0.0.0-20220715151400-c0bba94af5f8)",
+        "CVE-2026-56857 (stdlib@1.24.7)"
+      ]
+    },
+    {
+      "id": "go-uuid-stripped",
+      "ours": 60,
+      "oursRuntime": 59,
+      "govulncheck": 58,
+      "govulncheckLevels": {
+        "module": 0,
+        "package": 0,
+        "symbol": 58
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 58,
+      "oursAtSymbolLevel": 58,
+      "gapReachability": 2,
+      "gapReachabilityRuntime": 1,
+      "oursNotReportedByGovulncheck": [
+        "CVE-2026-39824 (golang.org/x/sys@v0.0.0-20220715151400-c0bba94af5f8)",
+        "CVE-2026-56857 (stdlib@1.24.7)"
+      ]
+    },
+    {
+      "id": "go-jwt",
+      "ours": 63,
+      "oursRuntime": 59,
+      "govulncheck": 62,
+      "govulncheckLevels": {
+        "module": 45,
+        "package": 17,
+        "symbol": 0
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 62,
+      "oursAtSymbolLevel": 0,
+      "gapReachability": 63,
+      "gapReachabilityRuntime": 59,
+      "oursNotReportedByGovulncheck": ["CVE-2026-56857 (stdlib@1.24.7)"]
+    },
+    {
+      "id": "go-jwt-stripped",
+      "ours": 63,
+      "oursRuntime": 59,
+      "govulncheck": 62,
+      "govulncheckLevels": {
+        "module": 0,
+        "package": 0,
+        "symbol": 62
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 62,
+      "oursAtSymbolLevel": 62,
+      "gapReachability": 1,
+      "gapReachabilityRuntime": 1,
+      "oursNotReportedByGovulncheck": ["CVE-2026-56857 (stdlib@1.24.7)"]
+    },
+    {
+      "id": "real:stringer",
+      "ours": 61,
+      "oursRuntime": 59,
+      "govulncheck": 60,
+      "govulncheckLevels": {
+        "module": 57,
+        "package": 3,
+        "symbol": 0
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 60,
+      "oursAtSymbolLevel": 0,
+      "gapReachability": 61,
+      "gapReachabilityRuntime": 59,
+      "oursNotReportedByGovulncheck": ["CVE-2026-56857 (stdlib@1.24.7)"]
+    },
+    {
+      "id": "real:yq",
+      "ours": 73,
+      "oursRuntime": 52,
+      "govulncheck": 71,
+      "govulncheckLevels": {
+        "module": 20,
+        "package": 40,
+        "symbol": 11
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 71,
+      "oursAtSymbolLevel": 11,
+      "gapReachability": 62,
+      "gapReachabilityRuntime": 46,
+      "oursNotReportedByGovulncheck": [
+        "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+        "CVE-2026-56857 (stdlib@1.24.7)"
+      ]
+    },
+    {
+      "id": "real:prometheus",
+      "ours": 120,
+      "oursRuntime": 52,
+      "govulncheck": 117,
+      "govulncheckLevels": {
+        "module": 45,
+        "package": 5,
+        "symbol": 67
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 117,
+      "oursAtSymbolLevel": 67,
+      "gapReachability": 53,
+      "gapReachabilityRuntime": 7,
+      "oursNotReportedByGovulncheck": [
+        "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)",
+        "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+        "CVE-2026-56857 (stdlib@1.24.7)"
+      ]
+    },
+    {
+      "id": "real:terraform",
+      "ours": 121,
+      "oursRuntime": 52,
+      "govulncheck": 118,
+      "govulncheckLevels": {
+        "module": 8,
+        "package": 23,
+        "symbol": 87
+      },
+      "govulncheckMissingFromOurs": [],
+      "oursAlsoGovulncheckAnyLevel": 118,
+      "oursAtSymbolLevel": 87,
+      "gapReachability": 34,
+      "gapReachabilityRuntime": 5,
+      "oursNotReportedByGovulncheck": [
+        "CVE-2026-39824 (golang.org/x/sys@v0.20.0)",
+        "CVE-2026-56857 (stdlib@1.24.7)",
+        "CVE-2026-63209 (github.com/klauspost/compress@v1.15.11)"
+      ]
+    }
+  ],
+  "rust": [
+    {
+      "id": "rust-small",
+      "status": "exécuté",
+      "ours": 0,
+      "cargoAudit": 0,
+      "common": 0,
+      "missingFromOurs": [],
+      "oursNotInCargoAudit": [],
+      "warnings": []
+    },
+    {
+      "id": "rust-vuln",
+      "status": "exécuté",
+      "ours": 1,
+      "cargoAudit": 1,
+      "common": 1,
+      "missingFromOurs": [],
+      "oursNotInCargoAudit": [],
+      "warnings": []
+    },
+    {
+      "id": "real:ripgrep",
+      "status": "exécuté",
+      "ours": 3,
+      "cargoAudit": 1,
+      "common": 1,
+      "missingFromOurs": [],
+      "oursNotInCargoAudit": [
+        "RUSTSEC-2026-0186 (memmap2@0.9.4)",
+        "RUSTSEC-2026-0190 (anyhow@1.0.87)"
+      ],
+      "warnings": ["unsound: 2"]
+    },
+    {
+      "id": "real:fd",
+      "status": "exécuté",
+      "ours": 3,
+      "cargoAudit": 2,
+      "common": 2,
+      "missingFromOurs": [],
+      "oursNotInCargoAudit": ["RUSTSEC-2026-0190 (anyhow@1.0.86)"],
+      "warnings": ["unsound: 1", "yanked: 1"]
+    }
+  ]
+}

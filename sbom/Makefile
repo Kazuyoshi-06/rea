@@ -17,7 +17,7 @@ STAMP := $(OUT)/.built
 REA_DIST := $(REPO)/dist/cli-runtime
 OXFMT := $(REPO)/node_modules/.bin/oxfmt
 
-.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-test-diff sbom-real sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
+.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-test-diff sbom-real sbom-oracle-s5 sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
 all: baseline
 
 $(STAMP):
@@ -112,3 +112,12 @@ sbom-oracle: $(TEST_STAMP)
 sbom-real:
 	scripts/build_real_binaries.sh
 	node scripts/real_binaries.mjs
+
+# S5 part D: govulncheck (pinned v1.1.4, binary mode) and cargo-audit on the Go/Rust corpus and
+# real binaries → s5/oracle.json; risky OSV ranges checked against api.osv.dev →
+# test/data/risky-ranges.json (replayed offline by make sbom-test). Needs make vulndb and network.
+sbom-oracle-s5: $(TEST_STAMP)
+	GOTOOLCHAIN=local GOBIN=$(SBOM)/.work/real/tools go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
+	test -x .work/real/cargo/bin/cargo-audit || cargo install cargo-audit --locked --version 0.22.2 --root .work/real/cargo
+	node scripts/oracle_s5.mjs
+	node scripts/risky_ranges.mjs
