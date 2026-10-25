@@ -36,10 +36,22 @@ export function sha256File(path) {
   return { sha256: hash.digest("hex"), bytes };
 }
 
-/** Read exactly `length` bytes at `offset`; returns null when the file is shorter. */
+/**
+ * Read exactly `length` bytes at `offset`; returns null when the range is not inside the file.
+ * The range is checked against the real file size before the buffer is allocated, so a header
+ * announcing a huge length costs nothing.
+ */
 export function readRange(path, offset, length) {
   const fd = openSync(path, "r");
   try {
+    if (
+      !Number.isSafeInteger(offset) ||
+      !Number.isSafeInteger(length) ||
+      offset < 0 ||
+      length < 0 ||
+      offset + length > fstatSync(fd).size
+    )
+      return null;
     const buffer = Buffer.alloc(length);
     let done = 0;
     while (done < length) {

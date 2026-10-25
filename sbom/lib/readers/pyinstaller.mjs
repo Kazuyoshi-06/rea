@@ -34,6 +34,11 @@ export const PYC_MAGIC = new Map([[3571, "3.13"]]);
 
 const bad = (message) => err("malformed-pyinstaller-archive", message);
 
+const inflateFailure = (error, limit) =>
+  error?.code === "ERR_BUFFER_TOO_LARGE"
+    ? `inflated data exceeds ${limit} bytes (decompression stopped)`
+    : error.message;
+
 function findCookie(path, fileSize) {
   const windowStart = Math.max(0, fileSize - COOKIE_WINDOW);
   const tail = readRange(path, windowStart, fileSize - windowStart);
@@ -138,9 +143,14 @@ export function openPyInstaller(path, fileSize) {
     let data = raw.bytes;
     if (entry.compressed) {
       try {
-        data = inflateSync(raw.bytes, { maxOutputLength: MAX_ENTRY_BYTES });
+        // The TOC declares the inflated size: anything larger is refused while inflating.
+        data = inflateSync(raw.bytes, {
+          maxOutputLength: Math.max(1, entry.uncompressedLength),
+        });
       } catch (error) {
-        return bad(`${entry.name}: ${error.message}`);
+        return bad(
+          `${entry.name}: ${inflateFailure(error, entry.uncompressedLength)}`,
+        );
       }
     }
     if (data.length !== entry.uncompressedLength)
@@ -240,7 +250,7 @@ export function openPyz(archive, entry) {
           sourceSha256: sha256(compressed),
         });
       } catch (error) {
-        return bad(`${name}: ${error.message}`);
+        return bad(`${name}: ${inflateFailure(error, MAX_ENTRY_BYTES)}`);
       }
     },
   });

@@ -1,0 +1,122 @@
+[
+  {
+    "case": "PYZ module: 1 KiB-ish zlib inflating to 128 MiB",
+    "tag": "malformed-pyinstaller-archive",
+    "message": "bomb: inflated data exceeds 67108864 bytes (decompression stopped)",
+    "fileBytes": 130648,
+    "wallS": 0.137,
+    "rssMiB": 125.1
+  },
+  {
+    "case": "CArchive entry: TOC declares 1 KiB, zlib inflates to 128 MiB",
+    "tag": "malformed-pyinstaller-archive",
+    "message": "x.json: inflated data exceeds 1024 bytes (decompression stopped)",
+    "fileBytes": 130606,
+    "wallS": 0.097,
+    "rssMiB": 53.7
+  },
+  {
+    "case": "CArchive: TOC entry offset past the end of the file",
+    "tag": "malformed-pyinstaller-archive",
+    "message": "TOC entry at 0 points outside the package",
+    "fileBytes": 143,
+    "wallS": 0.087,
+    "rssMiB": 53.1
+  },
+  {
+    "case": "marshal: list announcing 2^31-1 items",
+    "tag": "MarshalError",
+    "message": "count 2147483647 exceeds remaining data at offset 5",
+    "fileBytes": 6,
+    "wallS": 0.09,
+    "rssMiB": 53.3
+  },
+  {
+    "case": "marshal: string announcing 4 GiB",
+    "tag": "MarshalError",
+    "message": "truncated data at offset 5",
+    "fileBytes": 6,
+    "wallS": 0.081,
+    "rssMiB": 53
+  },
+  {
+    "case": "marshal: 200 000 nested lists",
+    "tag": "MarshalError",
+    "message": "nesting too deep",
+    "fileBytes": 1000000,
+    "wallS": 0.076,
+    "rssMiB": 54.8
+  },
+  {
+    "case": "ELF: e_shoff 1 TiB past a 300-byte file",
+    "tag": "malformed-executable",
+    "message": "ELF section header table (offset 1099511627776, 128 bytes) lies outside the file",
+    "fileBytes": 208,
+    "wallS": 0.068,
+    "rssMiB": 53.2
+  },
+  {
+    "case": "ELF: 65 535 sections announced, table past the end",
+    "tag": "malformed-executable",
+    "message": "ELF section header table (offset 80, 4194240 bytes) lies outside the file",
+    "fileBytes": 208,
+    "wallS": 0.065,
+    "rssMiB": 53.1
+  },
+  {
+    "case": "ELF: extended numbering claims 2^32-1 sections",
+    "tag": "malformed-executable",
+    "message": "4294967295 ELF sections (limit 65535)",
+    "fileBytes": 288,
+    "wallS": 0.063,
+    "rssMiB": 53.2
+  },
+  {
+    "case": "PE: 65 535 sections announced",
+    "tag": "malformed-executable",
+    "message": "65535 PE sections (limit 96)",
+    "fileBytes": 512,
+    "wallS": 0.066,
+    "rssMiB": 53.2
+  },
+  {
+    "case": "PE: .dep-v0 raw data pointer at 2 GiB",
+    "tag": "malformed-cargo-auditable",
+    "message": "section (offset 2147483647, 23 bytes) lies outside the file",
+    "fileBytes": 1024,
+    "wallS": 0.076,
+    "rssMiB": 53.1
+  },
+  {
+    "case": "cargo-auditable: 64 KiB of zlib inflating to 128 MiB",
+    "tag": "cargo-auditable-too-large",
+    "message": "inflated JSON exceeds 33554432 bytes",
+    "fileBytes": 130760,
+    "wallS": 0.092,
+    "rssMiB": 93
+  },
+  {
+    "case": "Go buildinfo: module information announcing 2^40 bytes",
+    "tag": "malformed-go-buildinfo",
+    "message": "module information: 1099511627776 bytes (limit 8388608)",
+    "fileBytes": 368,
+    "wallS": 0.064,
+    "rssMiB": 53.3
+  },
+  {
+    "case": "ZIP: entry declares 1 KiB, inflates to 128 MiB",
+    "tag": "zip-too-large",
+    "message": "x.json: inflates past its declared 1024 bytes",
+    "fileBytes": 130570,
+    "wallS": 0.065,
+    "rssMiB": 53.6
+  },
+  {
+    "case": "ZIP: entry declares 4 GiB",
+    "tag": "zip-too-large",
+    "message": "x.json: 4294967294 bytes declared (limit 67108864)",
+    "fileBytes": 130570,
+    "wallS": 0.081,
+    "rssMiB": 53.1
+  }
+]

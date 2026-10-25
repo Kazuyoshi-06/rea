@@ -12,6 +12,9 @@ const ZIP64_EOCD = 0x06064b50;
 const CENTRAL = 0x02014b50;
 const LOCAL = 0x04034b50;
 const MAX_U32 = 0xffffffff;
+// Resource guards, not format limits: an OSV record is a few KiB (npm: 230 777 entries).
+const MAX_ENTRY_BYTES = 64 << 20;
+const MAX_ENTRIES = 4_000_000;
 
 function findEocd(buf) {
   const stop = Math.max(0, buf.length - 22 - 0xffff);
@@ -46,6 +49,8 @@ function centralDirectory(buf) {
   }
   if (offset + size > buf.length)
     return err("zip-invalid", "central directory outside the file");
+  if (count > MAX_ENTRIES)
+    return err("zip-too-large", `${count} entries (limit ${MAX_ENTRIES})`);
   const entries = [];
   let p = offset;
   for (let i = 0; i < count; i += 1) {
@@ -115,9 +120,28 @@ export function openZip(path) {
         "zip-unsupported",
         `${entry.name}: compression method ${entry.method}`,
       );
+    if (entry.size > MAX_ENTRY_BYTES)
+      return err(
+        "zip-too-large",
+        `${entry.name}: ${entry.size} bytes declared (limit ${MAX_ENTRY_BYTES})`,
+      );
     try {
-      return ok(inflateRawSync(data));
+      // The central directory declares the inflated size: decompression stops past it.
+      const out = inflateRawSync(data, {
+        maxOutputLength: Math.max(1, entry.size),
+      });
+      if (out.length !== entry.size)
+        return err(
+          "zip-invalid",
+          `${entry.name}: ${out.length} bytes inflated, ${entry.size} declared`,
+        );
+      return ok(out);
     } catch (error) {
+      if (error?.code === "ERR_BUFFER_TOO_LARGE")
+        return err(
+          "zip-too-large",
+          `${entry.name}: inflates past its declared ${entry.size} bytes`,
+        );
       return err("zip-invalid", `${entry.name}: ${error.message}`);
     }
   };

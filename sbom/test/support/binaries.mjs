@@ -261,3 +261,96 @@ export const GO_TEXT = [
   "build\t-trimpath=true",
   "",
 ].join("\n");
+
+// --- hostile inputs (S5 part C) ---------------------------------------------------------
+
+/** PyInstaller onefile stand-in: prefix | CArchive entries | TOC | 88-byte cookie. */
+export function buildCArchive(entries, { pyvers = 313 } = {}) {
+  const parts = [];
+  const toc = [];
+  let pos = 0;
+  for (const e of entries) {
+    parts.push(e.data);
+    const name = Buffer.from(`${e.name}\0`, "utf8");
+    const length = Math.ceil((18 + name.length) / 16) * 16;
+    const t = Buffer.alloc(length);
+    t.writeInt32BE(length, 0);
+    t.writeUInt32BE(pos, 4);
+    t.writeUInt32BE(e.data.length, 8);
+    t.writeUInt32BE(e.uncompressedLength ?? e.data.length, 12);
+    t[16] = e.compressed ? 1 : 0;
+    t[17] = e.type.charCodeAt(0);
+    name.copy(t, 18);
+    toc.push(t);
+    pos += e.data.length;
+  }
+  const tocBytes = Buffer.concat(toc);
+  const cookie = Buffer.alloc(88);
+  Buffer.from([0x4d, 0x45, 0x49, 0x0c, 0x0b, 0x0a, 0x0b, 0x0e]).copy(cookie);
+  cookie.writeUInt32BE(pos + tocBytes.length + 88, 8);
+  cookie.writeUInt32BE(pos, 12);
+  cookie.writeUInt32BE(tocBytes.length, 16);
+  cookie.writeInt32BE(pyvers, 20);
+  cookie.write("libpython3.13.so", 24, "latin1");
+  return Buffer.concat([
+    Buffer.from("bootloader stand-in\n"),
+    ...parts,
+    tocBytes,
+    cookie,
+  ]);
+}
+
+/** PYZ with one module whose stored bytes are `moduleData` (zlib of marshalled code). */
+export function buildPyz(moduleName, moduleData) {
+  const header = Buffer.alloc(12);
+  header.write("PYZ\0", 0, "latin1");
+  header.writeUInt16LE(3571, 4); // CPython 3.13 .pyc magic
+  header[6] = 0x0d;
+  header[7] = 0x0a;
+  const name = Buffer.from(moduleName, "latin1");
+  const i32 = (n) => {
+    const b = Buffer.alloc(5);
+    b[0] = 0x69; // 'i'
+    b.writeInt32LE(n, 1);
+    return b;
+  };
+  // marshal: list of one tuple (name, (ispkg, position, length))
+  const toc = Buffer.concat([
+    Buffer.from([0x5b, 1, 0, 0, 0, 0x29, 2, 0x7a, name.length]),
+    name,
+    Buffer.from([0x29, 3]),
+    i32(0),
+    i32(12),
+    i32(moduleData.length),
+  ]);
+  header.writeUInt32BE(12 + moduleData.length, 8);
+  return Buffer.concat([header, moduleData, toc]);
+}
+
+/** ZIP with one deflated entry whose central directory declares `declaredSize`. */
+export function buildZip(name, deflated, declaredSize) {
+  const n = Buffer.from(name);
+  const local = Buffer.alloc(30);
+  local.writeUInt32LE(0x04034b50, 0);
+  local.writeUInt16LE(20, 4);
+  local.writeUInt16LE(8, 8);
+  local.writeUInt32LE(deflated.length, 18);
+  local.writeUInt32LE(declaredSize, 22);
+  local.writeUInt16LE(n.length, 26);
+  const central = Buffer.alloc(46);
+  central.writeUInt32LE(0x02014b50, 0);
+  central.writeUInt16LE(20, 4);
+  central.writeUInt16LE(20, 6);
+  central.writeUInt16LE(8, 10);
+  central.writeUInt32LE(deflated.length, 20);
+  central.writeUInt32LE(declaredSize, 24);
+  central.writeUInt16LE(n.length, 28);
+  const cdOffset = 30 + n.length + deflated.length;
+  const eocd = Buffer.alloc(22);
+  eocd.writeUInt32LE(0x06054b50, 0);
+  eocd.writeUInt16LE(1, 8);
+  eocd.writeUInt16LE(1, 10);
+  eocd.writeUInt32LE(46 + n.length, 12);
+  eocd.writeUInt32LE(cdOffset, 16);
+  return Buffer.concat([local, n, deflated, central, n, eocd]);
+}
