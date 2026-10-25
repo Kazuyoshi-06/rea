@@ -41,3 +41,13 @@ je connaissais déjà, puis vérifiées sur les octets des fixtures et contre RE
 - **Section cargo-auditable en Mach-O** (`__dep_v0`) : nom déjà utilisé comme marqueur en S2
   (`lib/scan.mjs`), non relu dans une source en S5 ; vérifié uniquement sur un Mach-O synthétique
   (aucun Mach-O réel construit, voir S5_REPORT.md).
+
+## S6
+
+Aucune nouvelle source de format lue. La disposition fat (`fat_header`, `fat_arch` : cputype,
+cpusubtype, offset, size, align en u32 gros-boutiens) de `scripts/make_fat.mjs` vient de la même
+connaissance préalable que ci-dessus ; cputype et cpusubtype sont recopiés de l'en-tête de chaque
+tranche. Constaté sur les binaires réels (pas lu dans une source) : l'octet de drapeaux du
+buildinfo vaut 3 (gros-boutien + inline) sur linux/s390x et linux/ppc64, 2 ailleurs ; la taille
+de pointeur vaut 4 sur linux/386. La structure de `ecosystem_specific.imports[].goos / goarch` a
+été lue dans les enregistrements de l'export OSV Go (données, CC-BY 4.0), pas dans du code.

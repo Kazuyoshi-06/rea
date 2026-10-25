@@ -211,11 +211,14 @@ export function goBuildInfo({
   inline = true,
   sentinels = true,
   moduleLength = null,
+  pointerSize = 8,
+  bigEndian = false,
 }) {
   const header = Buffer.alloc(32);
   header.write("\xff Go buildinf:", 0, "latin1");
-  header[14] = 8;
-  header[15] = inline ? 2 : 0;
+  header[14] = pointerSize;
+  // Real big-endian builds (linux/s390x, linux/ppc64, go1.24.7) set bit 0 with inline strings: 3.
+  header[15] = (inline ? 2 : 0) | (bigEndian ? 1 : 0);
   if (!inline) return Buffer.concat([header, Buffer.alloc(32)]);
   const raw = Buffer.from(text, "utf8");
   const mod = sentinels ? Buffer.concat([SENTINEL, raw, SENTINEL]) : raw;

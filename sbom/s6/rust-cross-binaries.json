@@ -1,0 +1,64 @@
+[
+  {
+    "target": "aarch64-unknown-linux-gnu",
+    "tool": "rg",
+    "bytes": 30000344,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "little",
+          "sections": 42
+        }
+      ]
+    },
+    "reader": {
+      "identical": true,
+      "packages": 33,
+      "build": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 32,
+      "oracle": 32,
+      "common": 32,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": []
+    }
+  },
+  {
+    "target": "x86_64-pc-windows-gnu",
+    "tool": "rg.exe",
+    "bytes": 37385172,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 21
+        }
+      ]
+    },
+    "reader": {
+      "identical": true,
+      "packages": 36,
+      "build": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 35,
+      "oracle": 35,
+      "common": 35,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": []
+    }
+  }
+]

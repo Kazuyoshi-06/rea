@@ -23,7 +23,8 @@
 // Location: the section that holds the header (ELF ".go.buildinfo", Mach-O "__go_buildinfo",
 // PE ".data") searched at 16-byte steps; when the structure gives none (no section table,
 // unknown container), the whole file is searched for the magic. -s -w does not remove the
-// section (it is data, not a symbol table).
+// section (it is data, not a symbol table). A fat Mach-O is read slice by slice: one result
+// only when every slice carries the same modules (fat-slices-differ otherwise).
 import { forEachChunk, withSource } from "../files.mjs";
 import { err, ok } from "../result.mjs";
 import { findSections, readExecutable } from "./executable.mjs";
@@ -80,6 +81,7 @@ function sectionCandidates(source, executable) {
           isHeader(bytes.subarray(at, at + HEADER_BYTES))
         )
           found.push({
+            image,
             offset: section.offset + at,
             end: section.offset + bytes.length,
             locatedBy: `section ${name}`,
@@ -99,7 +101,12 @@ function markerCandidates(path) {
     ) {
       const offset = start + at;
       if (found.at(-1)?.offset !== offset)
-        found.push({ offset, end: null, locatedBy: "marker-search" });
+        found.push({
+          image: null,
+          offset,
+          end: null,
+          locatedBy: "marker-search",
+        });
     }
   });
   return found;
@@ -259,12 +266,62 @@ function readAt(source, candidate) {
   });
 }
 
+// Facts that must be equal in every slice of a fat file for one SBOM to describe them all.
+const MODULE_FACTS = [
+  "goVersion",
+  "main",
+  "dependencies",
+  "complete",
+  "unparsedLines",
+  "unparsedBinaryLines",
+];
+
+/**
+ * A fat Mach-O gives one SBOM only when every slice has build information with the same
+ * modules; otherwise fat-slices-differ, naming the first differing fact. The value is the first
+ * slice's facts plus `slices`: each slice's cpuType, header offset and build settings (GOARCH
+ * differs between slices by construction).
+ */
+function agreeingSlices(allImages, images, read) {
+  const label = (image) =>
+    `slice ${allImages.indexOf(image)} (cputype 0x${(image.cpuType ?? 0).toString(16)})`;
+  const failed = images.findIndex((_, i) => !read[i].ok);
+  if (failed !== -1)
+    return err(
+      "fat-slices-differ",
+      `${label(images[failed])}: ${read[failed].error.tag}: ${read[failed].error.message}`,
+    );
+  const missing = allImages.filter((im) => !images.includes(im));
+  if (missing.length > 0)
+    return err(
+      "fat-slices-differ",
+      `${missing.map(label).join(", ")} without Go build information, ${images.map(label).join(", ")} with`,
+    );
+  const reference = read[0].value;
+  for (let i = 1; i < read.length; i += 1)
+    for (const key of MODULE_FACTS)
+      if (JSON.stringify(read[i].value[key]) !== JSON.stringify(reference[key]))
+        return err(
+          "fat-slices-differ",
+          `${label(images[0])} and ${label(images[i])} differ in ${key}`,
+        );
+  return ok({
+    ...reference,
+    slices: images.map((image, i) => ({
+      cpuType: image.cpuType ?? null,
+      headerOffset: read[i].value.headerOffset,
+      settings: read[i].value.settings,
+    })),
+  });
+}
+
 /**
  * Read the Go build information of the file at `path`.
  * Result tags: packed-executable, no-go-buildinfo, go-buildinfo-pointer-format,
- * malformed-go-buildinfo. Value: facts with the fields of the former REA adapter (goVersion,
+ * malformed-go-buildinfo, fat-slices-differ. Value: facts with the fields of the former REA adapter (goVersion,
  * moduleLocation, main, dependencies with replacements, complete, unparsedLines,
- * unparsedBinaryLines) plus headerOffset, locatedBy, settings and artifactBytes.
+ * unparsedBinaryLines) plus headerOffset, locatedBy, settings and artifactBytes; a fat Mach-O
+ * adds `slices` (see agreeingSlices).
  */
 export function readGoBuildInfo(path) {
   const started = process.hrtime.bigint();
@@ -281,13 +338,20 @@ export function readGoBuildInfo(path) {
     if (candidates.length === 0) candidates = markerCandidates(path);
     if (candidates.length === 0)
       return err("no-go-buildinfo", "no Go build information header found");
-    let first = null;
-    for (const candidate of candidates) {
-      const facts = readAt(source, candidate);
-      if (facts.ok) return facts;
-      first ??= facts;
-    }
-    return first;
+    // One reading per image (a fat Mach-O has one per slice): its first readable candidate.
+    const images = [...new Set(candidates.map((c) => c.image))];
+    const read = images.map((image) => {
+      let first = null;
+      for (const candidate of candidates.filter((c) => c.image === image)) {
+        const facts = readAt(source, candidate);
+        if (facts.ok) return facts;
+        first ??= facts;
+      }
+      return first;
+    });
+    const fat = executable.ok && executable.value.format === "fat";
+    if (!fat || images[0] === null) return read[0];
+    return agreeingSlices(executable.value.images, images, read);
   });
   if (!result.ok) return result;
   const elapsedMs = Math.round(Number(process.hrtime.bigint() - started) / 1e6);

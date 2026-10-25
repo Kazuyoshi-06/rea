@@ -7,7 +7,8 @@
 // Omitted fields take their defaults: kind "runtime" (kept null here: the adapter interprets
 // it), dependencies [], root false, format 0. Section lookup uses the container structure only
 // (lib/readers/executable.mjs): the section name in the bytes says nothing about where the data
-// is. A fat Mach-O is read from the first slice that has the section.
+// is. A fat Mach-O is read slice by slice: one result only when every slice has the section
+// with the same packages (fat-slices-differ otherwise).
 import { inflateSync } from "node:zlib";
 import { withSource } from "../files.mjs";
 import { err, ok } from "../result.mjs";
@@ -30,9 +31,10 @@ const SECTIONS = [
 
 const malformed = (message) => err("malformed-cargo-auditable", message);
 
-function locate(executable) {
+/** The cargo-auditable section of one image, or null. */
+function locate(image) {
   for (const { format, name } of SECTIONS)
-    for (const hit of findSections(executable, name))
+    for (const hit of findSections({ images: [image] }, name))
       if (hit.image.format === format && !hit.section.nobits) return hit;
   return null;
 }
@@ -99,7 +101,7 @@ export function parseAuditJson(text) {
 /**
  * Read the cargo-auditable section of the file at `path`.
  * Result tags: not-executable, malformed-executable, packed-executable, no-cargo-auditable,
- * cargo-auditable-too-large, malformed-cargo-auditable.
+ * cargo-auditable-too-large, malformed-cargo-auditable, fat-slices-differ.
  * Value: {reader, artifactBytes, section: {name, offset, bytes, formatVersion}, packages[], call}
  */
 export function readCargoAuditable(path) {
@@ -112,37 +114,63 @@ export function readCargoAuditable(path) {
         "packed-executable",
         `${executable.value.packer.toUpperCase()}-packed executable: sections are compressed, not read`,
       );
-    const hit = locate(executable.value);
-    if (hit === null)
-      return err("no-cargo-auditable", "no .dep-v0 / __dep_v0 section");
-    const { section } = hit;
-    if (section.bytes > LIMITS.sectionBytes)
+    const { images } = executable.value;
+    const read = images.map((image) => readSection(source, locate(image)));
+    if (executable.value.format !== "fat") return read[0];
+    // Fat Mach-O: every slice must carry the same packages.
+    const label = (i) =>
+      `slice ${i} (cputype 0x${(images[i].cpuType ?? 0).toString(16)})`;
+    const failed = read.findIndex((r) => !r.ok);
+    if (failed !== -1)
       return err(
-        "cargo-auditable-too-large",
-        `section of ${section.bytes} bytes (limit ${LIMITS.sectionBytes})`,
+        "fat-slices-differ",
+        `${label(failed)}: ${read[failed].error.tag}: ${read[failed].error.message}`,
       );
-    const bytes = source.read(section.offset, section.bytes);
-    if (bytes === null)
-      return malformed(
-        `section (offset ${section.offset}, ${section.bytes} bytes) lies outside the file`,
-      );
-    const json = inflateBounded(bytes, LIMITS.jsonBytes);
-    if (!json.ok) return json;
-    const parsed = parseAuditJson(json.value.toString("utf8"));
-    if (!parsed.ok) return parsed;
-    return ok({
-      reader: READER,
-      artifactBytes: source.size,
-      section: {
-        name: section.name,
-        offset: section.offset,
-        bytes: section.bytes,
-        formatVersion: parsed.value.formatVersion,
-      },
-      packages: parsed.value.packages,
-    });
+    for (let i = 1; i < read.length; i += 1)
+      if (
+        JSON.stringify(read[i].value.packages) !==
+          JSON.stringify(read[0].value.packages) ||
+        read[i].value.section.formatVersion !==
+          read[0].value.section.formatVersion
+      )
+        return err(
+          "fat-slices-differ",
+          `${label(0)} and ${label(i)} record different packages`,
+        );
+    return read[0];
   });
   if (!result.ok) return result;
   const elapsedMs = Math.round(Number(process.hrtime.bigint() - started) / 1e6);
   return ok({ ...result.value, call: { command: READER.command, elapsedMs } });
+}
+
+function readSection(source, hit) {
+  if (hit === null)
+    return err("no-cargo-auditable", "no .dep-v0 / __dep_v0 section");
+  const { section } = hit;
+  if (section.bytes > LIMITS.sectionBytes)
+    return err(
+      "cargo-auditable-too-large",
+      `section of ${section.bytes} bytes (limit ${LIMITS.sectionBytes})`,
+    );
+  const bytes = source.read(section.offset, section.bytes);
+  if (bytes === null)
+    return malformed(
+      `section (offset ${section.offset}, ${section.bytes} bytes) lies outside the file`,
+    );
+  const json = inflateBounded(bytes, LIMITS.jsonBytes);
+  if (!json.ok) return json;
+  const parsed = parseAuditJson(json.value.toString("utf8"));
+  if (!parsed.ok) return parsed;
+  return ok({
+    reader: READER,
+    artifactBytes: source.size,
+    section: {
+      name: section.name,
+      offset: section.offset,
+      bytes: section.bytes,
+      formatVersion: parsed.value.formatVersion,
+    },
+    packages: parsed.value.packages,
+  });
 }

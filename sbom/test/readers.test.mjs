@@ -83,6 +83,34 @@ const GO_LAYOUTS = [
         ],
       }),
   ],
+  // S6: layouts of the real cross builds (s6/cross-binaries.json): linux/386 is ELF32 LE with
+  // pointer size 4; linux/s390x and linux/ppc64 are ELF64 BE with header flags 3.
+  [
+    "ELF32 LE, pointer size 4 (linux/386)",
+    () =>
+      buildElf({
+        bits: 32,
+        sections: [
+          {
+            name: ".go.buildinfo",
+            data: goBuildInfo({ text: GO_TEXT, pointerSize: 4 }),
+          },
+        ],
+      }),
+  ],
+  [
+    "ELF64 BE, flags 3 (linux/s390x, linux/ppc64)",
+    () =>
+      buildElf({
+        littleEndian: false,
+        sections: [
+          {
+            name: ".go.buildinfo",
+            data: goBuildInfo({ text: GO_TEXT, bigEndian: true }),
+          },
+        ],
+      }),
+  ],
   [
     "PE32+ .data",
     () =>
@@ -120,7 +148,7 @@ const GO_LAYOUTS = [
       }),
   ],
   [
-    "fat Mach-O",
+    "fat Mach-O (same modules in both slices)",
     () =>
       buildFat([
         buildMachO({
@@ -128,7 +156,11 @@ const GO_LAYOUTS = [
             { name: "__go_buildinfo", data: goBuildInfo({ text: GO_TEXT }) },
           ],
         }),
-        buildMachO({ sections: [] }),
+        buildMachO({
+          sections: [
+            { name: "__go_buildinfo", data: goBuildInfo({ text: GO_TEXT }) },
+          ],
+        }),
       ]),
   ],
 ];
@@ -259,10 +291,12 @@ const RUST_LAYOUTS = [
       }),
   ],
   [
-    "fat Mach-O (second slice)",
+    "fat Mach-O (same packages in both slices)",
     () =>
       buildFat([
-        buildMachO({ sections: [] }),
+        buildMachO({
+          sections: [{ name: "__dep_v0", data: auditSection(AUDIT_DOC) }],
+        }),
         buildMachO({
           sections: [{ name: "__dep_v0", data: auditSection(AUDIT_DOC) }],
         }),
@@ -433,4 +467,83 @@ test("corpus: every Go and Rust fixture is located through its section", (t) => 
       assert.equal(facts.value.locatedBy, "section .go.buildinfo", fx.id);
     } else assert.equal(readCargoAuditable(path).value.section.name, ".dep-v0");
   }
+});
+
+// --- S6 A2: a fat Mach-O is one SBOM only when its slices agree --------------------------
+
+const goSlice = (text, goarch) =>
+  buildMachO({
+    sections: [
+      {
+        name: "__go_buildinfo",
+        data: goBuildInfo({
+          text: `${text}build\tGOARCH=${goarch}\nbuild\tGOOS=darwin\n`,
+        }),
+      },
+    ],
+  });
+
+test("A2 fat: same modules → one result, each slice's build settings kept", () => {
+  const result = readGoBuildInfo(
+    file(buildFat([goSlice(GO_TEXT, "amd64"), goSlice(GO_TEXT, "arm64")])),
+  );
+  assert.equal(result.ok, true, JSON.stringify(result.error));
+  assert.deepEqual(pick(result.value, Object.keys(GO_EXPECTED)), GO_EXPECTED);
+  assert.deepEqual(
+    result.value.slices.map((s) => [
+      s.cpuType,
+      s.settings.find((x) => x.key === "GOARCH").value,
+    ]),
+    [
+      [0x01000007, "amd64"],
+      [0x0100000c, "arm64"],
+    ],
+  );
+});
+
+test("A2 fat: different modules or a slice without build information → fat-slices-differ", () => {
+  const other = GO_TEXT.replace("v1.0.0", "v1.0.1");
+  assert.notEqual(other, GO_TEXT);
+  const differ = readGoBuildInfo(
+    file(buildFat([goSlice(GO_TEXT, "amd64"), goSlice(other, "arm64")])),
+  );
+  assert.equal(differ.ok, false);
+  assert.equal(differ.error.tag, "fat-slices-differ");
+  assert.match(differ.error.message, /differ in dependencies/);
+  const missing = readGoBuildInfo(
+    file(buildFat([goSlice(GO_TEXT, "amd64"), buildMachO({ sections: [] })])),
+  );
+  assert.equal(missing.error?.tag, "fat-slices-differ");
+  assert.match(missing.error.message, /without Go build information/);
+  const rust = readCargoAuditable(
+    file(
+      buildFat([
+        buildMachO({ sections: [] }),
+        buildMachO({
+          sections: [{ name: "__dep_v0", data: auditSection(AUDIT_DOC) }],
+        }),
+      ]),
+    ),
+  );
+  assert.equal(rust.error?.tag, "fat-slices-differ");
+  const otherDoc = {
+    ...AUDIT_DOC,
+    packages: AUDIT_DOC.packages.map((p, i) =>
+      i === 1 ? { ...p, version: "9.9.9" } : p,
+    ),
+  };
+  const rustDiffer = readCargoAuditable(
+    file(
+      buildFat([
+        buildMachO({
+          sections: [{ name: "__dep_v0", data: auditSection(AUDIT_DOC) }],
+        }),
+        buildMachO({
+          sections: [{ name: "__dep_v0", data: auditSection(otherDoc) }],
+        }),
+      ]),
+    ),
+  );
+  assert.equal(rustDiffer.error?.tag, "fat-slices-differ");
+  assert.match(rustDiffer.error.message, /different packages/);
 });

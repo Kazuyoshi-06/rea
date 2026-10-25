@@ -58,7 +58,7 @@ export const BINARIES = [
   },
 ];
 
-function run(cmd, args) {
+export function run(cmd, args) {
   const res = spawnSync(cmd, args, { maxBuffer: 256 << 20 });
   if (res.status !== 0)
     throw new Error(
@@ -67,13 +67,14 @@ function run(cmd, args) {
   return res.stdout.toString("utf8");
 }
 
-/** `go version -m` output → {goVersion, main, dependencies[{path, version, replacement}]}. */
-function goVersionM(path) {
+/** `go version -m` output → {goVersion, main, dependencies[{path, version, replacement}], settings}. */
+export function goVersionM(path) {
   const lines = run("go", ["version", "-m", path]).split("\n");
   const out = {
     goVersion: lines[0].split(": ")[1],
     main: null,
     dependencies: [],
+    settings: [],
   };
   let last = null;
   for (const line of lines.slice(1)) {
@@ -83,6 +84,10 @@ function goVersionM(path) {
     else if (f[0] === "dep") out.dependencies.push((last = mod));
     else if (f[0] === "=>")
       last.replacement = { path: f[1], version: f[2] ?? "" };
+    else if (f[0] === "build") {
+      const eq = f[1].indexOf("=");
+      out.settings.push({ key: f[1].slice(0, eq), value: f[1].slice(eq + 1) });
+    }
   }
   return out;
 }
@@ -106,7 +111,7 @@ function rustAuditInfo(path) {
 
 const key = (name, version) => `${name}@${version}`;
 
-function precisionRecall(found, truth) {
+export function precisionRecall(found, truth) {
   const tp = [...found].filter((k) => truth.has(k));
   return {
     found: found.size,
@@ -119,7 +124,7 @@ function precisionRecall(found, truth) {
   };
 }
 
-function compareGo(bin, path) {
+export function compareGo(bin, path) {
   const oracle = goVersionM(path);
   const ours = readGoBuildInfo(path);
   if (!ours.ok) return { reader: { error: ours.error } };
@@ -136,33 +141,43 @@ function compareGo(bin, path) {
     fieldDiffs.push(["dependency only ours", JSON.parse(d)]);
   for (const d of b.filter((x) => !as.has(x)))
     fieldDiffs.push(["dependency only oracle", JSON.parse(d)]);
+  // Build settings (S6): GOOS / GOARCH drive the platform filter of the Go alerts.
+  if (JSON.stringify(ours.value.settings) !== JSON.stringify(oracle.settings))
+    fieldDiffs.push(["settings", ours.value.settings, oracle.settings]);
   const shipped = new Set(
     oracle.dependencies
       .map((d) => d.replacement ?? d)
       .filter((m) => m.version !== "" && m.version !== "(devel)")
       .map((m) => key(m.path, m.version)),
   );
+  const reader = {
+    identical: fieldDiffs.length === 0,
+    deps: oracle.dependencies.length,
+    replacements: oracle.dependencies.filter((d) => d.replacement).length,
+    diffs: fieldDiffs,
+  };
   const scan = scanArtifact(path);
+  if (!scan.ok) return { reader, sbom: { error: scan.error } };
   const found = new Set(
     scan.value.components
       .filter((c) => c.role === "library")
       .map((c) => key(c.name, c.version)),
   );
+  const stdlib = scan.value.components.find(
+    (c) => c.role === "language-runtime",
+  );
   return {
-    reader: {
-      identical: fieldDiffs.length === 0,
-      deps: oracle.dependencies.length,
-      replacements: oracle.dependencies.filter((d) => d.replacement).length,
-      diffs: fieldDiffs,
-    },
+    reader,
     sbom: {
       ...precisionRecall(found, shipped),
+      stdlib: stdlib?.version ?? null,
+      stdlibMatchesOracle: `go${stdlib?.version}` === oracle.goVersion,
       unknowns: scan.value.unknowns.map((u) => `${u.name}: ${u.reason}`),
     },
   };
 }
 
-function compareRust(bin, path) {
+export function compareRust(bin, path) {
   const oracle = rustAuditInfo(path);
   const ours = readCargoAuditable(path);
   if (!ours.ok) return { reader: { error: ours.error } };
@@ -200,27 +215,33 @@ function compareRust(bin, path) {
   };
 }
 
-const results = [];
-for (const bin of BINARIES) {
-  const path = join(REAL, bin.path);
-  if (!existsSync(path)) {
-    results.push({ ...bin, status: "not built" });
-    continue;
+function main() {
+  const results = [];
+  for (const bin of BINARIES) {
+    const path = join(REAL, bin.path);
+    if (!existsSync(path)) {
+      results.push({ ...bin, status: "not built" });
+      continue;
+    }
+    const bytes = Number(run("stat", ["-c", "%s", path]).trim());
+    const cmp =
+      bin.ecosystem === "golang"
+        ? compareGo(bin, path)
+        : compareRust(bin, path);
+    results.push({ ...bin, bytes, ...cmp });
   }
-  const bytes = Number(run("stat", ["-c", "%s", path]).trim());
-  const cmp =
-    bin.ecosystem === "golang" ? compareGo(bin, path) : compareRust(bin, path);
-  results.push({ ...bin, bytes, ...cmp });
-}
-mkdirSync(join(SBOM, "s5"), { recursive: true });
-writeFileSync(
-  join(SBOM, "s5/real-binaries.json"),
-  `${JSON.stringify(results, null, 2)}\n`,
-);
-const pct = (x) =>
-  x === null || x === undefined ? "—" : `${(x * 100).toFixed(1)} %`;
-for (const r of results)
-  console.log(
-    r.status ??
-      `${r.id}\t${r.bytes} B\treader identical: ${r.reader.identical} (${r.reader.diffs?.length ?? "error"} diffs)\tSBOM P ${pct(r.sbom?.precision)} R ${pct(r.sbom?.recall)} (${r.sbom?.found}/${r.sbom?.oracle})`,
+  mkdirSync(join(SBOM, "s5"), { recursive: true });
+  writeFileSync(
+    join(SBOM, "s5/real-binaries.json"),
+    `${JSON.stringify(results, null, 2)}\n`,
   );
+  const pct = (x) =>
+    x === null || x === undefined ? "—" : `${(x * 100).toFixed(1)} %`;
+  for (const r of results)
+    console.log(
+      r.status ??
+        `${r.id}\t${r.bytes} B\treader identical: ${r.reader.identical} (${r.reader.diffs?.length ?? "error"} diffs)\tSBOM P ${pct(r.sbom?.precision)} R ${pct(r.sbom?.recall)} (${r.sbom?.found}/${r.sbom?.oracle})`,
+    );
+}
+
+if (import.meta.main) main();

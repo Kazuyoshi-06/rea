@@ -1,0 +1,1122 @@
+[
+  {
+    "target": "darwin-amd64",
+    "tool": "prometheus",
+    "bytes": 136948752,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 172,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 172,
+      "oracle": 172,
+      "common": 172,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "darwin-amd64",
+    "tool": "stringer",
+    "bytes": 7326976,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "darwin-amd64",
+    "tool": "stringer-stripped",
+    "bytes": 5075552,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 15
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "darwin-amd64",
+    "tool": "yq",
+    "bytes": 16227920,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 21,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 21,
+      "oracle": 21,
+      "common": 21,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "prometheus",
+    "bytes": 133516562,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 172,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 172,
+      "oracle": 172,
+      "common": 172,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "stringer",
+    "bytes": 6974914,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "stringer-stripped",
+    "bytes": 4810098,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 15
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "yq",
+    "bytes": 15528818,
+    "container": {
+      "format": "macho",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "locatedBy": "section __go_buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 21,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 21,
+      "oracle": 21,
+      "common": 21,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-386",
+    "tool": "prometheus",
+    "bytes": 127810939,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 32,
+          "endian": "little",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 176,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 176,
+      "oracle": 176,
+      "common": 176,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-386",
+    "tool": "stringer",
+    "bytes": 6863668,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 32,
+          "endian": "little",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-386",
+    "tool": "stringer-stripped",
+    "bytes": 4628664,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 32,
+          "endian": "little",
+          "sections": 16
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-386",
+    "tool": "yq",
+    "bytes": 15743597,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 32,
+          "endian": "little",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 21,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 21,
+      "oracle": 21,
+      "common": 21,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "prometheus",
+    "bytes": 132229997,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "little",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 176,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 176,
+      "oracle": 176,
+      "common": 176,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "stringer",
+    "bytes": 7064119,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "little",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "stringer-stripped",
+    "bytes": 4784312,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "little",
+          "sections": 16
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "yq",
+    "bytes": 15524659,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "little",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 21,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 21,
+      "oracle": 21,
+      "common": 21,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "prometheus",
+    "bytes": 136854137,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 176,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 176,
+      "oracle": 176,
+      "common": 176,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "stringer",
+    "bytes": 7402094,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "stringer-stripped",
+    "bytes": 4980920,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 16
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "yq",
+    "bytes": 16198424,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 21,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 21,
+      "oracle": 21,
+      "common": 21,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "prometheus",
+    "bytes": 142448060,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 176,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 176,
+      "oracle": 176,
+      "common": 176,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "stringer",
+    "bytes": 7716660,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "stringer-stripped",
+    "bytes": 5374136,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 16
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "yq",
+    "bytes": 16986385,
+    "container": {
+      "format": "elf",
+      "images": [
+        {
+          "format": "elf",
+          "bits": 64,
+          "endian": "big",
+          "sections": 25
+        }
+      ]
+    },
+    "locatedBy": "section .go.buildinfo",
+    "reader": {
+      "identical": true,
+      "deps": 21,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 21,
+      "oracle": 21,
+      "common": 21,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "prometheus",
+    "bytes": 136190976,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 15
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 171,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 171,
+      "oracle": 171,
+      "common": 171,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "stringer-stripped",
+    "bytes": 5176832,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 8
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "stringer",
+    "bytes": 7536640,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 15
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "yq",
+    "bytes": 16728064,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 15
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 22,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 22,
+      "oracle": 22,
+      "common": 22,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "prometheus",
+    "bytes": 130504704,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 13
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 171,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 171,
+      "oracle": 171,
+      "common": 171,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "stringer-stripped",
+    "bytes": 4793856,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 6
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "stringer",
+    "bytes": 7035392,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 13
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "yq",
+    "bytes": 15751168,
+    "container": {
+      "format": "pe",
+      "images": [
+        {
+          "format": "pe",
+          "bits": 64,
+          "endian": "little",
+          "sections": 13
+        }
+      ]
+    },
+    "locatedBy": "section .data",
+    "reader": {
+      "identical": true,
+      "deps": 22,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 22,
+      "oracle": 22,
+      "common": 22,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "stdlib": "1.24.7",
+      "stdlibMatchesOracle": true,
+      "unknowns": []
+    }
+  }
+]

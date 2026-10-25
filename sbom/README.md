@@ -246,3 +246,49 @@ cassant pour un consommateur. Historique :
 | 1       | S2 / S3 | Format initial (propriété non émise à l'époque) : `rea-sbom:artifact-path`, confiance `observed` / `inferred` (Go, Rust, npm) et `high` / `medium` / `low` (NuGet, PyPI)                                                                                            |
 | 2       | S4      | `rea-sbom:artifact-path` remplacé par `rea-sbom:artifact-name` (nom de base) ; une seule échelle de confiance `high` / `medium` / `low` ; version PyPI = forme normale PEP 440 ; section `vulnerabilities` (un enregistrement OSV par entrée) (propriété non émise) |
 | 3       | S5      | `vulnerabilities[]` regroupées par alias (id = CVE / GHSA / premier) ; `rea-sbom:vuln-count` compte les groupes ; `analysis.state = in_triage` sur confiance `low` ; `rea-sbom:scope`, `rea-sbom:osv-record` ; lecteurs Go/Rust maison (`rea-sbom:reader` change)   |
+
+## S6 — validation sur binaires réels multi-plateformes, filtre de plateforme, intégrité
+
+Détails, mesures et limites : [`S6_REPORT.md`](S6_REPORT.md).
+
+### Matrice de support
+
+« Vérifié sur binaire réel » = un binaire produit par la vraie chaîne d'outils (Go 1.24.7,
+cargo-auditable 0.7.7) a été lu et comparé à l'oracle (`go version -m`, `rust-audit-info`) :
+faits identiques, précision et rappel 100 %. « Vérifié sur fichier fabriqué » = seulement des
+conteneurs construits par `test/support/binaries.mjs` ou par un script de ce dépôt, donc à partir
+de ma propre lecture du format. Rien d'autre n'est revendiqué.
+
+| Écosystème       | Disposition                                                    | Statut                                                                                            |
+| ---------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Go (≥ 1.18)      | ELF64 LE (linux/amd64, linux/arm64)                            | vérifié sur binaire réel                                                                          |
+| Go (≥ 1.18)      | ELF32 LE (linux/386)                                           | vérifié sur binaire réel                                                                          |
+| Go (≥ 1.18)      | ELF64 BE (linux/s390x, linux/ppc64)                            | vérifié sur binaire réel                                                                          |
+| Go (≥ 1.18)      | ELF32 BE                                                       | vérifié sur fichier fabriqué                                                                      |
+| Go (≥ 1.18)      | PE32+ (windows/amd64, windows/arm64)                           | vérifié sur binaire réel                                                                          |
+| Go (≥ 1.18)      | PE32 (windows/386, windows/arm)                                | non vérifié (ni réel ni fabriqué)                                                                 |
+| Go (≥ 1.18)      | Mach-O 64 LE (darwin/amd64, darwin/arm64)                      | vérifié sur binaire réel                                                                          |
+| Go (≥ 1.18)      | Mach-O 32 BE                                                   | vérifié sur fichier fabriqué                                                                      |
+| Go (≥ 1.18)      | fat Mach-O (darwin/amd64 + darwin/arm64)                       | tranches réelles, **conteneur fabriqué** (`scripts/make_fat.mjs`, pas `lipo`)                     |
+| Go (≥ 1.18)      | strippé `-ldflags="-s -w"` (toutes les cibles ci-dessus)       | vérifié sur binaire réel                                                                          |
+| Go (≥ 1.18)      | sans table de sections (recherche du marqueur)                 | vérifié sur fichier fabriqué                                                                      |
+| Go (1.13–1.17)   | format par pointeurs                                           | **non supporté** : refus typé `go-buildinfo-pointer-format`, testé sur en-tête fabriqué seulement |
+| Go, Rust         | exécutable UPX                                                 | **non supporté** : refus typé (`unsupported-artifact`) vérifié sur binaire réel (S5)              |
+| Rust (auditable) | ELF64 LE (x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu) | vérifié sur binaire réel                                                                          |
+| Rust (auditable) | PE32+ (x86_64-pc-windows-gnu, linker mingw-w64)                | vérifié sur binaire réel                                                                          |
+| Rust (auditable) | PE MSVC, Mach-O, fat                                           | vérifié sur fichier fabriqué (Mach-O réel non réalisable ici : pas de linker ni de SDK Apple)     |
+| .NET             | répertoire de publication, DLL PE (corpus linux)               | vérifié sur binaire réel (S3)                                                                     |
+| npm              | `app.asar`, répertoire `node_modules`                          | vérifié sur artefact réel (S2)                                                                    |
+| PyInstaller      | `--onefile` ELF linux/amd64, CPython 3.13                      | vérifié sur binaire réel (S3) ; autres plateformes et versions de CPython non vérifiées           |
+
+Un fat Mach-O donne un seul résultat quand toutes ses tranches portent les mêmes modules
+(Go) ou paquets (Rust) ; sinon erreur `fat-slices-differ` qui nomme la tranche et le fait qui
+diffère. `go version -m` ne lit que la première tranche d'un fat (constaté sur un fat
+stringer + yq) : il ne voit pas ce désaccord.
+
+```sh
+scripts/build_cross.sh        # cross-compilations Go épinglées → .work/cross/
+scripts/build_rust_cross.sh   # cargo auditable windows-gnu / aarch64 → .work/rust-cross/
+node scripts/make_fat.mjs .work/fat/stringer .work/cross/darwin-{amd64,arm64}/stringer
+node scripts/cross_binaries.mjs   # → s6/cross-binaries.json, s6/fat-binaries.json, s6/rust-cross-binaries.json
+```

@@ -1,0 +1,160 @@
+[
+  {
+    "tool": "mismatch-stringer-yq",
+    "bytes": 22885234,
+    "container": {
+      "format": "fat",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        },
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "expectedError": true,
+    "result": {
+      "tag": "fat-slices-differ",
+      "message": "slice 0 (cputype 0x1000007) and slice 1 (cputype 0x100000c) differ in main"
+    }
+  },
+  {
+    "tool": "stringer",
+    "bytes": 14331330,
+    "container": {
+      "format": "fat",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        },
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "slices": [
+      {
+        "target": "darwin-amd64",
+        "sameComponents": true
+      },
+      {
+        "target": "darwin-arm64",
+        "sameComponents": true
+      }
+    ],
+    "result": {
+      "components": 3,
+      "platforms": [
+        {
+          "goos": "darwin",
+          "goarch": "amd64"
+        },
+        {
+          "goos": "darwin",
+          "goarch": "arm64"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "stringer-stripped",
+    "bytes": 9905522,
+    "container": {
+      "format": "fat",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 15
+        },
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 15
+        }
+      ]
+    },
+    "slices": [
+      {
+        "target": "darwin-amd64",
+        "sameComponents": true
+      },
+      {
+        "target": "darwin-arm64",
+        "sameComponents": true
+      }
+    ],
+    "result": {
+      "components": 3,
+      "platforms": [
+        {
+          "goos": "darwin",
+          "goarch": "amd64"
+        },
+        {
+          "goos": "darwin",
+          "goarch": "arm64"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "yq",
+    "bytes": 31781746,
+    "container": {
+      "format": "fat",
+      "images": [
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        },
+        {
+          "format": "macho",
+          "bits": 64,
+          "endian": "little",
+          "sections": 22
+        }
+      ]
+    },
+    "slices": [
+      {
+        "target": "darwin-amd64",
+        "sameComponents": true
+      },
+      {
+        "target": "darwin-arm64",
+        "sameComponents": true
+      }
+    ],
+    "result": {
+      "components": 22,
+      "platforms": [
+        {
+          "goos": "darwin",
+          "goarch": "amd64"
+        },
+        {
+          "goos": "darwin",
+          "goarch": "arm64"
+        }
+      ]
+    }
+  }
+]
