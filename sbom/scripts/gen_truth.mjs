@@ -12,7 +12,7 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { FIXTURES } from "./fixtures.mjs";
+import { EXPERIMENT_FIXTURES, FIXTURES } from "./fixtures.mjs";
 
 const SBOM = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(SBOM, "corpus/src");
@@ -162,7 +162,7 @@ const READERS = {
 
 mkdirSync(TRUTH, { recursive: true });
 const only = new Set(process.argv.slice(2));
-for (const fx of FIXTURES) {
+for (const fx of [...FIXTURES, ...EXPERIMENT_FIXTURES]) {
   if (only.size && !only.has(fx.id) && !only.has(fx.ecosystem)) continue;
   try {
     const components = sortComponents(READERS[fx.ecosystem](fx));

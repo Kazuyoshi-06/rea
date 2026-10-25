@@ -1,8 +1,8 @@
-// Package URL (purl) builder for the S2 ecosystems: golang, cargo, npm.
+// Package URL (purl) builder for golang, cargo, npm (S2), nuget and pypi (S3).
 // Spec: https://github.com/package-url/purl-spec (PURL-SPECIFICATION.rst, PURL-TYPES.rst).
 // Encoding choice: every UTF-8 byte outside [A-Za-z0-9.-_~] and ':' is percent-encoded in
 // namespace segments, name and version, so a semver "+build" suffix is written "%2B".
-// Qualifiers and subpaths are not produced by any S2 adapter and are not supported.
+// Qualifiers and subpaths are not produced by any adapter and are not supported.
 import { err, ok } from "./result.mjs";
 
 const UNENCODED = /[A-Za-z0-9.\-_~:]/;
@@ -96,6 +96,31 @@ export function npmPurl(packageName, version = null) {
     });
   }
   return formatPurl({ type: "npm", name: lower, version });
+}
+
+/**
+ * NuGet package: no namespace; the name keeps the case it was published with. The purl test
+ * suite ("nuget names are case sensitive": pkg:Nuget/EnterpriseLibrary.Common@6.0.1304 →
+ * pkg:nuget/EnterpriseLibrary.Common@6.0.1304, packageurl-python 0.17.5) lowercases only the type.
+ * Matching NuGet ids case-insensitively is the consumer's job; see identityName() in model.mjs.
+ */
+export function nugetPurl(name, version = null) {
+  return formatPurl({ type: "nuget", name, version });
+}
+
+/**
+ * PyPI project: lowercased, "_" replaced by "-" (purl PURL-TYPES rule, same as packageurl-python's
+ * normalize_name). Other PEP 503 separators ("." and runs of "-") are left alone, as the purl rule
+ * does not touch them.
+ */
+export function pypiPurl(name, version = null) {
+  if (typeof name !== "string")
+    return err("purl-invalid-name", "PyPI project name is not a string");
+  return formatPurl({
+    type: "pypi",
+    name: name.toLowerCase().replaceAll("_", "-"),
+    version,
+  });
 }
 
 /** Parse the subset produced above (no qualifiers or subpath). Returns Result. */

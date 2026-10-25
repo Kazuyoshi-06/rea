@@ -1,6 +1,7 @@
 // File reads shared by detection, adapters and evidence: bounded, positional, no whole-file loads.
 import { createHash } from "node:crypto";
-import { closeSync, openSync, readSync } from "node:fs";
+import { closeSync, openSync, readdirSync, readSync } from "node:fs";
+import { join } from "node:path";
 
 const CHUNK = 1 << 20;
 
@@ -54,3 +55,30 @@ export function readRange(path, offset, length) {
 
 export const sha256 = (bytes) =>
   createHash("sha256").update(bytes).digest("hex");
+
+/**
+ * Regular files under `root`, depth-first, names sorted by code unit order (deterministic).
+ * Symbolic links are neither followed nor listed; `links` counts them. Paths use "/".
+ */
+export function walkFiles(root) {
+  const files = [];
+  let links = 0;
+  const visit = (segments) => {
+    let entries;
+    try {
+      entries = readdirSync(join(root, ...segments), { withFileTypes: true });
+    } catch {
+      return;
+    }
+    entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+    for (const entry of entries) {
+      const next = [...segments, entry.name];
+      if (entry.isSymbolicLink()) links += 1;
+      else if (entry.isDirectory()) visit(next);
+      else if (entry.isFile())
+        files.push({ rel: next.join("/"), abs: join(root, ...next) });
+    }
+  };
+  visit([]);
+  return { files, links };
+}

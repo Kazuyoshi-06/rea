@@ -6,12 +6,26 @@
 //                                                    deliberately not a shipped component.
 // Evidence   {artifact, location, sourceSha256, reader, ...adapter facts}
 //
-// confidence: "observed" (read verbatim from the artifact) or "inferred" (derived, e.g. an npm
-// name taken from the install directory because package.json had none).
+// confidence: Go, Rust and npm (S2) use "observed" (read verbatim from the artifact) or
+// "inferred" (derived, e.g. an npm name taken from the install directory because package.json had
+// none). NuGet and PyPI (S3) use the ordinal "high" / "medium" / "low" scale, defined per
+// adapter (see S3_REPORT.md); the two vocabularies are kept apart on purpose, not merged.
 // role: "library" or "language-runtime" (Go stdlib); TRUTH_RULES.md does not count runtimes.
-import { cargoPurl, golangPurl, npmPurl } from "./purl.mjs";
+import {
+  cargoPurl,
+  golangPurl,
+  npmPurl,
+  nugetPurl,
+  pypiPurl,
+} from "./purl.mjs";
 
-const PURL_BUILDERS = { golang: golangPurl, cargo: cargoPurl, npm: npmPurl };
+const PURL_BUILDERS = {
+  golang: golangPurl,
+  cargo: cargoPurl,
+  npm: npmPurl,
+  nuget: nugetPurl,
+  pypi: pypiPurl,
+};
 
 /**
  * Build one component. `purlName` overrides the name given to the purl builder (Go stdlib);
@@ -26,6 +40,7 @@ export function makeComponent({
   role = "library",
   evidence,
   noPurl = null,
+  technique = null,
 }) {
   const component = {
     purl: null,
@@ -37,6 +52,8 @@ export function makeComponent({
     role,
     evidence: [evidence],
   };
+  // Overrides the per-ecosystem CycloneDX evidence technique (e.g. deps.json vs CLI metadata).
+  if (technique !== null) component.technique = technique;
   if (noPurl !== null) {
     component.purlStatus = noPurl;
     return component;
@@ -49,6 +66,17 @@ export function makeComponent({
 
 export function makeUnknown({ ecosystem, name, reason, evidence }) {
   return { ecosystem, name, reason, evidence: [evidence] };
+}
+
+/**
+ * Key under which two sightings are the same component. NuGet ids are case-insensitive; PyPI
+ * names compare by PEP 503 ("-", "_" and "." runs equal, case-insensitive). Go, Cargo and npm
+ * names are exact. The first sighting (in input order) keeps its own spelling in `name`.
+ */
+export function identityName({ ecosystem, name }) {
+  if (ecosystem === "nuget") return name.toLowerCase();
+  if (ecosystem === "pypi") return name.toLowerCase().replace(/[-_.]+/g, "-");
+  return name;
 }
 
 export const compareStrings = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
@@ -81,10 +109,10 @@ export function finalizeScan(scan) {
   return {
     ...scan,
     components: mergeByKey(scan.components, (c) =>
-      JSON.stringify([c.ecosystem, c.role, c.name, c.version]),
+      JSON.stringify([c.ecosystem, c.role, identityName(c), c.version]),
     ),
     unknowns: mergeByKey(scan.unknowns, (u) =>
-      JSON.stringify([u.ecosystem, u.name, u.reason]),
+      JSON.stringify([u.ecosystem, identityName(u), u.reason]),
     ),
     exclusions: [...scan.exclusions].sort((a, b) =>
       compareStrings(JSON.stringify(a), JSON.stringify(b)),

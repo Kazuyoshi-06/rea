@@ -86,4 +86,22 @@ export const FIXTURES = [
     artifact: "py-yaml",
     rea: "inspect-artifact",
   },
+  {
+    id: "py-requests-meta",
+    ecosystem: "pypi",
+    source: "py-requests-meta",
+    artifact: "py-requests-meta",
+    rea: "inspect-artifact",
+  },
+];
+
+// Not part of the baseline, the default build or the tests: held-out check of the PyInstaller
+// bytecode spike on packages the module table was not written for (build_corpus.sh python_wide).
+export const EXPERIMENT_FIXTURES = [
+  {
+    id: "py-wide",
+    ecosystem: "pypi",
+    source: "py-wide",
+    artifact: "py-wide",
+  },
 ];

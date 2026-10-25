@@ -48,8 +48,18 @@ const TECHNIQUE = {
   golang: "binary-analysis",
   cargo: "binary-analysis",
   npm: "manifest-analysis",
+  nuget: "manifest-analysis",
+  pypi: "other",
 };
-const CONFIDENCE = { observed: 1, inferred: 0.5 };
+// Numeric CycloneDX confidence. high/medium/low are the S3 scale (NuGet, PyPI); the values
+// are a mapping choice, not a calibrated probability.
+const CONFIDENCE = {
+  observed: 1,
+  inferred: 0.5,
+  high: 1,
+  medium: 0.6,
+  low: 0.3,
+};
 
 function occurrence(evidence, artifactPath) {
   const loc = evidence.location;
@@ -71,7 +81,7 @@ function componentEvidence(c, artifactPath) {
         confidence,
         methods: [
           {
-            technique: TECHNIQUE[c.ecosystem] ?? "other",
+            technique: c.technique ?? TECHNIQUE[c.ecosystem] ?? "other",
             confidence,
             value: c.source,
           },

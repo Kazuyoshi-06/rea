@@ -15,7 +15,7 @@ composant REA, quelle que soit la version.
 | cargo      | 2        | 7     | 13      | 7   | 54%       | 100%   |
 | nuget      | 2        | 3     | 3       | 0   | 0%        | 0%     |
 | npm        | 2        | 9     | 9       | 9   | 100%      | 100%   |
-| pypi       | 2        | 6     | 0       | 0   | n/a       | 0%     |
+| pypi       | 3        | 11    | 5       | 5   | 100%      | 45%    |
 
 ## Par fixture
 
@@ -33,6 +33,7 @@ composant REA, quelle que soit la version.
 | npm-cli          | `rea analyze-javascript-application` | 7     | 7       | 7   | 0         | 0       | 100%      | 100%   | 100%            | 14.0 MiB  | 11.3 s  | 15.3 s  | 489 MiB |
 | py-requests      | `rea inspect-artifact`               | 5     | 0       | 0   | 5         | 0       | n/a       | 0%     | 0%              | 406.5 KiB | 2.8 s   | 3.9 s   | 464 MiB |
 | py-yaml          | `rea inspect-artifact`               | 1     | 0       | 0   | 1         | 0       | n/a       | 0%     | 0%              | 281.1 KiB | 3.2 s   | 4.2 s   | 458 MiB |
+| py-requests-meta | `rea inspect-artifact`               | 5     | 5       | 5   | 0         | 0       | 100%      | 100%   | 100%            | 460.5 KiB | 3.1 s   | 4.3 s   | 468 MiB |
 
 Durée = temps mur du processus CLI (démarrage Node inclus), un seul run par cible, sans répétition ni séparation froid/chaud ;
 CPU = user+sys et RSS max via `/usr/bin/time` (processus principal + enfants attendus, pic du plus gros). Pour .NET : somme/max sur toutes les DLL.
@@ -132,3 +133,10 @@ CPU = user+sys et RSS max via `/usr/bin/time` (processus principal + enfants att
   - `PyYAML@5.3.1` — aucun répertoire *.dist-info dans l'inventaire: pas de métadonnée de distribution (nom+version)
 - En trop : aucun
 - Signaux nom seul (non comptés) : 65 modules de premier niveau dans PYZ-00.pyz, stdlib comprise ; nom normalisé identique à une distribution vraie : aucun
+
+### py-requests-meta
+
+- Codes de sortie REA : 0
+- Manquants : aucun
+- En trop : aucun
+- Signaux nom seul (non comptés) : 78 modules de premier niveau dans PYZ-00.pyz, stdlib comprise ; nom normalisé identique à une distribution vraie : `certifi`, `charset_normalizer`, `idna`, `requests`, `urllib3`

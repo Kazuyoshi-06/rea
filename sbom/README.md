@@ -47,6 +47,7 @@ Un écosystème dont la toolchain manque est sauté avec un message `SKIP`.
 | npm-electron               | npm (ASAR)  | lodash 4.17.20, ms 2.1.3 (dev: electron 33.2.1)                     | CVE-2021-23337 (lodash)                             |
 | npm-cli                    | npm (ASAR)  | minimist 1.2.5, chalk 4.1.2                                         | CVE-2021-44906 (minimist)                           |
 | py-requests                | PyInstaller | requests 2.31.0, urllib3 1.26.17, certifi, idna, charset-normalizer | CVE-2024-35195 (requests), CVE-2023-45803 (urllib3) |
+| py-requests-meta           | PyInstaller | idem py-requests, avec `--copy-metadata` (dist-info embarqués) (S3) | idem py-requests                                    |
 | py-yaml                    | PyInstaller | PyYAML 5.3.1                                                        | CVE-2020-14343                                      |
 
 Les identifiants de vulnérabilité viennent de la connaissance publique des avis (et, pour Newtonsoft,
@@ -66,7 +67,8 @@ scanner dans S1.
   répertoires de scope vides (`@electron`, `@types`, `@sindresorhus`, `@szmarczak`, restes des
   devDependencies omises) absents d'un autre build (constaté ; cause côté npm non isolée). Les paquets
   eux-mêmes étaient identiques et REA donnait le même résultat.
-- PyInstaller : `--onefile --clean`, `SOURCE_DATE_EPOCH=0`. **Non déterministe malgré cela** (constaté) :
+- PyInstaller : `--onefile --clean`, `SOURCE_DATE_EPOCH=0`. `py-requests-meta` ajoute
+  `--copy-metadata` pour chaque distribution listée dans `corpus/src/py-requests-meta/copy-metadata.txt`. **Non déterministe malgré cela** (constaté) :
   les builds successifs alternent entre deux sorties (A, B, A…) pour `py-yaml` comme pour `py-requests`.
   `pyi-archive_viewer` montre une seule différence de TOC : l'entrée libpython s'appelle
   `libpython3.13.so.1.0` dans un build et `libpython3.13.so` dans l'autre (même taille, même offset),
@@ -97,3 +99,32 @@ contenant `node_modules`. Détails, décisions et mesures : [`S2_REPORT.md`](S2_
 | `schemas/`                    | Schéma CycloneDX 1.6 épinglé (gzip, sha256, provenance)                   |
 | `test/`                       | Tests node:test ; `make sbom-test` construit ce qu'il faut et les lance   |
 | `s2/measurements.json`        | Sortie de `make sbom-measure` (temps, CPU, RSS par appel REA et par scan) |
+
+## S3 — cas difficiles : .NET et PyInstaller
+
+`bin/sbom-scan` lit aussi un répertoire de publication .NET (ou une DLL isolée) et un exécutable
+PyInstaller `--onefile`, en Node pur (aucun appel à REA). Détails, mesures, limites :
+[`S3_REPORT.md`](S3_REPORT.md).
+
+| Fichier                              | Rôle                                                                                    |
+| ------------------------------------ | --------------------------------------------------------------------------------------- |
+| `lib/readers/cli-metadata.mjs`       | PE → en-tête CLI → tables de métadonnées ECMA-335 (assembly, attributs de version)      |
+| `lib/adapters/dotnet.mjs`            | `*.deps.json` (confiance high) ; repli sur les attributs de la DLL (medium / low)       |
+| `lib/readers/marshal.mjs`            | Lecteur `marshal` (CPython 3.13) : TOC du PYZ et objets code                            |
+| `lib/readers/pybytecode.mjs`         | Liaisons de noms au niveau module d'un objet code 3.13                                  |
+| `lib/readers/pyinstaller.mjs`        | Cookie MEI, CArchive (TOC), PYZ                                                         |
+| `lib/adapters/pyinstaller.mjs`       | dist-info METADATA (high) ; spike bytecode (low) ; stdlib retirée                       |
+| `lib/adapters/pypi-modules.mjs`      | Table statique module → distribution (courte, documentée)                               |
+| `data/stdlib-module-names-3.13.json` | `sys.stdlib_module_names` de Python 3.13.17 (donnée de référence)                       |
+| `scripts/measure_s3.mjs`             | Précision / rappel + `/usr/bin/time -v` → `s3/measurements.json`                        |
+| `scripts/experiment_py_wide.mjs`     | Test hors corpus du spike bytecode (`corpus/src/py-wide`, jamais dans `make sbom-test`) |
+
+```sh
+make sbom-test          # construit Go/Rust/npm/.NET/PyInstaller + REA, lance tous les tests
+make sbom-measure-s3    # précision / rappel / temps / RSS .NET et PyInstaller → s3/measurements.json
+make stdlib-names       # régénère data/stdlib-module-names-<X.Y>.json avec python3
+```
+
+Prérequis supplémentaires : SDK .NET 8 (`apt install dotnet-sdk-8.0` quand dot.net est bloqué),
+Python 3.13 avec `venv` et accès PyPI. Les tests qui compilent des extraits Python exigent Python 3.13
+(bytecode et numéros d'opcode propres à cette version).

@@ -1,0 +1,16 @@
+{
+  "fixture": "py-requests-meta",
+  "runs": [
+    {
+      "target": "py-requests-meta",
+      "command": "rea inspect-artifact corpus/out/py-requests-meta/py-requests-meta --format json",
+      "exit_code": 0,
+      "output_file": "py-requests-meta.json.gz",
+      "output_bytes": 471540,
+      "elapsed_ms": 3087,
+      "cpu_ms": 4250,
+      "peak_rss_kb": 479000,
+      "stderr_tail": []
+    }
+  ]
+}

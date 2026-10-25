@@ -1,0 +1,488 @@
+{
+  "runs_per_target": 4,
+  "node": "v24.22.1",
+  "results": [
+    {
+      "target": "dotnet-json",
+      "ecosystem": "nuget",
+      "source": "deps.json",
+      "components": 1,
+      "unknowns": 0,
+      "confidence": {
+        "high": 1
+      },
+      "truth": 1,
+      "strict": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "pep440_equivalent": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "rea_raw": {
+        "precision": 0,
+        "recall": 0,
+        "found": 1
+      },
+      "identical_bytes_across_runs": true,
+      "output_bytes": 3239,
+      "cold": {
+        "elapsed_s": 0.07,
+        "cpu_s": 0.07,
+        "peak_rss_mib": 54.4
+      },
+      "warm_median": {
+        "elapsed_s": 0.08,
+        "cpu_s": 0.08,
+        "peak_rss_mib": 54.2
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 54.4
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 54.3
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 54.2
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.2
+        }
+      ]
+    },
+    {
+      "target": "dotnet-json-nodeps",
+      "ecosystem": "nuget",
+      "source": "assembly attributes (deps.json removed)",
+      "components": 1,
+      "unknowns": 0,
+      "confidence": {
+        "medium": 1
+      },
+      "truth": 1,
+      "strict": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "pep440_equivalent": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "rea_raw": {
+        "precision": 0,
+        "recall": 0,
+        "found": 1
+      },
+      "identical_bytes_across_runs": true,
+      "output_bytes": 3825,
+      "cold": {
+        "elapsed_s": 0.07,
+        "cpu_s": 0.08,
+        "peak_rss_mib": 57.7
+      },
+      "warm_median": {
+        "elapsed_s": 0.07,
+        "cpu_s": 0.07,
+        "peak_rss_mib": 57.7
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.7
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.7
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.5
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.7
+        }
+      ]
+    },
+    {
+      "target": "dotnet-serilog",
+      "ecosystem": "nuget",
+      "source": "deps.json",
+      "components": 2,
+      "unknowns": 0,
+      "confidence": {
+        "high": 2
+      },
+      "truth": 2,
+      "strict": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "pep440_equivalent": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "rea_raw": {
+        "precision": 0,
+        "recall": 0,
+        "found": 2
+      },
+      "identical_bytes_across_runs": true,
+      "output_bytes": 4678,
+      "cold": {
+        "elapsed_s": 0.06,
+        "cpu_s": 0.07,
+        "peak_rss_mib": 54.3
+      },
+      "warm_median": {
+        "elapsed_s": 0.06,
+        "cpu_s": 0.06,
+        "peak_rss_mib": 54.3
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 54.3
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.3
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.1
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.3
+        }
+      ]
+    },
+    {
+      "target": "dotnet-serilog-nodeps",
+      "ecosystem": "nuget",
+      "source": "assembly attributes (deps.json removed)",
+      "components": 2,
+      "unknowns": 0,
+      "confidence": {
+        "low": 2
+      },
+      "truth": 2,
+      "strict": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 0,
+        "precision": 0,
+        "recall": 0,
+        "extra": [
+          "serilog.sinks.console@5.0.1-main-33be844",
+          "serilog@3.1.1-main-999d686d"
+        ],
+        "missing": ["serilog.sinks.console@5.0.1", "serilog@3.1.1"]
+      },
+      "pep440_equivalent": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 0,
+        "precision": 0,
+        "recall": 0,
+        "extra": [
+          "serilog.sinks.console@5.0.1-main-33be844",
+          "serilog@3.1.1-main-999d686d"
+        ],
+        "missing": ["serilog.sinks.console@5.0.1", "serilog@3.1.1"]
+      },
+      "rea_raw": {
+        "precision": 0,
+        "recall": 0,
+        "found": 2
+      },
+      "identical_bytes_across_runs": true,
+      "output_bytes": 5378,
+      "cold": {
+        "elapsed_s": 0.08,
+        "cpu_s": 0.09,
+        "peak_rss_mib": 58.6
+      },
+      "warm_median": {
+        "elapsed_s": 0.08,
+        "cpu_s": 0.09,
+        "peak_rss_mib": 58.6
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 58.6
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 58.4
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 58.7
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.6
+        }
+      ]
+    },
+    {
+      "target": "py-requests-meta",
+      "ecosystem": "pypi",
+      "source": "dist-info METADATA",
+      "components": 5,
+      "unknowns": 0,
+      "confidence": {
+        "high": 5
+      },
+      "truth": 5,
+      "strict": {
+        "found": 5,
+        "truth": 5,
+        "truePositives": 5,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "pep440_equivalent": {
+        "found": 5,
+        "truth": 5,
+        "truePositives": 5,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "rea_raw": {
+        "precision": 1,
+        "recall": 1,
+        "found": 5
+      },
+      "identical_bytes_across_runs": true,
+      "output_bytes": 9558,
+      "cold": {
+        "elapsed_s": 0.09,
+        "cpu_s": 0.1,
+        "peak_rss_mib": 58.4
+      },
+      "warm_median": {
+        "elapsed_s": 0.09,
+        "cpu_s": 0.1,
+        "peak_rss_mib": 58.4
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.4
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.4
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.4
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.7
+        }
+      ]
+    },
+    {
+      "target": "py-requests",
+      "ecosystem": "pypi",
+      "source": "PYZ bytecode",
+      "components": 5,
+      "unknowns": 0,
+      "confidence": {
+        "low": 5
+      },
+      "truth": 5,
+      "strict": {
+        "found": 5,
+        "truth": 5,
+        "truePositives": 4,
+        "precision": 0.8,
+        "recall": 0.8,
+        "extra": ["certifi@2023.07.22"],
+        "missing": ["certifi@2023.7.22"]
+      },
+      "pep440_equivalent": {
+        "found": 5,
+        "truth": 5,
+        "truePositives": 5,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "rea_raw": {
+        "precision": null,
+        "recall": 0,
+        "found": 0
+      },
+      "identical_bytes_across_runs": true,
+      "output_bytes": 9990,
+      "cold": {
+        "elapsed_s": 0.1,
+        "cpu_s": 0.12,
+        "peak_rss_mib": 59
+      },
+      "warm_median": {
+        "elapsed_s": 0.1,
+        "cpu_s": 0.1,
+        "peak_rss_mib": 58.9
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.12,
+          "peak_rss_mib": 59
+        },
+        {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.9
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 58.9
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.8
+        }
+      ]
+    },
+    {
+      "target": "py-yaml",
+      "ecosystem": "pypi",
+      "source": "PYZ bytecode",
+      "components": 1,
+      "unknowns": 0,
+      "confidence": {
+        "low": 1
+      },
+      "truth": 1,
+      "strict": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "pep440_equivalent": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": []
+      },
+      "rea_raw": {
+        "precision": null,
+        "recall": 0,
+        "found": 0
+      },
+      "identical_bytes_across_runs": true,
+      "output_bytes": 3988,
+      "cold": {
+        "elapsed_s": 0.09,
+        "cpu_s": 0.09,
+        "peak_rss_mib": 57.7
+      },
+      "warm_median": {
+        "elapsed_s": 0.1,
+        "cpu_s": 0.1,
+        "peak_rss_mib": 57.5
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.7
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 57.5
+        },
+        {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 57.6
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 57.5
+        }
+      ]
+    }
+  ]
+}

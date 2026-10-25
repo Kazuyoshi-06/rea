@@ -1,8 +1,8 @@
 {
   "name": "rea-sbom",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "SBOM core (S2): component model, purl, CycloneDX 1.6 export, Go/Rust/npm adapters",
+  "description": "SBOM core (S2, S3): component model, purl, CycloneDX 1.6 export, Go/Rust/npm/.NET/PyInstaller adapters",
   "type": "module",
   "bin": {
     "sbom-scan": "bin/sbom-scan"

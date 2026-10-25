@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Build every S1 corpus fixture into sbom/corpus/out/<fixture>/.
-# Usage: build_corpus.sh [ecosystem...]   (go rust dotnet npm python; default: all)
+# Usage: build_corpus.sh [ecosystem...]   (go rust dotnet npm python; default: all;
+# python_wide builds the py-wide experiment and is never part of the default set)
 # Toolchains are bring-your-own; a missing toolchain skips its ecosystem with a message.
 set -euo pipefail
 
@@ -67,9 +68,14 @@ build_npm() {
   done
 }
 
-build_python() {
+build_python() { build_pyinstaller py-requests py-yaml py-requests-meta; }
+
+# Held-out experiment for the bytecode spike (not part of the default build or of the tests).
+build_python_wide() { build_pyinstaller py-wide; }
+
+build_pyinstaller() {
   have python3 || { skip python "python3 not found"; return; }
-  for f in py-requests py-yaml; do
+  for f in "$@"; do
     venv="$WORK/venv-$f"
     if [ ! -x "$venv/bin/pyinstaller" ]; then
       python3 -m venv "$venv"
@@ -77,9 +83,15 @@ build_python() {
       "$venv/bin/pip" install -q --disable-pip-version-check -r "$SBOM/tools/requirements-build.txt"
     fi
     mkdir -p "$OUT/$f"
+    # copy-metadata.txt (optional): one distribution per line, embedded as *.dist-info.
+    meta=()
+    if [ -f "$SRC/$f/copy-metadata.txt" ]; then
+      while IFS= read -r dist; do [ -n "$dist" ] && meta+=(--copy-metadata "$dist"); done \
+        <"$SRC/$f/copy-metadata.txt"
+    fi
     (cd "$WORK" && SOURCE_DATE_EPOCH=0 "$venv/bin/pyinstaller" --onefile --noconfirm --clean \
       --log-level WARN --distpath "$OUT/$f" --workpath "$WORK/pyi-$f" --specpath "$WORK/pyi-$f" \
-      -n "$f" "$SRC/$f/app.py")
+      ${meta[@]+"${meta[@]}"} -n "$f" "$SRC/$f/app.py")
   done
 }
 

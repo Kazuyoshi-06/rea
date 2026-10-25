@@ -16,7 +16,7 @@ STAMP := $(OUT)/.built
 REA_DIST := $(REPO)/dist/cli-runtime
 OXFMT := $(REPO)/node_modules/.bin/oxfmt
 
-.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-measure
+.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-measure sbom-measure-s3 stdlib-names
 all: baseline
 
 $(STAMP):
@@ -53,12 +53,13 @@ repro:
 clean:
 	rm -rf $(OUT) .work
 
-# --- S2: SBOM core (Go, Rust, npm). `make sbom-test` from a clean clone, inside sbom/. ---
-S2_STAMP := $(OUT)/.built-s2
+# --- S2/S3: SBOM core (Go, Rust, npm, .NET, PyInstaller). `make sbom-test` from a clean clone, inside sbom/. ---
+TEST_STAMP := $(OUT)/.built-s3
 
-# Go, Rust and npm fixtures only (.NET / PyInstaller are S3 and need other toolchains).
-$(S2_STAMP):
-	scripts/build_corpus.sh go rust npm
+# Every fixture the tests use. .NET needs the SDK (apt dotnet-sdk-8.0 where dot.net is blocked),
+# PyInstaller needs python3 3.13 + venv and PyPI access.
+$(TEST_STAMP):
+	scripts/build_corpus.sh go rust npm dotnet python
 	node scripts/check_s2_digests.mjs
 	touch $@
 
@@ -66,9 +67,18 @@ $(S2_STAMP):
 node_modules/.package-lock.json: package.json package-lock.json
 	npm ci --no-audit --no-fund
 
-sbom-test: $(S2_STAMP) $(REA_DIST) node_modules/.package-lock.json
+sbom-test: $(TEST_STAMP) $(REA_DIST) node_modules/.package-lock.json
 	SBOM_REQUIRE_FIXTURES=1 node --test 'test/*.test.mjs'
 
 # Time and peak RSS per REA call and per sbom-scan run (writes s2/measurements.json).
-sbom-measure: $(S2_STAMP) $(REA_DIST)
+sbom-measure: $(TEST_STAMP) $(REA_DIST)
 	node scripts/measure_s2.mjs
+
+# S3: precision/recall, time and peak RSS (/usr/bin/time -v) of .NET and PyInstaller scans,
+# including the .NET variant without deps.json (writes s3/measurements.json). No REA needed.
+sbom-measure-s3: $(TEST_STAMP) node_modules/.package-lock.json
+	node scripts/measure_s3.mjs
+
+# Record sys.stdlib_module_names of the fixtures' Python as data/stdlib-module-names-<X.Y>.json.
+stdlib-names:
+	node scripts/gen_stdlib_names.mjs python3

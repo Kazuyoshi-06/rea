@@ -1,0 +1,131 @@
+{
+  "summary": {
+    "truth": 16,
+    "reported_exact": 7,
+    "reported_exact_high": 1,
+    "reported_exact_low": 6,
+    "reported_wrong": 0,
+    "unknown": 9,
+    "unknown_with_correct_observed_literal": 3,
+    "absent": 0,
+    "reported_not_in_truth": [
+      {
+        "name": "typeguard",
+        "version": "4.3.0",
+        "confidence": "high"
+      },
+      {
+        "name": "wheel",
+        "version": "0.43.0",
+        "confidence": "high"
+      }
+    ]
+  },
+  "rows": [
+    {
+      "truth": "attrs@23.1.0",
+      "outcome": "exact",
+      "confidence": "high",
+      "reported": "23.1.0"
+    },
+    {
+      "truth": "beautifulsoup4@4.12.2",
+      "outcome": "exact",
+      "confidence": "low",
+      "reported": "4.12.2"
+    },
+    {
+      "truth": "click@8.1.7",
+      "outcome": "exact",
+      "confidence": "low",
+      "reported": "8.1.7"
+    },
+    {
+      "truth": "colorama@0.4.6",
+      "outcome": "unknown",
+      "observedLiteral": "0.4.6",
+      "observedMatchesTruth": true,
+      "reason": "module colorama found in the PYZ; its distribution name is not in the module table"
+    },
+    {
+      "truth": "Jinja2@3.1.2",
+      "outcome": "exact",
+      "confidence": "low",
+      "reported": "3.1.2"
+    },
+    {
+      "truth": "MarkupSafe@2.1.3",
+      "outcome": "exact",
+      "confidence": "low",
+      "reported": "2.1.3"
+    },
+    {
+      "truth": "PyJWT@2.8.0",
+      "outcome": "exact",
+      "confidence": "low",
+      "reported": "2.8.0"
+    },
+    {
+      "truth": "pyparsing@3.1.1",
+      "outcome": "unknown",
+      "observedLiteral": null,
+      "observedMatchesTruth": null,
+      "reason": "module pyparsing found in the PYZ; its distribution name is not in the module table; __version__ in pyparsing is not a constant (computed or imported otherwise)"
+    },
+    {
+      "truth": "python-dateutil@2.8.2",
+      "outcome": "unknown",
+      "observedLiteral": null,
+      "observedMatchesTruth": null,
+      "reason": "module dateutil: __version__ has 2 bindings in dateutil; no single constant"
+    },
+    {
+      "truth": "python-dotenv@1.0.0",
+      "outcome": "unknown",
+      "observedLiteral": null,
+      "observedMatchesTruth": null,
+      "reason": "module dotenv: __version__ is not bound in module dotenv"
+    },
+    {
+      "truth": "pytz@2023.3",
+      "outcome": "unknown",
+      "observedLiteral": "2023.3",
+      "observedMatchesTruth": true,
+      "reason": "module pytz found in the PYZ; its distribution name is not in the module table"
+    },
+    {
+      "truth": "six@1.16.0",
+      "outcome": "exact",
+      "confidence": "low",
+      "reported": "1.16.0"
+    },
+    {
+      "truth": "soupsieve@2.5",
+      "outcome": "unknown",
+      "observedLiteral": null,
+      "observedMatchesTruth": null,
+      "reason": "module soupsieve found in the PYZ; its distribution name is not in the module table; __version__ in soupsieve.__meta__ is not a constant (computed or imported otherwise)"
+    },
+    {
+      "truth": "toml@0.10.2",
+      "outcome": "unknown",
+      "observedLiteral": "0.10.2",
+      "observedMatchesTruth": true,
+      "reason": "module toml found in the PYZ; its distribution name is not in the module table"
+    },
+    {
+      "truth": "tqdm@4.66.1",
+      "outcome": "unknown",
+      "observedLiteral": null,
+      "observedMatchesTruth": null,
+      "reason": "module tqdm found in the PYZ; its distribution name is not in the module table; __version__ has 3 bindings in tqdm.version; no single constant"
+    },
+    {
+      "truth": "typing_extensions@4.8.0",
+      "outcome": "unknown",
+      "observedLiteral": null,
+      "observedMatchesTruth": null,
+      "reason": "module typing_extensions found in the PYZ; its distribution name is not in the module table; __version__ is not bound in module typing_extensions"
+    }
+  ]
+}
