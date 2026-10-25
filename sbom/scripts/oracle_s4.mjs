@@ -176,14 +176,17 @@ function ours(fx) {
       name: c.name,
       version: c.version,
     })),
-    findings: bom.vulnerabilities.map((v) => {
-      const c = byRef.get(v.affects[0].ref);
-      return {
-        package: c.name,
-        version: c.version,
-        ids: [v.id, ...(v.references ?? []).map((r) => r.id)],
-      };
-    }),
+    // One entry per alias group since format-version 3: one finding per affected component.
+    findings: bom.vulnerabilities.flatMap((v) =>
+      v.affects.map((a) => {
+        const c = byRef.get(a.ref);
+        return {
+          package: c.name,
+          version: c.version,
+          ids: [v.id, ...(v.references ?? []).map((r) => r.id)],
+        };
+      }),
+    ),
   };
 }
 

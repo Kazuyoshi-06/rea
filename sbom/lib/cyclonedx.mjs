@@ -14,11 +14,16 @@
 //                            match a versionless component against every version
 //   exclusions             → metadata.properties "rea-sbom:excluded-component" (JSON value)
 //   evidence               → components[].evidence (identity + occurrences)
-//   vulnerability matches  → vulnerabilities[] (with --vulns): one entry per (OSV advisory,
-//                            component), id = OSV id, aliases as references, fixed versions as
-//                            affects[].versions with status "unaffected", rea-sbom:confidence
-//                            inherited from the component; the index snapshot id and archive
-//                            dates go to metadata.properties (rea-sbom:vulndb-*)
+//   vulnerability matches  → vulnerabilities[] (with --vulns): one entry per alias group of OSV
+//                            records (GO-/GHSA-/CVE-/PYSEC-…), id = primary id (CVE, else GHSA,
+//                            else first), every other id in references, affected components in
+//                            affects[] with fixed versions as status "unaffected";
+//                            rea-sbom:confidence = lowest of the components (low → analysis.state
+//                            in_triage), rea-sbom:osv-record per matched record,
+//                            rea-sbom:scope=language-runtime for Go stdlib alerts; the index
+//                            snapshot id and archive dates go to metadata.properties
+//                            (rea-sbom:vulndb-*)
+//   format version         → metadata.properties rea-sbom:format-version (integer)
 // No dependency graph is emitted: absence of "dependencies" means unknown, not none.
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -28,6 +33,9 @@ const SBOM_PACKAGE = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url), "utf8"),
 );
 export const TOOL_VERSION = SBOM_PACKAGE.version;
+// Version of the BOM layout (properties, ids, grouping) that consumers rely on; bumped on every
+// breaking change, listed in README.md ("Format du BOM").
+export const FORMAT_VERSION = 3;
 const URL_NAMESPACE = "6ba7b811-9dad-11d1-80b4-00c04fd430c8"; // RFC 4122 URL namespace
 
 /** RFC 4122 version-5 (SHA-1, name-based) UUID. */
@@ -171,6 +179,7 @@ function metadataProperties(scan, refs) {
     scan.components.flatMap((c) => c.evidence.map((e) => e.reader?.command)),
   );
   return [
+    prop("rea-sbom:format-version", FORMAT_VERSION),
     ...scan.ecosystems.map((e) => prop("rea-sbom:detected-ecosystem", e)),
     ...[...readers]
       .filter(Boolean)
@@ -216,7 +225,16 @@ function vulnDbProperties(vulns, refs) {
           }),
         ),
       ),
-    prop("rea-sbom:vuln-count", vulns.alerts.length),
+    prop("rea-sbom:vuln-count", vulns.groups.length),
+    prop("rea-sbom:vuln-record-count", vulns.alerts.length),
+    ...(vulns.runtimeExcluded
+      ? [
+          prop(
+            "rea-sbom:vuln-runtime-excluded-count",
+            vulns.stats.runtimeAlertsExcluded,
+          ),
+        ]
+      : []),
     prop("rea-sbom:vuln-unevaluated-count", vulns.unevaluated.length),
     ...vulns.unevaluated.map((u) =>
       prop(
@@ -243,35 +261,79 @@ function aliasSource(id) {
   return { name, url: url(id) };
 }
 
-function bomVulnerabilities(vulns, refs) {
-  return vulns.alerts.map((a) => {
+const CONFIDENCE_ORDER = ["low", "medium", "high"];
+const lowest = (levels) =>
+  CONFIDENCE_ORDER.find((level) => levels.includes(level)) ?? levels[0];
+
+/** One vulnerabilities[] entry per alias group (lib/vulns/match.mjs groupAlerts). */
+function bomVulnerability(group, refs) {
+  const affects = new Map();
+  for (const a of group.alerts) {
     const ref = refs.get(a.component);
-    const out = {
-      "bom-ref": `rea-sbom:vuln:${a.id}:${ref}`,
-      id: a.id,
-      source: { name: "OSV", url: `https://osv.dev/vulnerability/${a.id}` },
+    const entry = affects.get(ref) ?? {
+      component: a.component,
+      fixed: new Set(),
     };
-    if (a.aliases.length > 0)
-      out.references = a.aliases.map((id) => ({ id, source: aliasSource(id) }));
-    if (a.summary) out.description = a.summary;
-    if (a.fixed.length > 0)
-      out.recommendation = `Fixed in: ${a.fixed.join(", ")}`;
-    if (a.modified) out.updated = formatTimestamp(a.modified);
-    out.affects = [
-      {
-        ref,
-        versions: [
-          { version: a.component.version, status: "affected" },
-          ...a.fixed.map((version) => ({ version, status: "unaffected" })),
-        ],
-      },
-    ];
-    out.properties = [
-      prop("rea-sbom:confidence", a.confidence),
-      ...a.via.map((v) => prop("rea-sbom:matched-by", v)),
-    ];
-    return out;
-  });
+    for (const f of a.fixed) entry.fixed.add(f);
+    affects.set(ref, entry);
+  }
+  const targets = [...affects.entries()].sort(([a], [b]) =>
+    a < b ? -1 : a > b ? 1 : 0,
+  );
+  const records = new Map(group.alerts.map((a) => [a.id, a]));
+  const summary = group.records
+    .map((id) => records.get(id).summary)
+    .find((s) => s);
+  const modified = group.alerts
+    .map((a) => a.modified)
+    .filter(Boolean)
+    .sort()
+    .at(-1);
+  const out = {
+    "bom-ref": `rea-sbom:vuln:${group.id}`,
+    id: group.id,
+    source: aliasSource(group.id),
+  };
+  const others = group.ids.filter((id) => id !== group.id);
+  if (others.length > 0)
+    out.references = others.map((id) => ({ id, source: aliasSource(id) }));
+  if (summary) out.description = summary;
+  const fixedText = targets
+    .filter(([, t]) => t.fixed.size > 0)
+    .map(([, t]) => [t.component, [...t.fixed].sort().join(", ")]);
+  if (fixedText.length === 1 && targets.length === 1)
+    out.recommendation = `Fixed in: ${fixedText[0][1]}`;
+  else if (fixedText.length > 0)
+    out.recommendation = fixedText
+      .map(([c, text]) => `${c.name}@${c.version}: fixed in ${text}`)
+      .join("; ");
+  if (modified) out.updated = formatTimestamp(modified);
+  const confidence = lowest(group.alerts.map((a) => a.confidence));
+  if (confidence === "low")
+    out.analysis = {
+      state: "in_triage",
+      detail:
+        "The affected component's identity or version has low confidence (rea-sbom:confidence); confirm the shipped version before acting.",
+    };
+  out.affects = targets.map(([ref, t]) => ({
+    ref,
+    versions: [
+      { version: t.component.version, status: "affected" },
+      ...[...t.fixed]
+        .sort()
+        .map((version) => ({ version, status: "unaffected" })),
+    ],
+  }));
+  out.properties = [
+    prop("rea-sbom:confidence", confidence),
+    ...[...new Set(group.alerts.flatMap((a) => a.via))]
+      .sort()
+      .map((v) => prop("rea-sbom:matched-by", v)),
+    ...group.records.map((id) => prop("rea-sbom:osv-record", id)),
+  ];
+  if (targets.every(([, t]) => t.component.role === "language-runtime"))
+    out.properties.push(prop("rea-sbom:scope", "language-runtime"));
+  return out;
 }
 
 /** Build the CycloneDX 1.6 BOM object for a finalized scan. */
@@ -297,7 +359,9 @@ export function toCycloneDx(scan, { timestamp = new Date() } = {}) {
     components: bomComponents(scan, refs),
   };
   if (scan.vulnerabilities)
-    bom.vulnerabilities = bomVulnerabilities(scan.vulnerabilities, refs);
+    bom.vulnerabilities = scan.vulnerabilities.groups.map((g) =>
+      bomVulnerability(g, refs),
+    );
   const { serialNumber: _serial, ...content } = bom;
   const digest = createHash("sha256")
     .update(JSON.stringify(content))

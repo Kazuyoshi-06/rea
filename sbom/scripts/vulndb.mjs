@@ -16,12 +16,19 @@ import {
 import { join } from "node:path";
 import { openZip } from "../lib/readers/zip.mjs";
 import { indexAdvisories, writeVulnDb } from "../lib/vulns/db.mjs";
+import { checkGuard } from "../lib/vulns/guard.mjs";
 import { OSV_ECOSYSTEM } from "../lib/vulns/osv.mjs";
 
 const SBOM = join(import.meta.dirname, "..");
 const DIR = process.env.VULNDB_DIR ?? join(SBOM, "vulndb");
 const BASE = "https://osv-vulnerabilities.storage.googleapis.com";
 const noDownload = process.argv.includes("--no-download");
+const GUARD = JSON.parse(
+  readFileSync(
+    process.env.VULNDB_GUARD ?? join(SBOM, "test/data/osv-guard.json"),
+    "utf8",
+  ),
+);
 
 function download(osvName) {
   const url = `${BASE}/${encodeURIComponent(osvName)}/all.zip`;
@@ -77,6 +84,7 @@ function* records(zip, stats) {
 
 mkdirSync(join(DIR, "index"), { recursive: true });
 const built = {};
+const guardFailures = [];
 for (const [ecosystem, osvName] of Object.entries(OSV_ECOSYSTEM)) {
   const started = process.hrtime.bigint();
   const { url, target, headers } = download(osvName);
@@ -105,10 +113,24 @@ for (const [ecosystem, osvName] of Object.entries(OSV_ECOSYSTEM)) {
       packages: packages.size,
     },
   };
+  guardFailures.push(
+    ...checkGuard(GUARD, ecosystem, {
+      indexedAdvisories: stats.advisories,
+      packages,
+    }),
+  );
   const ms = Number(process.hrtime.bigint() - started) / 1e6;
   process.stderr.write(
     `vulndb: ${osvName}: ${stats.advisories} advisories, ${packages.size} packages, ${Math.round(ms)} ms\n`,
   );
+}
+
+if (guardFailures.length > 0) {
+  process.stderr.write(
+    `vulndb: format guard failed, index NOT written:\n${guardFailures.map((f) => `  - ${f}`).join("\n")}\n` +
+      "vulndb: inspect the OSV export; update test/data/osv-guard.json only once the change is understood.\n",
+  );
+  process.exit(1);
 }
 
 const snapshot = writeVulnDb(

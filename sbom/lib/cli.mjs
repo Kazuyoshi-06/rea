@@ -10,7 +10,7 @@ import { matchComponents } from "./vulns/match.mjs";
 const DEFAULT_DB = fileURLToPath(new URL("../vulndb", import.meta.url));
 
 const USAGE =
-  "usage: sbom-scan <artifact> [--format cyclonedx|model] [--vulns [--db DIR]] [--output FILE] [--timestamp ISO|EPOCH] [--timings]";
+  "usage: sbom-scan <artifact> [--format cyclonedx|model] [--vulns [--db DIR] [--no-runtime-vulns]] [--output FILE] [--timestamp ISO|EPOCH] [--timings]";
 
 function timestampOption(value) {
   if (value !== undefined) return /^\d+$/.test(value) ? Number(value) : value;
@@ -29,11 +29,13 @@ function render(scan, values) {
         name: c.name,
         version: c.version,
       });
+      const alert = (a) => ({ ...a, component: describe(a.component) });
       model.vulnerabilities = {
         ...vulnerabilities,
-        alerts: vulnerabilities.alerts.map((a) => ({
-          ...a,
-          component: describe(a.component),
+        alerts: vulnerabilities.alerts.map(alert),
+        groups: vulnerabilities.groups.map((g) => ({
+          ...g,
+          alerts: g.alerts.map(alert),
         })),
         unevaluated: vulnerabilities.unevaluated.map((u) => ({
           ...u,
@@ -61,6 +63,7 @@ export function main(argv) {
         timings: { type: "boolean", default: false },
         vulns: { type: "boolean", default: false },
         db: { type: "string" },
+        "no-runtime-vulns": { type: "boolean", default: false },
       },
     });
   } catch (error) {
@@ -72,7 +75,7 @@ export function main(argv) {
   if (
     positionals.length !== 1 ||
     !["cyclonedx", "model"].includes(values.format) ||
-    (values.db !== undefined && !values.vulns)
+    ((values.db !== undefined || values["no-runtime-vulns"]) && !values.vulns)
   ) {
     process.stderr.write(`${USAGE}\n`);
     process.exitCode = 2;
@@ -94,12 +97,16 @@ export function main(argv) {
       return;
     }
     const started = process.hrtime.bigint();
-    const matched = matchComponents(result.value.components, db.value);
+    const excludeRuntime = values["no-runtime-vulns"];
+    const matched = matchComponents(result.value.components, db.value, {
+      excludeRuntime,
+    });
     result.value.vulnerabilities = {
       snapshot: {
         id: db.value.snapshot.id,
         archives: db.value.snapshot.archives,
       },
+      runtimeExcluded: excludeRuntime,
       ...matched,
     };
     result.value.calls.push(

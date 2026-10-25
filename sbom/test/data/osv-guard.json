@@ -1,0 +1,47 @@
+{
+  "description": "make vulndb format guard (S5 A5): an ecosystem whose indexed advisory count falls under minAdvisories, or from which a known advisory disappears, fails the build. minAdvisories = 80 % of the indexedAdvisories of vulndb/SNAPSHOT.json (osv-3fe57c98aea6919b, 2026-10-25), rounded down; known ids taken from that snapshot (fixture advisories first).",
+  "snapshot": "osv-3fe57c98aea6919b",
+  "ecosystems": {
+    "golang": {
+      "minAdvisories": 7823,
+      "known": [
+        { "id": "GO-2020-0017", "package": "github.com/dgrijalva/jwt-go" },
+        { "id": "GO-2022-1059", "package": "golang.org/x/text" },
+        { "id": "GO-2025-4006", "package": "stdlib" },
+        { "id": "GHSA-2wp2-chmh-r934", "package": "golang.org/x/net" }
+      ]
+    },
+    "cargo": {
+      "minAdvisories": 2375,
+      "known": [
+        { "id": "RUSTSEC-2022-0013", "package": "regex" },
+        { "id": "RUSTSEC-2020-0071", "package": "time" },
+        { "id": "GHSA-43w2-9j62-hq99", "package": "smallvec" }
+      ]
+    },
+    "npm": {
+      "minAdvisories": 184623,
+      "known": [
+        { "id": "GHSA-35jh-r3h4-6jhm", "package": "lodash" },
+        { "id": "GHSA-xvch-5gv4-984h", "package": "minimist" },
+        { "id": "GHSA-35jp-ww65-95wh", "package": "axios" }
+      ]
+    },
+    "nuget": {
+      "minAdvisories": 1572,
+      "known": [
+        { "id": "GHSA-5crp-9r3c-p9vr", "package": "newtonsoft.json" },
+        { "id": "GHSA-ghhp-997w-qr28", "package": "system.text.encodings.web" },
+        { "id": "GHSA-8g4q-xg66-9fp4", "package": "system.text.json" }
+      ]
+    },
+    "pypi": {
+      "minAdvisories": 21290,
+      "known": [
+        { "id": "PYSEC-2023-212", "package": "urllib3" },
+        { "id": "GHSA-9wx4-h78v-vm56", "package": "requests" },
+        { "id": "GHSA-8q59-q68h-6hv4", "package": "pyyaml" }
+      ]
+    }
+  }
+}

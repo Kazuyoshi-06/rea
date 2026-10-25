@@ -168,3 +168,50 @@ make sbom-test          # inclut les tests hors ligne ; les tests de bornes sur 
 make sbom-measure-s4    # temps / CPU / RSS avec et sans --vulns → s4/measurements.json
 make sbom-oracle        # osv-scanner, npm audit, pip-audit, dotnet list package --vulnerable → s4/oracle.json
 ```
+
+## S5 — décisions de format (partie A) et indépendance vis-à-vis de REA
+
+Détails, mesures et limites : [`S5_REPORT.md`](S5_REPORT.md).
+
+### Alertes (`--vulns`)
+
+- **Une entrée `vulnerabilities[]` par vulnérabilité**, pas par enregistrement OSV : les
+  enregistrements liés par leurs `aliases` (GO-/GHSA-/CVE-/PYSEC-/RUSTSEC-…, transitivement ;
+  `related` ne lie pas) forment un groupe. Identifiant principal déterministe : le premier CVE par
+  ordre alphabétique, sinon le premier GHSA, sinon le premier identifiant. Tous les autres
+  identifiants vont dans `references` ; les enregistrements OSV effectivement appariés sont listés
+  en `rea-sbom:osv-record` ; tous les composants concernés sont dans `affects`.
+  `rea-sbom:vuln-count` = nombre de groupes, `rea-sbom:vuln-record-count` = nombre de couples
+  (enregistrement OSV, composant).
+- **Stdlib Go** : ses alertes portent `rea-sbom:scope=language-runtime`. `--no-runtime-vulns` (avec
+  `--vulns`) les exclut ; leur nombre reste visible (`rea-sbom:vuln-runtime-excluded-count`).
+- **Pas d'analyse d'atteignabilité** : une version dans la plage d'un avis donne une alerte, que les
+  symboles vulnérables soient liés et appelés ou non (govulncheck filtre par symboles, pas nous).
+  La stdlib Go à elle seule donne des dizaines d'alertes sur un binaire minuscule.
+- **Confiance** : `rea-sbom:confidence` d'une alerte = la plus basse des composants touchés ; une
+  alerte sur un composant `low` (version lue dans le bytecode PyInstaller) porte
+  `analysis.state = in_triage` (valeur acceptée par le schéma CycloneDX 1.6 épinglé) avec une
+  explication dans `analysis.detail`.
+
+### Limites connues
+
+- **Plages non évaluées** : une plage GIT sans liste `versions` ou un événement que le comparateur
+  de l'écosystème ne sait pas lire (`"0.8"` en Go, `"2.9.0-NA"` en PyPI…) n'est jamais transformé en
+  alerte ni en absence d'alerte. Il reste visible : `rea-sbom:vuln-unevaluated-count` et une
+  propriété `rea-sbom:vuln-unevaluated` par couple (avis, composant). Ordre de grandeur sur la
+  snapshot S4 : ~120 entrées `affected` concernées sur ~270 000 avis (voir S4_REPORT.md).
+- **Garde-fou de format OSV** : `make vulndb` échoue (index non écrit) si un écosystème indexe
+  moins d'avis que le seuil de `test/data/osv-guard.json` (80 % de la snapshot de référence) ou si
+  un avis connu (≥ 3 par écosystème) n'est plus indexé sous son paquet. Ce garde-fou détecte un
+  changement grossier du format, pas un changement de sens d'un champ.
+
+### Format du BOM (`rea-sbom:format-version`)
+
+`metadata.properties` porte `rea-sbom:format-version` (entier), incrémenté à chaque changement
+cassant pour un consommateur. Historique :
+
+| Version | Session | Changements cassants                                                                                                                                                                                                                                                |
+| ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1       | S2 / S3 | Format initial (propriété non émise à l'époque) : `rea-sbom:artifact-path`, confiance `observed` / `inferred` (Go, Rust, npm) et `high` / `medium` / `low` (NuGet, PyPI)                                                                                            |
+| 2       | S4      | `rea-sbom:artifact-path` remplacé par `rea-sbom:artifact-name` (nom de base) ; une seule échelle de confiance `high` / `medium` / `low` ; version PyPI = forme normale PEP 440 ; section `vulnerabilities` (un enregistrement OSV par entrée) (propriété non émise) |
+| 3       | S5      | `vulnerabilities[]` regroupées par alias (id = CVE / GHSA / premier) ; `rea-sbom:vuln-count` compte les groupes ; `analysis.state = in_triage` sur confiance `low` ; `rea-sbom:scope`, `rea-sbom:osv-record` ; lecteurs Go/Rust maison (`rea-sbom:reader` change)   |
