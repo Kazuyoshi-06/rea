@@ -114,9 +114,9 @@ export function finalizeScan(scan) {
     unknowns: mergeByKey(scan.unknowns, (u) =>
       JSON.stringify([u.ecosystem, identityName(u), u.reason]),
     ),
-    exclusions: [...scan.exclusions].sort((a, b) =>
-      compareStrings(JSON.stringify(a), JSON.stringify(b)),
-    ),
+    exclusions: [...new Set(scan.exclusions.map((x) => JSON.stringify(x)))]
+      .sort(compareStrings)
+      .map((x) => JSON.parse(x)),
     limitations: [...new Set(scan.limitations)].sort(compareStrings),
   };
 }

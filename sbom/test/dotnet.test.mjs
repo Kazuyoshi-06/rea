@@ -335,10 +335,20 @@ test("deps.json: only type=package is a component; project, runtimepack and odd 
 test("deps.json: same package in several files merges case-insensitively; broken files fall back", () => {
   const dir = publishDir("multi", {
     "a.deps.json": {
-      libraries: { "Serilog/3.1.1": { type: "package", sha512: "sha512-x" } },
+      libraries: {
+        "Serilog/3.1.1": { type: "package", sha512: "sha512-x" },
+        "runtimepack.Microsoft.NETCore.App.Runtime.linux-x64/8.0.1": {
+          type: "runtimepack",
+        },
+      },
     },
     "plugins/b.deps.json": {
-      libraries: { "serilog/3.1.1": { type: "package", sha512: "sha512-x" } },
+      libraries: {
+        "serilog/3.1.1": { type: "package", sha512: "sha512-x" },
+        "runtimepack.Microsoft.NETCore.App.Runtime.linux-x64/8.0.1": {
+          type: "runtimepack",
+        },
+      },
     },
     "plugins/c.deps.json": {
       libraries: { "Serilog/2.0.0": { type: "package" } },
@@ -351,6 +361,11 @@ test("deps.json: same package in several files merges case-insensitively; broken
   ]);
   const merged = scan.value.components.find((c) => c.version === "3.1.1");
   assert.equal(merged.evidence.length, 2, "two locations, one component");
+  assert.equal(
+    scan.value.exclusions.length,
+    1,
+    "identical exclusions are listed once",
+  );
 
   const broken = publishDir("broken", {
     "x.deps.json": "{ not json",

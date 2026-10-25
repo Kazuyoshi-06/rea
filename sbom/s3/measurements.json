@@ -1,5 +1,5 @@
 {
-  "runs_per_target": 4,
+  "runs_per_target": 5,
   "node": "v24.22.1",
   "results": [
     {
@@ -36,37 +36,42 @@
         "found": 1
       },
       "identical_bytes_across_runs": true,
-      "output_bytes": 3239,
+      "output_bytes": 3442,
       "cold": {
-        "elapsed_s": 0.07,
-        "cpu_s": 0.07,
-        "peak_rss_mib": 54.4
+        "elapsed_s": 0.06,
+        "cpu_s": 0.06,
+        "peak_rss_mib": 54.1
       },
       "warm_median": {
-        "elapsed_s": 0.08,
-        "cpu_s": 0.08,
-        "peak_rss_mib": 54.2
+        "elapsed_s": 0.06,
+        "cpu_s": 0.06,
+        "peak_rss_mib": 54.3
       },
       "runs": [
         {
-          "elapsed_s": 0.07,
-          "cpu_s": 0.07,
-          "peak_rss_mib": 54.4
-        },
-        {
-          "elapsed_s": 0.09,
-          "cpu_s": 0.09,
-          "peak_rss_mib": 54.3
-        },
-        {
-          "elapsed_s": 0.08,
-          "cpu_s": 0.08,
-          "peak_rss_mib": 54.2
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.1
         },
         {
           "elapsed_s": 0.06,
           "cpu_s": 0.06,
-          "peak_rss_mib": 54.2
+          "peak_rss_mib": 54.3
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.3
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.4
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 54.1
         }
       ]
     },
@@ -104,31 +109,36 @@
         "found": 1
       },
       "identical_bytes_across_runs": true,
-      "output_bytes": 3825,
+      "output_bytes": 4028,
       "cold": {
         "elapsed_s": 0.07,
-        "cpu_s": 0.08,
-        "peak_rss_mib": 57.7
+        "cpu_s": 0.07,
+        "peak_rss_mib": 57.5
       },
       "warm_median": {
         "elapsed_s": 0.07,
         "cpu_s": 0.07,
-        "peak_rss_mib": 57.7
+        "peak_rss_mib": 57.6
       },
       "runs": [
         {
           "elapsed_s": 0.07,
-          "cpu_s": 0.08,
-          "peak_rss_mib": 57.7
-        },
-        {
-          "elapsed_s": 0.08,
-          "cpu_s": 0.08,
-          "peak_rss_mib": 57.7
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.5
         },
         {
           "elapsed_s": 0.07,
           "cpu_s": 0.07,
+          "peak_rss_mib": 57.6
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.6
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
           "peak_rss_mib": 57.5
         },
         {
@@ -172,10 +182,10 @@
         "found": 2
       },
       "identical_bytes_across_runs": true,
-      "output_bytes": 4678,
+      "output_bytes": 4881,
       "cold": {
         "elapsed_s": 0.06,
-        "cpu_s": 0.07,
+        "cpu_s": 0.06,
         "peak_rss_mib": 54.3
       },
       "warm_median": {
@@ -186,6 +196,16 @@
       "runs": [
         {
           "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.3
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.3
+        },
+        {
+          "elapsed_s": 0.06,
           "cpu_s": 0.07,
           "peak_rss_mib": 54.3
         },
@@ -193,11 +213,6 @@
           "elapsed_s": 0.06,
           "cpu_s": 0.06,
           "peak_rss_mib": 54.3
-        },
-        {
-          "elapsed_s": 0.06,
-          "cpu_s": 0.06,
-          "peak_rss_mib": 54.1
         },
         {
           "elapsed_s": 0.06,
@@ -246,37 +261,42 @@
         "found": 2
       },
       "identical_bytes_across_runs": true,
-      "output_bytes": 5378,
+      "output_bytes": 5581,
       "cold": {
-        "elapsed_s": 0.08,
-        "cpu_s": 0.09,
-        "peak_rss_mib": 58.6
+        "elapsed_s": 0.09,
+        "cpu_s": 0.1,
+        "peak_rss_mib": 58.7
       },
       "warm_median": {
-        "elapsed_s": 0.08,
-        "cpu_s": 0.09,
-        "peak_rss_mib": 58.6
+        "elapsed_s": 0.07,
+        "cpu_s": 0.08,
+        "peak_rss_mib": 58.7
       },
       "runs": [
         {
-          "elapsed_s": 0.08,
-          "cpu_s": 0.09,
-          "peak_rss_mib": 58.6
+          "elapsed_s": 0.09,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.7
         },
         {
-          "elapsed_s": 0.08,
-          "cpu_s": 0.09,
-          "peak_rss_mib": 58.4
-        },
-        {
-          "elapsed_s": 0.08,
+          "elapsed_s": 0.07,
           "cpu_s": 0.08,
           "peak_rss_mib": 58.7
         },
         {
-          "elapsed_s": 0.1,
-          "cpu_s": 0.1,
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 58.7
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.08,
           "peak_rss_mib": 58.6
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 58.8
         }
       ]
     },
@@ -316,35 +336,40 @@
       "identical_bytes_across_runs": true,
       "output_bytes": 9558,
       "cold": {
-        "elapsed_s": 0.09,
-        "cpu_s": 0.1,
-        "peak_rss_mib": 58.4
+        "elapsed_s": 0.11,
+        "cpu_s": 0.12,
+        "peak_rss_mib": 58.5
       },
       "warm_median": {
-        "elapsed_s": 0.09,
+        "elapsed_s": 0.1,
         "cpu_s": 0.1,
-        "peak_rss_mib": 58.4
+        "peak_rss_mib": 58.5
       },
       "runs": [
         {
-          "elapsed_s": 0.09,
-          "cpu_s": 0.1,
-          "peak_rss_mib": 58.4
+          "elapsed_s": 0.11,
+          "cpu_s": 0.12,
+          "peak_rss_mib": 58.5
         },
         {
-          "elapsed_s": 0.09,
+          "elapsed_s": 0.1,
           "cpu_s": 0.1,
-          "peak_rss_mib": 58.4
+          "peak_rss_mib": 58.5
         },
         {
-          "elapsed_s": 0.09,
+          "elapsed_s": 0.1,
           "cpu_s": 0.1,
-          "peak_rss_mib": 58.4
+          "peak_rss_mib": 58.6
         },
         {
-          "elapsed_s": 0.09,
+          "elapsed_s": 0.1,
           "cpu_s": 0.1,
-          "peak_rss_mib": 58.7
+          "peak_rss_mib": 58.3
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 58.5
         }
       ]
     },
@@ -385,25 +410,15 @@
       "output_bytes": 9990,
       "cold": {
         "elapsed_s": 0.1,
-        "cpu_s": 0.12,
-        "peak_rss_mib": 59
-      },
-      "warm_median": {
-        "elapsed_s": 0.1,
-        "cpu_s": 0.1,
+        "cpu_s": 0.11,
         "peak_rss_mib": 58.9
       },
+      "warm_median": {
+        "elapsed_s": 0.11,
+        "cpu_s": 0.11,
+        "peak_rss_mib": 59.3
+      },
       "runs": [
-        {
-          "elapsed_s": 0.1,
-          "cpu_s": 0.12,
-          "peak_rss_mib": 59
-        },
-        {
-          "elapsed_s": 0.11,
-          "cpu_s": 0.1,
-          "peak_rss_mib": 58.9
-        },
         {
           "elapsed_s": 0.1,
           "cpu_s": 0.11,
@@ -411,8 +426,23 @@
         },
         {
           "elapsed_s": 0.1,
-          "cpu_s": 0.1,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 59.2
+        },
+        {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 59.3
+        },
+        {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.11,
           "peak_rss_mib": 58.8
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 59.4
         }
       ]
     },
@@ -453,19 +483,29 @@
       "output_bytes": 3988,
       "cold": {
         "elapsed_s": 0.09,
-        "cpu_s": 0.09,
-        "peak_rss_mib": 57.7
+        "cpu_s": 0.1,
+        "peak_rss_mib": 57.6
       },
       "warm_median": {
-        "elapsed_s": 0.1,
-        "cpu_s": 0.1,
-        "peak_rss_mib": 57.5
+        "elapsed_s": 0.09,
+        "cpu_s": 0.09,
+        "peak_rss_mib": 57.6
       },
       "runs": [
         {
           "elapsed_s": 0.09,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 57.6
+        },
+        {
+          "elapsed_s": 0.09,
           "cpu_s": 0.09,
-          "peak_rss_mib": 57.7
+          "peak_rss_mib": 57.6
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.5
         },
         {
           "elapsed_s": 0.09,
@@ -473,14 +513,9 @@
           "peak_rss_mib": 57.5
         },
         {
-          "elapsed_s": 0.11,
-          "cpu_s": 0.11,
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
           "peak_rss_mib": 57.6
-        },
-        {
-          "elapsed_s": 0.1,
-          "cpu_s": 0.1,
-          "peak_rss_mib": 57.5
         }
       ]
     }

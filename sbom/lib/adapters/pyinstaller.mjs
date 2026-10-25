@@ -232,13 +232,144 @@ function versionFromModule(ctx, root) {
   return found;
 }
 
-function bytecodePhase(archive, base, covered, part, limitations) {
-  const stdlib = loadStdlib(archive.pythonVersion);
+/** Module loader and in-package import resolution over one PYZ, with a per-module cache. */
+function moduleContext(pyz) {
+  const cache = new Map();
+  const load = (moduleName) => {
+    if (cache.has(moduleName)) return cache.get(moduleName);
+    let loaded;
+    if (!pyz.has(moduleName))
+      loaded = { ok: false, error: { message: "not in the PYZ" } };
+    else {
+      const m = pyz.module(moduleName);
+      loaded = m.ok
+        ? ok({
+            bindings: moduleBindings(m.value.code),
+            source: {
+              offset: m.value.offset,
+              size: m.value.size,
+              sourceSha256: m.value.sourceSha256,
+            },
+          })
+        : m;
+    }
+    cache.set(moduleName, loaded);
+    return loaded;
+  };
+  /** Module a `from <dots><module> import x` in `from` refers to, inside its package only. */
+  const importTarget = (from, binding) => {
+    const root = from.split(".")[0];
+    let target = binding.module;
+    if (binding.level > 0) {
+      const segments = from.split(".");
+      const parent = pyz.isPackage(from) ? segments : segments.slice(0, -1);
+      const kept = parent.slice(0, parent.length - (binding.level - 1));
+      if (kept.length === 0) return null;
+      target = [...kept, ...(binding.module ? [binding.module] : [])].join(".");
+    }
+    return target === root || target.startsWith(`${root}.`) ? target : null;
+  };
+  return { load, importTarget };
+}
+
+/** One third-party top-level module → a component, or an unknown with the reason. */
+function reportModule(ctx, top, distribution, evidenceBase) {
+  const found = versionFromModule(ctx, top);
+  const evidence = {
+    ...evidenceBase,
+    module: top,
+    distributionNameSource: distribution === null ? "none" : "static-table",
+  };
+  if (found.literal !== undefined && distribution !== null)
+    return {
+      component: makeComponent({
+        ecosystem: "pypi",
+        name: distribution,
+        version: found.literal,
+        source: "rea-sbom:pyinstaller-reader",
+        confidence: "low",
+        technique: "binary-analysis",
+        evidence: {
+          ...evidence,
+          location: {
+            kind: "pyz-module",
+            path: found.module,
+            offset: found.source.offset,
+            size: found.source.size,
+          },
+          sourceSha256: found.source.sourceSha256,
+          constant: found.constant,
+          resolvedThrough: found.chain,
+        },
+      }),
+    };
+  // A literal that was found but cannot be attributed (no table entry) or accepted (not a
+  // version) stays evidence of the unknown; it is never the version of a component.
+  const observed = found.literal !== undefined ? found : found.observed;
+  const why = found.literal !== undefined ? "" : `; ${found.failure}`;
+  return {
+    unknown: makeUnknown({
+      ecosystem: "pypi",
+      name: distribution ?? top,
+      reason:
+        distribution === null
+          ? `module ${top} found in the PYZ; its distribution name is not in the module table${why}`
+          : `module ${top}: ${found.failure}`,
+      evidence: {
+        ...evidence,
+        location: { kind: "pyz-module", path: top },
+        ...(observed
+          ? {
+              observedLiteral: {
+                module: observed.module,
+                constant: observed.constant,
+                value: observed.literal,
+              },
+            }
+          : {}),
+      },
+    }),
+  };
+}
+
+function scanPyz(pyz, stdlib, covered, evidenceBase, part) {
+  const ctx = moduleContext(pyz);
+  const tops = [...new Set(pyz.names.map((n) => n.split(".")[0]))].sort();
+  for (const top of tops) {
+    if (stdlib.has(top)) continue;
+    if (RUNTIME_MODULE.test(top)) {
+      part.exclusions.push({
+        ecosystem: "pypi",
+        name: top,
+        version: null,
+        reason: "PyInstaller runtime module",
+      });
+      continue;
+    }
+    const distribution = Object.hasOwn(MODULE_DISTRIBUTIONS, top)
+      ? MODULE_DISTRIBUTIONS[top]
+      : null;
+    const isCovered =
+      covered.modules.has(top) ||
+      covered.names.has(normalizeName(top)) ||
+      (distribution !== null && covered.names.has(normalizeName(distribution)));
+    if (isCovered) continue;
+    const entry = reportModule(ctx, top, distribution, {
+      ...evidenceBase,
+      pythonVersion: pyz.python,
+    });
+    if (entry.component) part.components.push(entry.component);
+    else part.unknowns.push(entry.unknown);
+  }
+}
+
+function bytecodePhase(archive, evidenceBase, covered, part, limitations) {
   const pyzEntries = archive.entries.filter((e) => e.type === "z");
   if (pyzEntries.length === 0) {
     limitations.push("pypi: the archive has no PYZ entry.");
     return;
   }
+  const stdlib = loadStdlib(archive.pythonVersion);
   if (stdlib === null) {
     limitations.push(
       `pypi: no standard-library module list recorded for Python ${archive.pythonVersion}; PYZ modules were not examined.`,
@@ -247,143 +378,11 @@ function bytecodePhase(archive, base, covered, part, limitations) {
   }
   for (const entry of pyzEntries) {
     const opened = openPyz(archive, entry);
-    if (!opened.ok) {
+    if (opened.ok) scanPyz(opened.value, stdlib, covered, evidenceBase, part);
+    else
       limitations.push(
         `pypi: ${entry.name}: ${opened.error.tag}: ${opened.error.message}`,
       );
-      continue;
-    }
-    const pyz = opened.value;
-    const cache = new Map();
-    const ctx = {
-      load(moduleName) {
-        if (!cache.has(moduleName)) {
-          if (!pyz.has(moduleName))
-            cache.set(moduleName, {
-              ok: false,
-              error: { message: "not in the PYZ" },
-            });
-          else {
-            const m = pyz.module(moduleName);
-            cache.set(
-              moduleName,
-              m.ok
-                ? ok({
-                    bindings: moduleBindings(m.value.code),
-                    source: {
-                      offset: m.value.offset,
-                      size: m.value.size,
-                      sourceSha256: m.value.sourceSha256,
-                    },
-                  })
-                : m,
-            );
-          }
-        }
-        return cache.get(moduleName);
-      },
-      /** Module a `from <level><module> import x` in `from` refers to, inside the package only. */
-      importTarget(from, binding) {
-        const root = from.split(".")[0];
-        let target;
-        if (binding.level === 0) target = binding.module;
-        else {
-          const segments = from.split(".");
-          const base = pyz.isPackage(from) ? segments : segments.slice(0, -1);
-          const kept = base.slice(0, base.length - (binding.level - 1));
-          if (kept.length === 0) return null;
-          target = [...kept, ...(binding.module ? [binding.module] : [])].join(
-            ".",
-          );
-        }
-        return target === root || target.startsWith(`${root}.`) ? target : null;
-      },
-    };
-    const tops = [...new Set(pyz.names.map((n) => n.split(".")[0]))].sort();
-    for (const top of tops) {
-      if (stdlib.has(top)) continue;
-      if (RUNTIME_MODULE.test(top)) {
-        part.exclusions.push({
-          ecosystem: "pypi",
-          name: top,
-          version: null,
-          reason: "PyInstaller runtime module",
-        });
-        continue;
-      }
-      const distribution = Object.hasOwn(MODULE_DISTRIBUTIONS, top)
-        ? MODULE_DISTRIBUTIONS[top]
-        : null;
-      if (
-        covered.modules.has(top) ||
-        covered.names.has(normalizeName(top)) ||
-        (distribution !== null &&
-          covered.names.has(normalizeName(distribution)))
-      )
-        continue;
-      const found = versionFromModule(ctx, top);
-      const location = (source) => ({
-        kind: "pyz-module",
-        path: top,
-        offset: source?.offset,
-        size: source?.size,
-      });
-      const evidence = {
-        ...base,
-        module: top,
-        pythonVersion: pyz.python,
-        distributionNameSource: distribution === null ? "none" : "static-table",
-      };
-      if (found.literal !== undefined && distribution !== null) {
-        part.components.push(
-          makeComponent({
-            ecosystem: "pypi",
-            name: distribution,
-            version: found.literal,
-            source: "rea-sbom:pyinstaller-reader",
-            confidence: "low",
-            technique: "binary-analysis",
-            evidence: {
-              ...evidence,
-              location: {
-                kind: "pyz-module",
-                path: found.module,
-                offset: found.source.offset,
-                size: found.source.size,
-              },
-              sourceSha256: found.source.sourceSha256,
-              constant: found.constant,
-              resolvedThrough: found.chain,
-            },
-          }),
-        );
-        continue;
-      }
-      const observed = found.literal !== undefined ? found : found.observed;
-      part.unknowns.push(
-        makeUnknown({
-          ecosystem: "pypi",
-          name: distribution ?? top,
-          reason:
-            distribution === null
-              ? `module ${top} found in the PYZ; its distribution name is not in the module table${found.literal !== undefined ? "" : `; ${found.failure}`}`
-              : `module ${top}: ${found.failure}`,
-          evidence: {
-            ...evidence,
-            location: location(undefined),
-            ...(observed
-              ? {
-                  observedLiteral: {
-                    module: observed.module,
-                    constant: observed.constant,
-                    value: observed.literal,
-                  },
-                }
-              : {}),
-          },
-        }),
-      );
-    }
   }
 }
 

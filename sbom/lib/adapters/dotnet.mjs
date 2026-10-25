@@ -32,6 +32,7 @@ const CLI_READER = { tool: "rea-sbom", command: "cli-metadata-reader" };
 export const LIMITATIONS = [
   "nuget: deps.json lists the packages the build resolved, not what the loader will map; a package listed there with no matching assembly in the directory is still reported.",
   "nuget: type=project and type=runtimepack libraries are not NuGet packages and are listed as exclusions.",
+  "nuget: when a usable deps.json exists, assemblies it does not describe (copied by hand, loaded by reflection) are not examined.",
 ];
 export const FALLBACK_LIMITATIONS = [
   "nuget: no usable deps.json; versions come from assembly attributes, not from NuGet. The package id is assumed to equal the assembly name, and one package shipping several assemblies would appear once per assembly.",
