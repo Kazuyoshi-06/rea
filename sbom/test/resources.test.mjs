@@ -130,7 +130,7 @@ const CASES = [
     message: /nesting too deep/,
   },
   {
-    name: "ELF: e_shoff 1 TiB past a 300-byte file",
+    name: "ELF: e_shoff 1 TiB past the end of a 208-byte file",
     kind: "executable",
     bytes: () => {
       const b = buildElf();

@@ -48,7 +48,7 @@
     "rssMiB": 54.8
   },
   {
-    "case": "ELF: e_shoff 1 TiB past a 300-byte file",
+    "case": "ELF: e_shoff 1 TiB past the end of a 208-byte file",
     "tag": "malformed-executable",
     "message": "ELF section header table (offset 1099511627776, 128 bytes) lies outside the file",
     "fileBytes": 208,

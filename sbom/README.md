@@ -221,7 +221,14 @@ description des formats (sources lues : [`NOTICE.md`](NOTICE.md)) :
 ```sh
 make sbom-test        # n'a plus besoin de REA
 make sbom-test-diff   # construit REA si absent, compare les lecteurs maison à REA
+make sbom-real        # outils Go/Rust réels épinglés vs go version -m / rust-audit-info → s5/real-binaries.json
+make sbom-oracle-s5   # govulncheck, cargo-audit, plages risquées vs api.osv.dev → s5/oracle.json
 ```
+
+Lecteurs de fichiers non fiables : chaque décompression a un plafond de sortie, chaque table un
+plafond d'entrées, et toute taille annoncée par un en-tête est comparée à la taille réelle du
+fichier avant allocation (liste des plafonds et mesures : S5_REPORT.md, partie C ;
+`test/resources.test.mjs`).
 
 La détection (`lib/scan.mjs`) lit d'abord la structure : un ELF ou Mach-O avec table de sections
 est Go seulement s'il a `.go.buildinfo` / `__go_buildinfo`, et Rust seulement s'il a `.dep-v0` /
