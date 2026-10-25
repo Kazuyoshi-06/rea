@@ -1,4 +1,7 @@
 // Command-line adapter for sbom/bin/sbom-scan. Exit codes: 0 ok, 1 scan failure, 2 usage.
+// stderr (S7 B): after the output, one summary line each for alerts removed by the platform
+// filter, excluded components and unknowns, when there are any; --quiet drops these lines.
+// They repeat what the BOM already records (rea-sbom:* properties) and never change stdout.
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -10,7 +13,7 @@ import { matchComponents } from "./vulns/match.mjs";
 const DEFAULT_DB = fileURLToPath(new URL("../vulndb", import.meta.url));
 
 const USAGE =
-  "usage: sbom-scan <artifact> [--format cyclonedx|model] [--vulns [--db DIR] [--no-runtime-vulns] [--all-platforms]] [--output FILE] [--timestamp ISO|EPOCH] [--timings]";
+  "usage: sbom-scan <artifact> [--format cyclonedx|model] [--vulns [--db DIR] [--no-runtime-vulns] [--all-platforms]] [--output FILE] [--timestamp ISO|EPOCH] [--timings] [--quiet]";
 
 function timestampOption(value) {
   if (value !== undefined) return /^\d+$/.test(value) ? Number(value) : value;
@@ -18,6 +21,38 @@ function timestampOption(value) {
   return epoch !== undefined && /^\d+$/.test(epoch)
     ? Number(epoch)
     : new Date();
+}
+
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+/** Summary lines for stderr: what the BOM leaves out or could not version (S7 B). */
+export function summaryLines(scan) {
+  const lines = [];
+  const platform = scan.vulnerabilities?.platform;
+  if (platform?.filter === "applied" && platform.filtered.length > 0) {
+    const targets = platform.targets
+      .map((t) => `${t.goos ?? "?"}/${t.goarch ?? "?"}`)
+      .join(", ");
+    lines.push(
+      `platform filter removed ${plural(platform.filtered.length, "alert")} whose vulnerable imports only exist on platforms other than ${targets} (listed as rea-sbom:platform-filtered; --all-platforms keeps them)`,
+    );
+  }
+  if (scan.exclusions.length > 0) {
+    const reasons = new Map();
+    for (const x of scan.exclusions)
+      reasons.set(x.reason, (reasons.get(x.reason) ?? 0) + 1);
+    const detail = [...reasons]
+      .map(([reason, n]) => `${n} ${reason}`)
+      .join("; ");
+    lines.push(
+      `${plural(scan.exclusions.length, "component")} excluded from the BOM (listed as rea-sbom:excluded-component): ${detail}`,
+    );
+  }
+  if (scan.unknowns.length > 0)
+    lines.push(
+      `${plural(scan.unknowns.length, "component")} detected without a version, reported as unknowns (rea-sbom:unknown-component), not matched against vulnerabilities`,
+    );
+  return lines.map((line) => `sbom-scan: ${line}\n`);
 }
 
 function render(scan, values) {
@@ -63,6 +98,7 @@ export function main(argv) {
         output: { type: "string" },
         timestamp: { type: "string" },
         timings: { type: "boolean", default: false },
+        quiet: { type: "boolean", default: false },
         vulns: { type: "boolean", default: false },
         db: { type: "string" },
         "no-runtime-vulns": { type: "boolean", default: false },
@@ -138,4 +174,6 @@ export function main(argv) {
       process.stderr.write(`sbom-scan: ${call.command} ${call.elapsedMs} ms\n`);
   if (values.output) writeFileSync(values.output, text);
   else process.stdout.write(text);
+  if (!values.quiet)
+    for (const line of summaryLines(result.value)) process.stderr.write(line);
 }
