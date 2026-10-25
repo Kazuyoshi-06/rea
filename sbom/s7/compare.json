@@ -1,0 +1,1668 @@
+{
+  "syft": {
+    "application": "syft",
+    "buildDate": "[not provided]",
+    "compiler": "gc",
+    "gitCommit": "[not provided]",
+    "gitDescription": "[not provided]",
+    "goVersion": "go1.24.7",
+    "platform": "linux/amd64",
+    "schemaVersion": "16.1.3",
+    "version": "[not provided]"
+  },
+  "summary": [
+    {
+      "label": "Go",
+      "artifacts": 20,
+      "truth": 1012,
+      "ours": {
+        "found": 1012,
+        "tp": 1012,
+        "precision": 1,
+        "recall": 1
+      },
+      "syft": {
+        "found": 1041,
+        "tp": 1012,
+        "roots": 20,
+        "precision": 0.9721421709894332,
+        "precisionWithoutRoots": 0.9911851126346719,
+        "recall": 1
+      }
+    },
+    {
+      "label": "Rust (cargo-auditable)",
+      "artifacts": 4,
+      "truth": 93,
+      "ours": {
+        "found": 93,
+        "tp": 93,
+        "precision": 1,
+        "recall": 1
+      },
+      "syft": {
+        "found": 97,
+        "tp": 93,
+        "roots": 4,
+        "precision": 0.9587628865979382,
+        "precisionWithoutRoots": 1,
+        "recall": 1
+      }
+    },
+    {
+      "label": "npm (ASAR)",
+      "artifacts": 2,
+      "truth": 9,
+      "ours": {
+        "found": 9,
+        "tp": 9,
+        "precision": 1,
+        "recall": 1
+      },
+      "syft": {
+        "found": 0,
+        "tp": 0,
+        "roots": 0,
+        "precision": null,
+        "precisionWithoutRoots": null,
+        "recall": 0
+      }
+    },
+    {
+      "label": ".NET (publish directory)",
+      "artifacts": 2,
+      "truth": 3,
+      "ours": {
+        "found": 3,
+        "tp": 3,
+        "precision": 1,
+        "recall": 1
+      },
+      "syft": {
+        "found": 5,
+        "tp": 3,
+        "roots": 2,
+        "precision": 0.6,
+        "precisionWithoutRoots": 1,
+        "recall": 1
+      }
+    },
+    {
+      "label": "PyInstaller onefile",
+      "artifacts": 3,
+      "truth": 11,
+      "ours": {
+        "found": 11,
+        "tp": 11,
+        "precision": 1,
+        "recall": 1
+      },
+      "syft": {
+        "found": 0,
+        "tp": 0,
+        "roots": 0,
+        "precision": null,
+        "precisionWithoutRoots": null,
+        "recall": 0
+      }
+    },
+    {
+      "label": ".NET without deps.json",
+      "artifacts": 2,
+      "truth": 3,
+      "ours": {
+        "found": 1,
+        "tp": 1,
+        "precision": 1,
+        "recall": 0.3333333333333333
+      },
+      "syft": {
+        "found": 5,
+        "tp": 0,
+        "roots": 2,
+        "precision": 0,
+        "precisionWithoutRoots": 0,
+        "recall": 0
+      }
+    },
+    {
+      "label": "npm staging directory (not ASAR)",
+      "artifacts": 2,
+      "truth": 9,
+      "ours": {
+        "found": 9,
+        "tp": 9,
+        "precision": 1,
+        "recall": 1
+      },
+      "syft": {
+        "found": 11,
+        "tp": 9,
+        "roots": 2,
+        "precision": 0.8181818181818182,
+        "precisionWithoutRoots": 1,
+        "recall": 1
+      }
+    }
+  ],
+  "results": [
+    {
+      "id": "go-uuid",
+      "ecosystem": "golang",
+      "group": "corpus",
+      "path": "corpus/out/go-uuid/go-uuid",
+      "ours": {
+        "found": 3,
+        "truth": 3,
+        "truePositives": 3,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 4,
+        "truth": 3,
+        "truePositives": 3,
+        "precision": 0.75,
+        "recall": 1,
+        "extra": ["example.com/gouuid@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "example.com/gouuid@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 5
+      }
+    },
+    {
+      "id": "go-uuid-stripped",
+      "ecosystem": "golang",
+      "group": "corpus",
+      "path": "corpus/out/go-uuid-stripped/go-uuid",
+      "ours": {
+        "found": 3,
+        "truth": 3,
+        "truePositives": 3,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 4,
+        "truth": 3,
+        "truePositives": 3,
+        "precision": 0.75,
+        "recall": 1,
+        "extra": ["example.com/gouuid@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "example.com/gouuid@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 5
+      }
+    },
+    {
+      "id": "go-jwt",
+      "ecosystem": "golang",
+      "group": "corpus",
+      "path": "corpus/out/go-jwt/go-jwt",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["example.com/gojwt@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "example.com/gojwt@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 4
+      }
+    },
+    {
+      "id": "go-jwt-stripped",
+      "ecosystem": "golang",
+      "group": "corpus",
+      "path": "corpus/out/go-jwt-stripped/go-jwt",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["example.com/gojwt@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "example.com/gojwt@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 4
+      }
+    },
+    {
+      "id": "rust-small",
+      "ecosystem": "cargo",
+      "group": "corpus",
+      "path": "corpus/out/rust-small/rust-small",
+      "ours": {
+        "found": 5,
+        "truth": 5,
+        "truePositives": 5,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 5
+      },
+      "syft": {
+        "found": 6,
+        "truth": 5,
+        "truePositives": 5,
+        "precision": 0.8333333333333334,
+        "recall": 1,
+        "extra": ["rust-small@0.1.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "rust-small@0.1.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 6
+      }
+    },
+    {
+      "id": "rust-vuln",
+      "ecosystem": "cargo",
+      "group": "corpus",
+      "path": "corpus/out/rust-vuln/rust-vuln",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 1
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["rust-vuln@0.1.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "rust-vuln@0.1.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 3
+      }
+    },
+    {
+      "id": "npm-electron",
+      "ecosystem": "npm",
+      "group": "corpus",
+      "path": "corpus/out/npm-electron/app.asar",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 0,
+        "truth": 2,
+        "truePositives": 0,
+        "precision": null,
+        "recall": 0,
+        "extra": [],
+        "missing": ["lodash@4.17.20", "ms@2.1.3"],
+        "causes": {
+          "extra": {},
+          "missing": {
+            "lodash@4.17.20": "nothing found in this ecosystem",
+            "ms@2.1.3": "nothing found in this ecosystem"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "components": 0
+      }
+    },
+    {
+      "id": "npm-cli",
+      "ecosystem": "npm",
+      "group": "corpus",
+      "path": "corpus/out/npm-cli/app.asar",
+      "ours": {
+        "found": 7,
+        "truth": 7,
+        "truePositives": 7,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 0,
+        "truth": 7,
+        "truePositives": 0,
+        "precision": null,
+        "recall": 0,
+        "extra": [],
+        "missing": [
+          "ansi-styles@4.3.0",
+          "chalk@4.1.2",
+          "color-convert@2.0.1",
+          "color-name@1.1.4",
+          "has-flag@4.0.0",
+          "minimist@1.2.5",
+          "supports-color@7.2.0"
+        ],
+        "causes": {
+          "extra": {},
+          "missing": {
+            "ansi-styles@4.3.0": "nothing found in this ecosystem",
+            "chalk@4.1.2": "nothing found in this ecosystem",
+            "color-convert@2.0.1": "nothing found in this ecosystem",
+            "color-name@1.1.4": "nothing found in this ecosystem",
+            "has-flag@4.0.0": "nothing found in this ecosystem",
+            "minimist@1.2.5": "nothing found in this ecosystem",
+            "supports-color@7.2.0": "nothing found in this ecosystem"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "components": 0
+      }
+    },
+    {
+      "id": "dotnet-json",
+      "ecosystem": "nuget",
+      "group": "corpus",
+      "path": "corpus/out/dotnet-json",
+      "ours": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 2,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 0.5,
+        "recall": 1,
+        "extra": ["dotnet-json@1.0.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "dotnet-json@1.0.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 2
+      }
+    },
+    {
+      "id": "dotnet-serilog",
+      "ecosystem": "nuget",
+      "group": "corpus",
+      "path": "corpus/out/dotnet-serilog",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["dotnet-serilog@1.0.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "dotnet-serilog@1.0.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 3
+      }
+    },
+    {
+      "id": "py-requests",
+      "ecosystem": "pypi",
+      "group": "corpus",
+      "path": "corpus/out/py-requests/py-requests",
+      "ours": {
+        "found": 5,
+        "truth": 5,
+        "truePositives": 5,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 0,
+        "truth": 5,
+        "truePositives": 0,
+        "precision": null,
+        "recall": 0,
+        "extra": [],
+        "missing": [
+          "certifi@2023.7.22",
+          "charset-normalizer@3.3.0",
+          "idna@3.4",
+          "requests@2.31.0",
+          "urllib3@1.26.17"
+        ],
+        "causes": {
+          "extra": {},
+          "missing": {
+            "certifi@2023.7.22": "nothing found in this ecosystem",
+            "charset-normalizer@3.3.0": "nothing found in this ecosystem",
+            "idna@3.4": "nothing found in this ecosystem",
+            "requests@2.31.0": "nothing found in this ecosystem",
+            "urllib3@1.26.17": "nothing found in this ecosystem"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "components": 0
+      }
+    },
+    {
+      "id": "py-requests-meta",
+      "ecosystem": "pypi",
+      "group": "corpus",
+      "path": "corpus/out/py-requests-meta/py-requests-meta",
+      "ours": {
+        "found": 5,
+        "truth": 5,
+        "truePositives": 5,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 0,
+        "truth": 5,
+        "truePositives": 0,
+        "precision": null,
+        "recall": 0,
+        "extra": [],
+        "missing": [
+          "certifi@2023.7.22",
+          "charset-normalizer@3.3.0",
+          "idna@3.4",
+          "requests@2.31.0",
+          "urllib3@1.26.17"
+        ],
+        "causes": {
+          "extra": {},
+          "missing": {
+            "certifi@2023.7.22": "nothing found in this ecosystem",
+            "charset-normalizer@3.3.0": "nothing found in this ecosystem",
+            "idna@3.4": "nothing found in this ecosystem",
+            "requests@2.31.0": "nothing found in this ecosystem",
+            "urllib3@1.26.17": "nothing found in this ecosystem"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "components": 0
+      }
+    },
+    {
+      "id": "py-yaml",
+      "ecosystem": "pypi",
+      "group": "corpus",
+      "path": "corpus/out/py-yaml/py-yaml",
+      "ours": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 0,
+        "truth": 1,
+        "truePositives": 0,
+        "precision": null,
+        "recall": 0,
+        "extra": [],
+        "missing": ["pyyaml@5.3.1"],
+        "causes": {
+          "extra": {},
+          "missing": {
+            "pyyaml@5.3.1": "nothing found in this ecosystem"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "components": 0
+      }
+    },
+    {
+      "id": "stringer",
+      "ecosystem": "golang",
+      "group": "real",
+      "path": ".work/real/go/stringer",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["golang.org/x/tools@v0.26.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "golang.org/x/tools@v0.26.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 4
+      }
+    },
+    {
+      "id": "yq",
+      "ecosystem": "golang",
+      "group": "real",
+      "path": ".work/real/go/yq",
+      "ours": {
+        "found": 21,
+        "truth": 21,
+        "truePositives": 21,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 22,
+        "truth": 21,
+        "truePositives": 21,
+        "precision": 0.9545454545454546,
+        "recall": 1,
+        "extra": ["github.com/mikefarah/yq/v4@v4.44.3"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/mikefarah/yq/v4@v4.44.3": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 23
+      }
+    },
+    {
+      "id": "prometheus",
+      "ecosystem": "golang",
+      "group": "real",
+      "path": ".work/real/go/prometheus",
+      "ours": {
+        "found": 176,
+        "truth": 176,
+        "truePositives": 176,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 177,
+        "truth": 176,
+        "truePositives": 176,
+        "precision": 0.9943502824858758,
+        "recall": 1,
+        "extra": ["github.com/prometheus/prometheus@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/prometheus/prometheus@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 178
+      }
+    },
+    {
+      "id": "terraform",
+      "ecosystem": "golang",
+      "group": "real",
+      "path": ".work/real/go/terraform",
+      "ours": {
+        "found": 208,
+        "truth": 208,
+        "truePositives": 208,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [
+          "github.com/hashicorp/terraform/internal/backend/remote-state/azure: replaced by local directory \"./internal/backend/remote-state/azure\"",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/consul: replaced by local directory \"./internal/backend/remote-state/consul\"",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/cos: replaced by local directory \"./internal/backend/remote-state/cos\"",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/gcs: replaced by local directory \"./internal/backend/remote-state/gcs\"",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/kubernetes: replaced by local directory \"./internal/backend/remote-state/kubernetes\"",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/oss: replaced by local directory \"./internal/backend/remote-state/oss\"",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/pg: replaced by local directory \"./internal/backend/remote-state/pg\"",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/s3: replaced by local directory \"./internal/backend/remote-state/s3\"",
+          "github.com/hashicorp/terraform/internal/legacy: replaced by local directory \"./internal/legacy\""
+        ],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 218,
+        "truth": 208,
+        "truePositives": 208,
+        "precision": 0.9541284403669725,
+        "recall": 1,
+        "extra": [
+          "github.com/hashicorp/terraform/internal/backend/remote-state/azure@",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/consul@",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/cos@",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/gcs@",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/kubernetes@",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/oss@",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/pg@",
+          "github.com/hashicorp/terraform/internal/backend/remote-state/s3@",
+          "github.com/hashicorp/terraform/internal/legacy@",
+          "github.com/hashicorp/terraform@"
+        ],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/hashicorp/terraform/internal/backend/remote-state/azure@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/backend/remote-state/consul@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/backend/remote-state/cos@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/backend/remote-state/gcs@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/backend/remote-state/kubernetes@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/backend/remote-state/oss@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/backend/remote-state/pg@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/backend/remote-state/s3@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform/internal/legacy@": "local-directory replacement, no version",
+            "github.com/hashicorp/terraform@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 219
+      }
+    },
+    {
+      "id": "ripgrep",
+      "ecosystem": "cargo",
+      "group": "real",
+      "path": ".work/real/cargo/bin/rg",
+      "ours": {
+        "found": 32,
+        "truth": 32,
+        "truePositives": 32,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 33,
+        "truth": 32,
+        "truePositives": 32,
+        "precision": 0.9696969696969697,
+        "recall": 1,
+        "extra": ["ripgrep@14.1.1"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "ripgrep@14.1.1": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 33
+      }
+    },
+    {
+      "id": "fd",
+      "ecosystem": "cargo",
+      "group": "real",
+      "path": ".work/real/cargo/bin/fd",
+      "ours": {
+        "found": 54,
+        "truth": 54,
+        "truePositives": 54,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 11
+      },
+      "syft": {
+        "found": 55,
+        "truth": 54,
+        "truePositives": 54,
+        "precision": 0.9818181818181818,
+        "recall": 1,
+        "extra": ["fd-find@10.2.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "fd-find@10.2.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 55
+      }
+    },
+    {
+      "id": "dotnet-json-nodeps",
+      "ecosystem": "nuget",
+      "group": "variant",
+      "path": ".work/s7/dotnet-json-nodeps",
+      "ours": {
+        "found": 1,
+        "truth": 1,
+        "truePositives": 1,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 2,
+        "truth": 1,
+        "truePositives": 0,
+        "precision": 0,
+        "recall": 0,
+        "extra": ["dotnet-json@1.0.0.0", "json.net@12.0.1.22727"],
+        "missing": ["newtonsoft.json@12.0.1"],
+        "causes": {
+          "extra": {
+            "dotnet-json@1.0.0.0": "root component emitted",
+            "json.net@12.0.1.22727": "not in the truth"
+          },
+          "missing": {
+            "newtonsoft.json@12.0.1": "not found"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "components": 2
+      }
+    },
+    {
+      "id": "dotnet-serilog-nodeps",
+      "ecosystem": "nuget",
+      "group": "variant",
+      "path": ".work/s7/dotnet-serilog-nodeps",
+      "ours": {
+        "found": 0,
+        "truth": 2,
+        "truePositives": 0,
+        "precision": null,
+        "recall": 0,
+        "extra": [],
+        "missing": ["serilog.sinks.console@5.0.1", "serilog@3.1.1"],
+        "causes": {
+          "extra": {},
+          "missing": {
+            "serilog.sinks.console@5.0.1": "reported as unknown (version not trusted)",
+            "serilog@3.1.1": "reported as unknown (version not trusted)"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [
+          "Serilog: AssemblyInformationalVersion \"3.1.1-main-999d686d+999d686d1830edde15ccb1d94c7bff313ec7d7a0\" carries a pre-release label; not trusted as the NuGet version",
+          "Serilog.Sinks.Console: AssemblyInformationalVersion \"5.0.1-main-33be844\" carries a pre-release label; not trusted as the NuGet version"
+        ],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 0,
+        "precision": 0,
+        "recall": 0,
+        "extra": [
+          "dotnet-serilog@1.0.0.0",
+          "serilog.sinks.console@5.0.1.0",
+          "serilog@3.1.1.0"
+        ],
+        "missing": ["serilog.sinks.console@5.0.1", "serilog@3.1.1"],
+        "causes": {
+          "extra": {
+            "dotnet-serilog@1.0.0.0": "root component emitted",
+            "serilog.sinks.console@5.0.1.0": "version differs from the truth",
+            "serilog@3.1.1.0": "version differs from the truth"
+          },
+          "missing": {
+            "serilog.sinks.console@5.0.1": "version differs from the truth",
+            "serilog@3.1.1": "version differs from the truth"
+          }
+        },
+        "other": [],
+        "runtime": [],
+        "components": 3
+      }
+    },
+    {
+      "id": "npm-electron-staged",
+      "ecosystem": "npm",
+      "group": "variant",
+      "path": ".work/stage-npm-electron",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["npm-electron@1.0.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "npm-electron@1.0.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 3
+      }
+    },
+    {
+      "id": "npm-cli-staged",
+      "ecosystem": "npm",
+      "group": "variant",
+      "path": ".work/stage-npm-cli",
+      "ours": {
+        "found": 7,
+        "truth": 7,
+        "truePositives": 7,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 8,
+        "truth": 7,
+        "truePositives": 7,
+        "precision": 0.875,
+        "recall": 1,
+        "extra": ["npm-cli@1.0.0"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "npm-cli@1.0.0": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": [],
+        "components": 8
+      }
+    },
+    {
+      "id": "stringer windows/amd64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/windows-amd64/stringer.exe",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["golang.org/x/tools@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "golang.org/x/tools@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": ["application:stringer@UNKNOWN"],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 5
+      }
+    },
+    {
+      "id": "stringer-stripped windows/amd64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/windows-amd64/stringer-stripped.exe",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["golang.org/x/tools@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "golang.org/x/tools@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": ["application:stringer-stripped@UNKNOWN"],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 5
+      }
+    },
+    {
+      "id": "yq windows/amd64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/windows-amd64/yq.exe",
+      "ours": {
+        "found": 22,
+        "truth": 22,
+        "truePositives": 22,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 23,
+        "truth": 22,
+        "truePositives": 22,
+        "precision": 0.9565217391304348,
+        "recall": 1,
+        "extra": ["github.com/mikefarah/yq/v4@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/mikefarah/yq/v4@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": ["application:yq@UNKNOWN"],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 25
+      }
+    },
+    {
+      "id": "prometheus windows/amd64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/windows-amd64/prometheus.exe",
+      "ours": {
+        "found": 171,
+        "truth": 171,
+        "truePositives": 171,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 172,
+        "truth": 171,
+        "truePositives": 171,
+        "precision": 0.9941860465116279,
+        "recall": 1,
+        "extra": ["github.com/prometheus/prometheus@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/prometheus/prometheus@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": ["application:prometheus@UNKNOWN"],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 174
+      }
+    },
+    {
+      "id": "stringer darwin/arm64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/darwin-arm64/stringer",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["golang.org/x/tools@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "golang.org/x/tools@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 4
+      }
+    },
+    {
+      "id": "stringer-stripped darwin/arm64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/darwin-arm64/stringer-stripped",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["golang.org/x/tools@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "golang.org/x/tools@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 4
+      }
+    },
+    {
+      "id": "yq darwin/arm64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/darwin-arm64/yq",
+      "ours": {
+        "found": 21,
+        "truth": 21,
+        "truePositives": 21,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 22,
+        "truth": 21,
+        "truePositives": 21,
+        "precision": 0.9545454545454546,
+        "recall": 1,
+        "extra": ["github.com/mikefarah/yq/v4@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/mikefarah/yq/v4@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 23
+      }
+    },
+    {
+      "id": "prometheus darwin/arm64",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/darwin-arm64/prometheus",
+      "ours": {
+        "found": 172,
+        "truth": 172,
+        "truePositives": 172,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 173,
+        "truth": 172,
+        "truePositives": 172,
+        "precision": 0.9942196531791907,
+        "recall": 1,
+        "extra": ["github.com/prometheus/prometheus@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/prometheus/prometheus@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 174
+      }
+    },
+    {
+      "id": "stringer linux/s390x",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/linux-s390x/stringer",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["golang.org/x/tools@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "golang.org/x/tools@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 4
+      }
+    },
+    {
+      "id": "stringer-stripped linux/s390x",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/linux-s390x/stringer-stripped",
+      "ours": {
+        "found": 2,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 3,
+        "truth": 2,
+        "truePositives": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "extra": ["golang.org/x/tools@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "golang.org/x/tools@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 4
+      }
+    },
+    {
+      "id": "yq linux/s390x",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/linux-s390x/yq",
+      "ours": {
+        "found": 21,
+        "truth": 21,
+        "truePositives": 21,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 22,
+        "truth": 21,
+        "truePositives": 21,
+        "precision": 0.9545454545454546,
+        "recall": 1,
+        "extra": ["github.com/mikefarah/yq/v4@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/mikefarah/yq/v4@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 23
+      }
+    },
+    {
+      "id": "prometheus linux/s390x",
+      "ecosystem": "golang",
+      "group": "cross",
+      "path": ".work/cross/linux-s390x/prometheus",
+      "ours": {
+        "found": 176,
+        "truth": 176,
+        "truePositives": 176,
+        "precision": 1,
+        "recall": 1,
+        "extra": [],
+        "missing": [],
+        "causes": {
+          "extra": {},
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "unknowns": [],
+        "exclusions": 0
+      },
+      "syft": {
+        "found": 177,
+        "truth": 176,
+        "truePositives": 176,
+        "precision": 0.9943502824858758,
+        "recall": 1,
+        "extra": ["github.com/prometheus/prometheus@"],
+        "missing": [],
+        "causes": {
+          "extra": {
+            "github.com/prometheus/prometheus@": "root component emitted"
+          },
+          "missing": {}
+        },
+        "other": [],
+        "runtime": ["stdlib@1.24.7"],
+        "components": 178
+      }
+    }
+  ]
+}

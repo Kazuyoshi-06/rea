@@ -3,6 +3,7 @@
 # targets into .work/cross/<goos>-<goarch>/ (gitignored), plus a stripped (-s -w) build of
 # stringer per target. Oracle: `go version -m` (scripts/cross_binaries.mjs).
 # Existing binaries are kept; each build runs once (no retry loop); a failure is logged, not fatal.
+# Usage: build_cross.sh [goos/goarch...]   (default: the 8 targets below; S7 builds a subset)
 set -uo pipefail
 SBOM="$(cd "$(dirname "$0")/.." && pwd)"
 C="$SBOM/.work/cross"
@@ -11,6 +12,7 @@ mkdir -p "$C" "$SRC"
 export GOTOOLCHAIN=local GOFLAGS="-trimpath -buildvcs=false" CGO_ENABLED=0
 
 TARGETS=(windows/amd64 windows/arm64 darwin/amd64 darwin/arm64 linux/arm64 linux/386 linux/s390x linux/ppc64)
+[ $# -gt 0 ] && TARGETS=("$@")
 
 # Module sources, fetched once: module zip for stringer, yq and prometheus (same pins as S5).
 fetch() { # name module@version

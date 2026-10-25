@@ -1,12 +1,12 @@
 {
   "format": "rea-sbom-osv-index/2",
-  "id": "osv-5668560afe1cbc0d",
+  "id": "osv-eef787903cdb54a4",
   "source": "OSV per-ecosystem exports (https://google.github.io/osv.dev/data/#data-dumps)",
   "archives": {
     "Go": {
       "url": "https://osv-vulnerabilities.storage.googleapis.com/Go/all.zip",
       "lastModified": "2026-10-24T03:03:12.000Z",
-      "downloadedAt": "2026-10-25T17:51:05.515Z",
+      "downloadedAt": "2026-10-25T19:10:33.500Z",
       "sha256": "aeb7314796b4b412c888173d9955876457058e9342ada0464659cf26055d70ce",
       "bytes": 12594328,
       "zipEntries": 9779,
@@ -19,7 +19,7 @@
     "NuGet": {
       "url": "https://osv-vulnerabilities.storage.googleapis.com/NuGet/all.zip",
       "lastModified": "2026-10-21T12:18:07.000Z",
-      "downloadedAt": "2026-10-25T17:51:31.284Z",
+      "downloadedAt": "2026-10-25T19:10:56.720Z",
       "sha256": "3ee198b4ca72eaf3bf4ef039f5e6e55f195fd385bb82bf2ccb3b6dbc53955e62",
       "bytes": 2676989,
       "zipEntries": 1965,
@@ -32,7 +32,7 @@
     "PyPI": {
       "url": "https://osv-vulnerabilities.storage.googleapis.com/PyPI/all.zip",
       "lastModified": "2026-10-25T11:33:01.000Z",
-      "downloadedAt": "2026-10-25T17:51:32.155Z",
+      "downloadedAt": "2026-10-25T19:10:57.420Z",
       "sha256": "03b09356ec07a18531c49eff6ea469eef3c981c0ed9e2a32f8f30b36549e916b",
       "bytes": 37065123,
       "zipEntries": 26613,
@@ -45,7 +45,7 @@
     "crates.io": {
       "url": "https://osv-vulnerabilities.storage.googleapis.com/crates.io/all.zip",
       "lastModified": "2026-10-24T08:47:51.000Z",
-      "downloadedAt": "2026-10-25T17:51:06.931Z",
+      "downloadedAt": "2026-10-25T19:10:34.668Z",
       "sha256": "4ea1d249e9074935bda06611809a01a3fa05c58142e2f4efd8c701c4ed75f9b5",
       "bytes": 3654719,
       "zipEntries": 2969,
@@ -57,16 +57,16 @@
     },
     "npm": {
       "url": "https://osv-vulnerabilities.storage.googleapis.com/npm/all.zip",
-      "lastModified": "2026-10-25T17:48:08.000Z",
-      "downloadedAt": "2026-10-25T17:51:09.919Z",
-      "sha256": "4c18bfb7e2ae4ad0b1aca4a03ff6fce36155698eafe04d4f31cee6e5553982b1",
-      "bytes": 219095799,
-      "zipEntries": 230779,
-      "osvRecords": 230779,
+      "lastModified": "2026-10-25T18:33:07.000Z",
+      "downloadedAt": "2026-10-25T19:10:37.096Z",
+      "sha256": "f6e20d441e9b2ba52c99f3f02d5ce257ec76ce5cbe478d0c571430b5f407bf0a",
+      "bytes": 219096572,
+      "zipEntries": 230780,
+      "osvRecords": 230780,
       "unreadableRecords": 0,
-      "indexedAdvisories": 230779,
+      "indexedAdvisories": 230780,
       "withdrawnAdvisories": 737,
-      "packages": 226137
+      "packages": 226138
     }
   }
 }
