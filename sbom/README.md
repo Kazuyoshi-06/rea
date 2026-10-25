@@ -78,3 +78,22 @@ Résultat de `make repro` (3 builds, même chemin) : voir `corpus/REPRO.txt`. Un
 avait conclu « 21/21 identiques » : il est tombé sur deux builds du même état. Hors PyInstaller,
 les artefacts sont identiques entre le dépôt et un clone propre dans un autre chemin (constaté après
 les correctifs `PathMap` et répertoires vides).
+
+## S2 — cœur SBOM (Go, Rust, npm)
+
+`bin/sbom-scan <artefact> --format cyclonedx` produit un CycloneDX 1.6 JSON déterministe pour un
+binaire Go, un binaire Rust construit avec `cargo auditable`, une archive `app.asar` ou un répertoire
+contenant `node_modules`. Détails, décisions et mesures : [`S2_REPORT.md`](S2_REPORT.md).
+
+| Fichier                       | Rôle                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------- |
+| `lib/model.mjs`               | Composants, unknowns, exclusions, evidence ; fusion et tri                |
+| `lib/purl.mjs`                | purl `pkg:golang`, `pkg:cargo`, `pkg:npm`                                 |
+| `lib/rea.mjs`                 | Seul point de contact avec REA (`readGoBuildInfo`, `readCargoAuditable`)  |
+| `lib/tree.mjs`                | Lecteur ASAR minimal et arborescence répertoire                           |
+| `lib/adapters/*.mjs`          | Go, Rust, npm → modèle                                                    |
+| `lib/cyclonedx.mjs`           | Export CycloneDX 1.6                                                      |
+| `lib/scan.mjs`, `lib/cli.mjs` | Détection automatique, CLI                                                |
+| `schemas/`                    | Schéma CycloneDX 1.6 épinglé (gzip, sha256, provenance)                   |
+| `test/`                       | Tests node:test ; `make sbom-test` construit ce qu'il faut et les lance   |
+| `s2/measurements.json`        | Sortie de `make sbom-measure` (temps, CPU, RSS par appel REA et par scan) |
