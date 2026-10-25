@@ -109,7 +109,7 @@ PyInstaller `--onefile`, en Node pur (aucun appel à REA). Détails, mesures, li
 | Fichier                              | Rôle                                                                                    |
 | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | `lib/readers/cli-metadata.mjs`       | PE → en-tête CLI → tables de métadonnées ECMA-335 (assembly, attributs de version)      |
-| `lib/adapters/dotnet.mjs`            | `*.deps.json` (confiance high) ; repli sur les attributs de la DLL (medium / low)       |
+| `lib/adapters/dotnet.mjs`            | `*.deps.json` (confiance high) ; repli sur les attributs de la DLL (medium, ou unknown) |
 | `lib/readers/marshal.mjs`            | Lecteur `marshal` (CPython 3.13) : TOC du PYZ et objets code                            |
 | `lib/readers/pybytecode.mjs`         | Liaisons de noms au niveau module d'un objet code 3.13                                  |
 | `lib/readers/pyinstaller.mjs`        | Cookie MEI, CArchive (TOC), PYZ                                                         |
@@ -128,3 +128,18 @@ make stdlib-names       # régénère data/stdlib-module-names-<X.Y>.json avec p
 Prérequis supplémentaires : SDK .NET 8 (`apt install dotnet-sdk-8.0` quand dot.net est bloqué),
 Python 3.13 avec `venv` et accès PyPI. Les tests qui compilent des extraits Python exigent Python 3.13
 (bytecode et numéros d'opcode propres à cette version).
+
+### Décisions appliquées en S4 (partie A)
+
+- **Confiance** : une seule échelle `high` / `medium` / `low` pour tous les écosystèmes (propriété
+  `rea-sbom:confidence`, CycloneDX 1 / 0,6 / 0,3). Go, Rust, npm : `observed` → `high`,
+  `inferred` → `medium`.
+- **PyPI** : `version` et purl = forme normale PEP 440 de la chaîne lue (`2023.07.22` → `2023.7.22`) ;
+  la chaîne lue reste dans l'evidence (`rawValue`). Une version de dist-info non PEP 440 est émise
+  telle quelle, marquée `pep440: "invalid"` et signalée en limitation. Bytecode : toujours `low`.
+- **.NET, repli sans deps.json** : seule une `AssemblyInformationalVersion` sans étiquette de
+  pré-version donne un composant (`medium`) ; une pré-version ou une `AssemblyFileVersion` donne un
+  unknown, la valeur candidate restant dans l'evidence (`candidate`).
+- **Chemin de l'artefact** : le BOM ne contient plus le chemin donné en argument, seulement le nom de
+  base (`rea-sbom:artifact-name`) et le sha256 ; le même fichier scanné depuis deux répertoires donne
+  les mêmes octets (`test/path-independence.test.mjs`).

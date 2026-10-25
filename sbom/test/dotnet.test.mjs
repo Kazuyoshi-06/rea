@@ -76,38 +76,33 @@ test("purl: nuget keeps the published case; pypi is lowercased with _ → -", ()
   });
 });
 
-test("attribute versions: build metadata dropped, pre-release and FileVersion downgraded, junk refused", () => {
+test("attribute versions: build metadata dropped, pre-release and FileVersion become unknowns, junk refused", () => {
   const attr = (value) => ({ value, offset: 1, size: 1, sourceSha256: "a" });
   let v = versionFromAttributes({
     informationalVersion: attr("12.0.1+509643a"),
   });
   assert.deepEqual(
-    [v.version, v.confidence, v.attribute, v.rawValue, v.buildMetadata],
-    [
-      "12.0.1",
-      "medium",
-      "AssemblyInformationalVersion",
-      "12.0.1+509643a",
-      "509643a",
-    ],
+    [v.version, v.attribute, v.rawValue, v.buildMetadata],
+    ["12.0.1", "AssemblyInformationalVersion", "12.0.1+509643a", "509643a"],
   );
   v = versionFromAttributes({
     informationalVersion: attr("3.1.1-main-999d686d+abc"),
   });
-  assert.deepEqual([v.version, v.confidence], ["3.1.1-main-999d686d", "low"]);
+  assert.equal(v.version, undefined);
+  assert.match(v.reason, /pre-release label/);
+  assert.equal(v.candidate.version, "3.1.1-main-999d686d");
   v = versionFromAttributes({ informationalVersion: attr("5.0") });
-  assert.deepEqual(
-    [v.version, v.confidence, v.buildMetadata],
-    ["5.0", "medium", null],
-  );
+  assert.deepEqual([v.version, v.buildMetadata], ["5.0", null]);
   // Not a version → next candidate, with the rejected value kept
   v = versionFromAttributes({
     informationalVersion: attr("Release build 7"),
     fileVersion: attr("1.2.3.0"),
   });
+  assert.equal(v.version, undefined);
+  assert.match(v.reason, /only AssemblyFileVersion/);
   assert.deepEqual(
-    [v.version, v.confidence, v.attribute],
-    ["1.2.3.0", "low", "AssemblyFileVersion"],
+    [v.candidate.version, v.candidate.attribute],
+    ["1.2.3.0", "AssemblyFileVersion"],
   );
   assert.deepEqual(v.rejected, [
     { attribute: "AssemblyInformationalVersion", rawValue: "Release build 7" },
@@ -240,24 +235,31 @@ test("fallback (no deps.json) is deterministic and its result is the measured on
   );
   assert.ok(json.value.limitations.some((l) => /no usable deps\.json/.test(l)));
 
-  // Serilog ships "3.1.1-main-999d686d": read literally, rated low, and wrong against NuGet.
+  // Serilog ships "3.1.1-main-999d686d" (wrong against NuGet 3.1.1): a pre-release label is
+  // not trusted, so both assemblies are unknowns that keep the candidate in their evidence.
   const serilog = scanArtifact(withoutDeps("dotnet-serilog"));
-  assert.deepEqual(summary(serilog.value), [
-    "Serilog@3.1.1-main-999d686d:low",
-    "Serilog.Sinks.Console@5.0.1-main-33be844:low",
-  ]);
+  assert.deepEqual(summary(serilog.value), []);
+  assert.deepEqual(
+    serilog.value.unknowns.map((u) => [u.name, u.evidence[0].candidate]),
+    [
+      ["Serilog", "3.1.1-main-999d686d"],
+      ["Serilog.Sinks.Console", "5.0.1-main-33be844"],
+    ],
+  );
+  for (const u of serilog.value.unknowns)
+    assert.match(u.reason, /pre-release label/);
   const m = compareToTruth(
     "nuget",
     serilog.value.components,
     readTruth("dotnet-serilog"),
   );
-  assert.equal(m.strict.precision, 0);
+  assert.equal(m.strict.precision, null);
   assert.equal(m.strict.recall, 0);
 
   const again = scanArtifact(withoutDeps("dotnet-serilog", "second"));
   assert.deepEqual(
-    JSON.stringify(again.value.components.map((c) => c.version)),
-    JSON.stringify(serilog.value.components.map((c) => c.version)),
+    JSON.stringify(again.value.unknowns.map((u) => u.evidence[0].candidate)),
+    JSON.stringify(serilog.value.unknowns.map((u) => u.evidence[0].candidate)),
   );
 });
 
@@ -437,12 +439,16 @@ test("CycloneDX: schema-valid, byte-identical across runs, confidence and techni
     ),
   );
   const fallback = JSON.parse(
-    render(withoutDeps("dotnet-serilog", "export-nodeps")),
+    render(withoutDeps("dotnet-json", "export-json-nodeps")),
   );
-  const low = fallback.components.find((c) => c.name === "Serilog");
+  const medium = fallback.components.find((c) => c.name === "Newtonsoft.Json");
   assert.equal(
-    low.evidence.identity[0].methods[0].technique,
+    medium.evidence.identity[0].methods[0].technique,
     "binary-analysis",
   );
-  assert.equal(low.evidence.identity[0].confidence, 0.3);
+  assert.equal(medium.evidence.identity[0].confidence, 0.6);
+  const unknowns = JSON.parse(
+    render(withoutDeps("dotnet-serilog", "export-nodeps")),
+  );
+  assert.deepEqual(unknowns.components, []);
 });

@@ -9,8 +9,10 @@
 //      - build metadata after "+" is dropped from the version (SemVer: ignored for precedence)
 //        and kept in the evidence as `buildMetadata` / `rawValue`;
 //      - the package id is assumed to be the assembly name (evidence `nameSource`);
-//      - "medium" for a clean informational version, "low" when it carries a pre-release label
-//        (Serilog ships "3.1.1-main-999d686d" for NuGet 3.1.1) or comes from AssemblyFileVersion;
+//      - only a clean informational version (no pre-release label) becomes a component, with
+//        confidence "medium". A pre-release label (Serilog ships "3.1.1-main-999d686d" for NuGet
+//        3.1.1) or an AssemblyFileVersion value is not the package version often enough that it
+//        becomes an unknown; the candidate stays in the evidence (`candidate`);
 //      - AssemblyVersion is never used: it is a binding version, not the package version.
 //    An assembly with an entry point is an application: scan root, not a package.
 // Satellite (culture) assemblies and non-managed files are skipped.
@@ -146,7 +148,9 @@ function readDepsFiles(artifact, depsFiles) {
 
 /**
  * Version from the assembly attributes, or the reason there is none.
- * Returns {version, confidence, attribute, rawValue, buildMetadata, rejected[]} or {reason}.
+ * Returns {version, attribute, rawValue, buildMetadata, rejected[]} or {reason, rejected[]};
+ * a well-formed but untrusted value (pre-release label, AssemblyFileVersion) is a reason with
+ * its `candidate` kept.
  */
 export function versionFromAttributes(attributes) {
   const rejected = [];
@@ -163,15 +167,21 @@ export function versionFromAttributes(attributes) {
       rejected.push({ attribute, rawValue: found.value });
       continue;
     }
-    const confidence =
-      key === "informationalVersion" && !core.includes("-") ? "medium" : "low";
-    return {
+    const chosen = {
       version: core,
-      confidence,
       attribute,
       found,
       rawValue: found.value,
       buildMetadata: plus === -1 ? null : found.value.slice(plus + 1),
+      rejected,
+    };
+    if (key === "informationalVersion" && !core.includes("-")) return chosen;
+    return {
+      reason:
+        key === "informationalVersion"
+          ? `AssemblyInformationalVersion ${JSON.stringify(found.value)} carries a pre-release label; not trusted as the NuGet version`
+          : `only AssemblyFileVersion ${JSON.stringify(found.value)} is available; a file version is not the NuGet version`,
+      candidate: chosen,
       rejected,
     };
   }
@@ -193,14 +203,38 @@ function assemblyEntry(artifact, rel, assembly, attributes, entryPoint) {
     assemblyVersion: assembly.version,
     nameSource: "assembly-name",
   };
-  if (chosen.reason !== undefined) {
-    const evidence = {
+  // The attribute that was read: the accepted version, or the untrusted candidate.
+  const read = chosen.reason === undefined ? chosen : chosen.candidate;
+  let evidence;
+  if (read === undefined)
+    evidence = {
       ...base,
       location: { kind: "file", path: rel },
       rejected: chosen.rejected,
     };
-    if (entryPoint)
-      return { root: { name: assembly.name, version: null, evidence } };
+  else {
+    evidence = {
+      ...base,
+      location: {
+        kind: "cli-attribute",
+        path: rel,
+        offset: read.found.offset,
+        size: read.found.size,
+      },
+      sourceSha256: read.found.sourceSha256,
+      attribute: read.attribute,
+      rawValue: read.rawValue,
+      buildMetadata: read.buildMetadata,
+    };
+    if (chosen.rejected.length > 0) evidence.rejected = chosen.rejected;
+  }
+  // An application is the scan root, not a package: its attribute version is reported as read.
+  if (entryPoint)
+    return {
+      root: { name: assembly.name, version: read?.version ?? null, evidence },
+    };
+  if (chosen.reason !== undefined) {
+    if (read !== undefined) evidence.candidate = read.version;
     return {
       unknown: makeUnknown({
         ecosystem: "nuget",
@@ -210,29 +244,13 @@ function assemblyEntry(artifact, rel, assembly, attributes, entryPoint) {
       }),
     };
   }
-  const evidence = {
-    ...base,
-    location: {
-      kind: "cli-attribute",
-      path: rel,
-      offset: chosen.found.offset,
-      size: chosen.found.size,
-    },
-    sourceSha256: chosen.found.sourceSha256,
-    attribute: chosen.attribute,
-    rawValue: chosen.rawValue,
-    buildMetadata: chosen.buildMetadata,
-  };
-  if (chosen.rejected.length > 0) evidence.rejected = chosen.rejected;
-  if (entryPoint)
-    return { root: { name: assembly.name, version: chosen.version, evidence } };
   return {
     component: makeComponent({
       ecosystem: "nuget",
       name: assembly.name,
       version: chosen.version,
       source: "rea-sbom:cli-metadata-reader",
-      confidence: chosen.confidence,
+      confidence: "medium",
       technique: "binary-analysis",
       evidence,
     }),

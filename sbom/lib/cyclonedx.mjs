@@ -4,6 +4,9 @@
 //
 // Mapping:
 //   scan root              → metadata.component (artifact sha256 in hashes)
+//   artifact path          → never emitted: only its base name (rea-sbom:artifact-name) and
+//                            sha256, so the same file scanned from two directories gives the
+//                            same bytes. Evidence locations are relative to the artifact.
 //   components             → components[] (type library); Go stdlib carries
 //                            property rea-sbom:role=language-runtime
 //   unknowns (no version)  → metadata.properties "rea-sbom:unknown-component" (JSON value),
@@ -51,20 +54,18 @@ const TECHNIQUE = {
   nuget: "manifest-analysis",
   pypi: "other",
 };
-// Numeric CycloneDX confidence. high/medium/low are the S3 scale (NuGet, PyPI); the values
-// are a mapping choice, not a calibrated probability.
-const CONFIDENCE = {
-  observed: 1,
-  inferred: 0.5,
+// Numeric CycloneDX confidence of the high/medium/low scale; the values are a mapping choice,
+// not a calibrated probability.
+export const CONFIDENCE = {
   high: 1,
   medium: 0.6,
   low: 0.3,
 };
 
-function occurrence(evidence, artifactPath) {
+function occurrence(evidence, artifactName) {
   const loc = evidence.location;
   const out = {
-    location: loc && loc.kind !== "file-range" ? loc.path : artifactPath,
+    location: loc && loc.kind !== "file-range" ? loc.path : artifactName,
   };
   if (loc && Number.isSafeInteger(loc.offset)) out.offset = loc.offset;
   const { artifact: _artifact, ...context } = evidence;
@@ -72,7 +73,7 @@ function occurrence(evidence, artifactPath) {
   return out;
 }
 
-function componentEvidence(c, artifactPath) {
+function componentEvidence(c, artifactName) {
   const confidence = CONFIDENCE[c.confidence] ?? 0;
   return {
     identity: [
@@ -88,7 +89,7 @@ function componentEvidence(c, artifactPath) {
         ],
       },
     ],
-    occurrences: c.evidence.map((e) => occurrence(e, artifactPath)),
+    occurrences: c.evidence.map((e) => occurrence(e, artifactName)),
   };
 }
 
@@ -117,24 +118,26 @@ function bomComponents(scan) {
     };
     if (c.purl !== null) out.purl = c.purl;
     out.properties = componentProperties(c);
-    out.evidence = componentEvidence(c, scan.artifact.path);
+    out.evidence = componentEvidence(c, artifactName(scan.artifact));
     return out;
   });
 }
+
+const artifactName = (artifact) => basename(artifact.path);
 
 function rootComponent(scan) {
   const { artifact, root } = scan;
   const out = {
     type: artifact.kind === "directory" ? "file" : "application",
     "bom-ref": "rea-sbom:subject",
-    name: root?.name ?? basename(artifact.path),
+    name: root?.name ?? artifactName(artifact),
   };
   if (root?.version) out.version = root.version;
   if (root?.purl) out.purl = root.purl;
   if (artifact.sha256)
     out.hashes = [{ alg: "SHA-256", content: artifact.sha256 }];
   out.properties = [
-    prop("rea-sbom:artifact-path", artifact.path),
+    prop("rea-sbom:artifact-name", artifactName(artifact)),
     prop("rea-sbom:artifact-kind", artifact.kind),
   ];
   if (artifact.bytes !== null)

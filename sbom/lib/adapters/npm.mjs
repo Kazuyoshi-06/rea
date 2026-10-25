@@ -75,7 +75,7 @@ function visitPackage(ctx, segments, installName) {
       name: declared ?? installName,
       version,
       source: `${ctx.base.reader.tool}:${ctx.base.reader.command}`,
-      confidence: declared === null ? "inferred" : "observed",
+      confidence: declared === null ? "medium" : "high",
       evidence,
     }),
   );

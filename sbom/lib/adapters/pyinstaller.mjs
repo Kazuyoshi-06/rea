@@ -12,12 +12,16 @@
 // Standard-library modules are removed with the sys.stdlib_module_names list recorded for the
 // archive's Python minor version (data/); without that list the bytecode path is not attempted.
 // The distribution name of a module comes from the static table in pypi-modules.mjs only.
+// Versions (both paths) are emitted in their PEP 440 normal form ("2023.07.22" → "2023.7.22");
+// the string as read stays in the evidence as `rawValue`. A dist-info Version that is not
+// PEP 440 is kept verbatim and flagged (`pep440: "invalid"` in the evidence and a limitation).
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { makeComponent, makeUnknown } from "../model.mjs";
 import { ok } from "../result.mjs";
 import { moduleBindings } from "../readers/pybytecode.mjs";
+import { canonicalPep440 } from "../versions/pep440.mjs";
 import { openPyInstaller, openPyz } from "../readers/pyinstaller.mjs";
 import { MODULE_DISTRIBUTIONS } from "./pypi-modules.mjs";
 
@@ -28,16 +32,6 @@ const MAX_FOLLOW = 3;
 const MAX_METADATA_BYTES = 8 << 20;
 // Modules the PyInstaller runtime adds to the archive itself.
 const RUNTIME_MODULE = /^(?:pyimod|_pyi_rth_utils|pyi_rth_)/;
-
-// PEP 440 Appendix B version pattern (case-insensitive), anchored.
-const PEP440 = new RegExp(
-  "^v?(?:(?:[0-9]+!)?[0-9]+(?:\\.[0-9]+)*" +
-    "(?:[-_.]?(?:alpha|a|beta|b|preview|pre|c|rc)[-_.]?[0-9]*)?" +
-    "(?:-[0-9]+|[-_.]?(?:post|rev|r)[-_.]?[0-9]*)?" +
-    "(?:[-_.]?dev[-_.]?[0-9]*)?)" +
-    "(?:\\+[a-z0-9]+(?:[-_.][a-z0-9]+)*)?$",
-  "i",
-);
 
 // Release segments that are all zeros ("0", "0.0.0", "0.dev0+unknown"): the placeholder a
 // build-time version script leaves in the source (setuptools ships "0.dev0+unknown"), not a
@@ -81,7 +75,7 @@ export function parseMetadataHeaders(text) {
   return headers;
 }
 
-function distInfoPhase(archive, base, part) {
+function distInfoPhase(archive, base, part, limitations) {
   const covered = { names: new Set(), modules: new Set(), distributions: 0 };
   const entries = archive.entries.filter((e) => e.type === "x");
   const metadata = entries
@@ -128,11 +122,19 @@ function distInfoPhase(archive, base, part) {
       );
       continue;
     }
+    const canonical = canonicalPep440(version);
+    evidence.rawValue = version;
+    if (!canonical.ok) {
+      evidence.pep440 = "invalid";
+      limitations.push(
+        `pypi: ${dir}: Version ${JSON.stringify(version)} is not PEP 440; emitted verbatim, not normalized.`,
+      );
+    }
     part.components.push(
       makeComponent({
         ecosystem: "pypi",
         name,
-        version,
+        version: canonical.ok ? canonical.value : version,
         source: "rea-sbom:pyinstaller-reader",
         confidence: "high",
         technique: "manifest-analysis",
@@ -224,7 +226,7 @@ function versionFromModule(ctx, root) {
       failure: `constant ${JSON.stringify(found.literal)} (${found.constant} in ${found.module}) is a placeholder, not a release version`,
       observed: found,
     };
-  if (!PEP440.test(found.literal))
+  if (!canonicalPep440(found.literal).ok)
     return {
       failure: `constant ${JSON.stringify(found.literal)} (${found.constant} in ${found.module}) is not a PEP 440 version`,
       observed: found,
@@ -285,7 +287,7 @@ function reportModule(ctx, top, distribution, evidenceBase) {
       component: makeComponent({
         ecosystem: "pypi",
         name: distribution,
-        version: found.literal,
+        version: canonicalPep440(found.literal).value,
         source: "rea-sbom:pyinstaller-reader",
         confidence: "low",
         technique: "binary-analysis",
@@ -299,6 +301,7 @@ function reportModule(ctx, top, distribution, evidenceBase) {
           },
           sourceSha256: found.source.sourceSha256,
           constant: found.constant,
+          rawValue: found.literal,
           resolvedThrough: found.chain,
         },
       }),
@@ -397,7 +400,7 @@ export function scanPyInstaller(artifact) {
   };
   const part = { root: null, components: [], unknowns: [], exclusions: [] };
   const limitations = [...LIMITATIONS];
-  const covered = distInfoPhase(archive, base, part);
+  const covered = distInfoPhase(archive, base, part, limitations);
   bytecodePhase(archive, base, covered, part, limitations);
   return ok({ ...part, limitations });
 }

@@ -64,8 +64,9 @@
 `py-requests-meta` (S3) a la même vérité terrain que `py-requests` (mêmes `requirements.txt`) : la
 différence est dans l'artefact, qui embarque les `*.dist-info` (`--copy-metadata`).
 
-Comparaison des versions PyPI en S3 : la version émise est celle lue dans l'artefact, sans
-normalisation. Le tableau de mesure donne donc deux chiffres : **stricte** (chaîne identique à
+Comparaison des versions PyPI en S3 : la version émise était celle lue dans l'artefact, sans
+normalisation. **Depuis S4, la version émise est la forme normale PEP 440** (la chaîne lue reste dans
+l'evidence) : les deux chiffres coïncident sur le corpus. Le tableau de mesure donne donc deux chiffres : **stricte** (chaîne identique à
 `pip freeze`) et **équivalente PEP 440** (les chiffres de tête nuls sont ignorés : `2023.07.22` =
 `2023.7.22`). La seconde n'est utilisée que pour la mesure ; elle n'est jamais appliquée aux versions
 émises.

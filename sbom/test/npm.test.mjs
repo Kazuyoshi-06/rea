@@ -107,8 +107,8 @@ for (const [label, target] of [
       ["node_modules/a/node_modules/ms", "node_modules/ms"],
     );
     assert.equal(byId["real@5.0.0"].evidence[0].installedAs, "alias");
-    assert.equal(byId["noname@1.2.3"].confidence, "inferred");
-    assert.equal(byId["lodash@4.17.20"].confidence, "observed");
+    assert.equal(byId["noname@1.2.3"].confidence, "medium");
+    assert.equal(byId["lodash@4.17.20"].confidence, "high");
     const unknowns = Object.fromEntries(
       scan.unknowns.map((u) => [u.name, u.reason]),
     );

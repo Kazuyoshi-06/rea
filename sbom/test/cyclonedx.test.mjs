@@ -72,7 +72,7 @@ function syntheticScan(order) {
       name: "inferred",
       version: "1.0.0",
       source: "s",
-      confidence: "inferred",
+      confidence: "medium",
       evidence: evidence("node_modules/inferred/package.json"),
     }),
   ];
@@ -140,7 +140,7 @@ test("export is schema-valid, sorted and independent of input order", () => {
   assert.equal(
     bom.components.find((c) => c.name === "inferred").evidence.identity[0]
       .confidence,
-    0.5,
+    0.6,
   );
   assert.equal(
     bom.components.find((c) => c.name === "gitdep").evidence.identity[0].field,

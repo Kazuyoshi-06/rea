@@ -61,12 +61,12 @@ for (const fx of [...S3_DOTNET_FIXTURES, ...S3_PYTHON_FIXTURES]) {
       "dotnet-json": [1, 1, "high"],
       "dotnet-serilog": [1, 1, "high"],
       "py-requests-meta": [1, 1, "high"],
-      "py-requests": [0.8, 1, "low"],
+      "py-requests": [1, 1, "low"],
       "py-yaml": [1, 1, "low"],
     }[fx.id];
     assert.equal(m.strict.precision, expected[0], `${fx.id} strict precision`);
     assert.equal(m.equivalent.recall, 1, `missing: ${m.equivalent.missing}`);
-    assert.equal(m.strict.recall, fx.id === "py-requests" ? 0.8 : 1);
+    assert.equal(m.strict.recall, 1);
     for (const c of bom.components) {
       assert.equal(
         componentProp(c, "rea-sbom:confidence"),

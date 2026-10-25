@@ -6,10 +6,12 @@
 //                                                    deliberately not a shipped component.
 // Evidence   {artifact, location, sourceSha256, reader, ...adapter facts}
 //
-// confidence: Go, Rust and npm (S2) use "observed" (read verbatim from the artifact) or
-// "inferred" (derived, e.g. an npm name taken from the install directory because package.json had
-// none). NuGet and PyPI (S3) use the ordinal "high" / "medium" / "low" scale, defined per
-// adapter (see S3_REPORT.md); the two vocabularies are kept apart on purpose, not merged.
+// confidence: one ordinal scale for every ecosystem, "high" / "medium" / "low" (property
+// rea-sbom:confidence). "high" = read verbatim from a manifest or build record of the artifact
+// (Go build info, cargo-auditable, package.json, deps.json, dist-info); "medium" = read but one
+// part derived (npm name taken from the install directory, .NET id assumed = assembly name);
+// "low" = a constant the package's own code binds (PyInstaller bytecode). Per-adapter rules in
+// the adapters' headers. Vulnerability alerts inherit the confidence of their component.
 // role: "library" or "language-runtime" (Go stdlib); TRUTH_RULES.md does not count runtimes.
 import {
   cargoPurl,
@@ -36,7 +38,7 @@ export function makeComponent({
   name,
   version,
   source,
-  confidence = "observed",
+  confidence = "high",
   role = "library",
   evidence,
   noPurl = null,

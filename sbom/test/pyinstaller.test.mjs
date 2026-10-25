@@ -357,6 +357,17 @@ test("dist-info path: Name and Version from METADATA, high confidence, covers it
         type: "x",
         text: "Name: broken\n\n",
       },
+      // PEP 440 spelling variants are normalized; a non-PEP 440 Version is kept and flagged.
+      {
+        name: "Spelled-1.0RC01.dist-info/METADATA",
+        type: "x",
+        text: "Name: Spelled\nVersion: 1.0RC01\n\n",
+      },
+      {
+        name: "odd-2.0.final.dist-info/METADATA",
+        type: "x",
+        text: "Name: odd\nVersion: 2.0.final\n\n",
+      },
       // not METADATA of a dist-info at the archive root: ignored
       {
         name: "pkg/x.dist-info/METADATA",
@@ -374,6 +385,20 @@ test("dist-info path: Name and Version from METADATA, high confidence, covers it
   assert.match(foo.evidence[0].sourceSha256, /^[0-9a-f]{64}$/);
   const broken = res.value.unknowns.find((u) => u.name === "broken");
   assert.match(broken.reason, /no Version header/);
+  const spelled = res.value.components.find((c) => c.name === "Spelled");
+  assert.deepEqual(
+    [spelled.version, spelled.purl, spelled.evidence[0].rawValue],
+    ["1.0rc1", "pkg:pypi/spelled@1.0rc1", "1.0RC01"],
+  );
+  assert.equal(spelled.evidence[0].pep440, undefined);
+  const odd = res.value.components.find((c) => c.name === "odd");
+  assert.deepEqual(
+    [odd.version, odd.evidence[0].rawValue, odd.evidence[0].pep440],
+    ["2.0.final", "2.0.final", "invalid"],
+  );
+  assert.ok(
+    res.value.limitations.some((l) => l.includes('"2.0.final" is not PEP 440')),
+  );
   assert.equal(
     res.value.components.some((c) => c.name === "no"),
     false,
@@ -523,10 +548,13 @@ for (const fx of S3_PYTHON_FIXTURES) {
       for (const c of scan.value.components) assert.equal(c.confidence, "low");
     }
     if (fx.id === "py-requests") {
-      // certifi spells its version "2023.07.22" in code; pip freeze says "2023.7.22".
+      // certifi spells its version "2023.07.22" in code; the PEP 440 normal form (what pip
+      // freeze prints) is emitted, the literal stays in the evidence.
       const certifi = scan.value.components.find((c) => c.name === "certifi");
-      assert.equal(certifi.version, "2023.07.22");
-      assert.equal(m.strict.precision, 0.8);
+      assert.equal(certifi.version, "2023.7.22");
+      assert.equal(certifi.purl, "pkg:pypi/certifi@2023.7.22");
+      assert.equal(certifi.evidence[0].rawValue, "2023.07.22");
+      assert.equal(m.strict.precision, 1);
     }
     if (fx.id === "py-yaml") {
       assert.equal(m.strict.precision, 1);
