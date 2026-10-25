@@ -1,0 +1,589 @@
+{
+  "runs": 5,
+  "node": "v24.22.1",
+  "results": [
+    {
+      "id": "go-uuid",
+      "bytes": 3088475,
+      "runs": [
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.7,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.6,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 57.7,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.6,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.12,
+          "cpu_s": 0.12,
+          "peak_rss_mib": 57.7,
+          "reader_ms": 2
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.08,
+        "warm": 0.095
+      },
+      "cpu_s": {
+        "cold": 0.08,
+        "warm": 0.095
+      },
+      "peak_rss_mib": {
+        "cold": 57.7,
+        "warm": 57.65
+      },
+      "reader_ms": {
+        "cold": 1,
+        "warm": 1
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "go-jwt",
+      "bytes": 4606705,
+      "runs": [
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.5,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 57.6,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 57.3,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.7,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.6,
+          "reader_ms": 1
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.09,
+        "warm": 0.095
+      },
+      "cpu_s": {
+        "cold": 0.09,
+        "warm": 0.095
+      },
+      "peak_rss_mib": {
+        "cold": 57.5,
+        "warm": 57.6
+      },
+      "reader_ms": {
+        "cold": 1,
+        "warm": 1
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "go-jwt-stripped",
+      "bytes": 3068088,
+      "runs": [
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.3,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.4,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.5,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.5,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.6,
+          "reader_ms": 1
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.08,
+        "warm": 0.08
+      },
+      "cpu_s": {
+        "cold": 0.08,
+        "warm": 0.08
+      },
+      "peak_rss_mib": {
+        "cold": 57.3,
+        "warm": 57.5
+      },
+      "reader_ms": {
+        "cold": 1,
+        "warm": 1
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "rust-small",
+      "bytes": 4480648,
+      "runs": [
+        {
+          "elapsed_s": 0.12,
+          "cpu_s": 0.12,
+          "peak_rss_mib": 57.7,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.7,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.8,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 57.8,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.6,
+          "reader_ms": 1
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.12,
+        "warm": 0.085
+      },
+      "cpu_s": {
+        "cold": 0.12,
+        "warm": 0.08
+      },
+      "peak_rss_mib": {
+        "cold": 57.7,
+        "warm": 57.75
+      },
+      "reader_ms": {
+        "cold": 1,
+        "warm": 1.5
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "rust-vuln",
+      "bytes": 667376,
+      "runs": [
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 57.3,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.3,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 57.3,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.1,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 57.2,
+          "reader_ms": 1
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.09,
+        "warm": 0.07
+      },
+      "cpu_s": {
+        "cold": 0.09,
+        "warm": 0.07
+      },
+      "peak_rss_mib": {
+        "cold": 57.3,
+        "warm": 57.25
+      },
+      "reader_ms": {
+        "cold": 1,
+        "warm": 1
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "real:stringer",
+      "bytes": 7400333,
+      "runs": [
+        {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 57.6,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 57.5,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.14,
+          "cpu_s": 0.14,
+          "peak_rss_mib": 57.4,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.12,
+          "cpu_s": 0.13,
+          "peak_rss_mib": 57.5,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 57.3,
+          "reader_ms": 1
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.11,
+        "warm": 0.11
+      },
+      "cpu_s": {
+        "cold": 0.11,
+        "warm": 0.115
+      },
+      "peak_rss_mib": {
+        "cold": 57.6,
+        "warm": 57.45
+      },
+      "reader_ms": {
+        "cold": 2,
+        "warm": 1
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "real:yq",
+      "bytes": 16257348,
+      "runs": [
+        {
+          "elapsed_s": 0.17,
+          "cpu_s": 0.16,
+          "peak_rss_mib": 57.9,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.14,
+          "cpu_s": 0.14,
+          "peak_rss_mib": 57.9,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.14,
+          "cpu_s": 0.14,
+          "peak_rss_mib": 57.8,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.14,
+          "cpu_s": 0.14,
+          "peak_rss_mib": 57.7,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.15,
+          "cpu_s": 0.15,
+          "peak_rss_mib": 57.5,
+          "reader_ms": 2
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.17,
+        "warm": 0.14
+      },
+      "cpu_s": {
+        "cold": 0.16,
+        "warm": 0.14
+      },
+      "peak_rss_mib": {
+        "cold": 57.9,
+        "warm": 57.75
+      },
+      "reader_ms": {
+        "cold": 1,
+        "warm": 1.5
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "real:prometheus",
+      "bytes": 136617940,
+      "runs": [
+        {
+          "elapsed_s": 0.7,
+          "cpu_s": 0.7,
+          "peak_rss_mib": 59.2,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.66,
+          "cpu_s": 0.65,
+          "peak_rss_mib": 59.1,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.67,
+          "cpu_s": 0.67,
+          "peak_rss_mib": 58.8,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.65,
+          "cpu_s": 0.65,
+          "peak_rss_mib": 59.2,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.66,
+          "cpu_s": 0.66,
+          "peak_rss_mib": 58.9,
+          "reader_ms": 2
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.7,
+        "warm": 0.66
+      },
+      "cpu_s": {
+        "cold": 0.7,
+        "warm": 0.655
+      },
+      "peak_rss_mib": {
+        "cold": 59.2,
+        "warm": 59
+      },
+      "reader_ms": {
+        "cold": 2,
+        "warm": 2
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "real:terraform",
+      "bytes": 124452395,
+      "runs": [
+        {
+          "elapsed_s": 0.59,
+          "cpu_s": 0.6,
+          "peak_rss_mib": 59.8,
+          "reader_ms": 3
+        },
+        {
+          "elapsed_s": 0.59,
+          "cpu_s": 0.59,
+          "peak_rss_mib": 60.2,
+          "reader_ms": 3
+        },
+        {
+          "elapsed_s": 0.58,
+          "cpu_s": 0.59,
+          "peak_rss_mib": 60.2,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.59,
+          "cpu_s": 0.59,
+          "peak_rss_mib": 59.9,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.61,
+          "cpu_s": 0.61,
+          "peak_rss_mib": 59.9,
+          "reader_ms": 2
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.59,
+        "warm": 0.59
+      },
+      "cpu_s": {
+        "cold": 0.6,
+        "warm": 0.59
+      },
+      "peak_rss_mib": {
+        "cold": 59.8,
+        "warm": 60.05
+      },
+      "reader_ms": {
+        "cold": 3,
+        "warm": 2
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "real:ripgrep",
+      "bytes": 29448808,
+      "runs": [
+        {
+          "elapsed_s": 0.21,
+          "cpu_s": 0.2,
+          "peak_rss_mib": 58.2,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.2,
+          "cpu_s": 0.21,
+          "peak_rss_mib": 58.1,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.2,
+          "cpu_s": 0.2,
+          "peak_rss_mib": 58.2,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.25,
+          "cpu_s": 0.23,
+          "peak_rss_mib": 57.9,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.27,
+          "cpu_s": 0.26,
+          "peak_rss_mib": 58,
+          "reader_ms": 2
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.21,
+        "warm": 0.225
+      },
+      "cpu_s": {
+        "cold": 0.2,
+        "warm": 0.22
+      },
+      "peak_rss_mib": {
+        "cold": 58.2,
+        "warm": 58.05
+      },
+      "reader_ms": {
+        "cold": 2,
+        "warm": 2
+      },
+      "identicalOutputs": true
+    },
+    {
+      "id": "real:fd",
+      "bytes": 3979488,
+      "runs": [
+        {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 58.4,
+          "reader_ms": 2
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 58.3,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 58.3,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 58.3,
+          "reader_ms": 1
+        },
+        {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 58.4,
+          "reader_ms": 1
+        }
+      ],
+      "elapsed_s": {
+        "cold": 0.1,
+        "warm": 0.09
+      },
+      "cpu_s": {
+        "cold": 0.11,
+        "warm": 0.09
+      },
+      "peak_rss_mib": {
+        "cold": 58.4,
+        "warm": 58.3
+      },
+      "reader_ms": {
+        "cold": 2,
+        "warm": 1
+      },
+      "identicalOutputs": true
+    }
+  ]
+}

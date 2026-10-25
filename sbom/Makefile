@@ -5,7 +5,8 @@ SHELL := /bin/bash
 
 SBOM := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 REPO := $(abspath $(SBOM)/..)
-NODE_VERSION := $(shell cat $(REPO)/.nvmrc)
+# sbom/ must work copied alone (S5 B7): the repository's .nvmrc when there is one, else sbom/.nvmrc.
+NODE_VERSION := $(shell cat $(REPO)/.nvmrc 2>/dev/null || cat $(SBOM)/.nvmrc)
 NVM_NODE_DIR := /opt/nvm/versions/node/v$(NODE_VERSION)/bin
 # Prefer the pinned Node from nvm when present, then whatever is on PATH.
 export PATH := $(if $(wildcard $(NVM_NODE_DIR)/node),$(NVM_NODE_DIR):,)$(PATH)
@@ -16,7 +17,7 @@ STAMP := $(OUT)/.built
 REA_DIST := $(REPO)/dist/cli-runtime
 OXFMT := $(REPO)/node_modules/.bin/oxfmt
 
-.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-test-diff sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
+.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-test-diff sbom-real sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
 all: baseline
 
 $(STAMP):
@@ -104,3 +105,10 @@ sbom-measure-s4: $(TEST_STAMP)
 # --vulns on every vulnerable fixture → s4/oracle.json (needs network for the oracles).
 sbom-oracle: $(TEST_STAMP)
 	node scripts/oracle_s4.mjs
+
+# --- S5: real binaries (B6) and resource tests (C). ---
+# Build pinned public Go and Rust tools into .work/real/ and compare the in-house readers with
+# `go version -m` and rust-audit-info → s5/real-binaries.json (needs network for the builds).
+sbom-real:
+	scripts/build_real_binaries.sh
+	node scripts/real_binaries.mjs

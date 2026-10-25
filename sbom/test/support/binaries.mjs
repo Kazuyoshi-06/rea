@@ -255,6 +255,7 @@ export const GO_TEXT = [
   "dep\tgithub.com/a/b\tv1.0.0\th1:x=",
   "dep\tgithub.com/c/d\tv0.1.0\th1:y=",
   "=>\tgithub.com/fork/d\tv0.1.1\th1:z=",
+  "", // real linkers write an empty line after "=>" (prometheus, terraform)
   "dep\tgithub.com/e/f\tv2.0.0",
   "=>\t../local/f\t",
   "build\t-trimpath=true",

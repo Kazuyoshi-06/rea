@@ -17,8 +17,8 @@
 //   dep\t<path>\t<version>[\t<sum>]     dependency
 //   =>\t<path>\t<version>[\t<sum>]      replacement of the previous mod/dep line
 //   build\t<key>=<value>                build setting
-// Anything else, or a line with too few fields, is kept verbatim in unparsedLines; a line that is
-// not valid UTF-8 is only counted (unparsedBinaryLines).
+// Empty lines are skipped. Anything else, or a line with too few fields, is kept verbatim in
+// unparsedLines; a line that is not valid UTF-8 is only counted (unparsedBinaryLines).
 //
 // Location: the section that holds the header (ELF ".go.buildinfo", Mach-O "__go_buildinfo",
 // PE ".data") searched at 16-byte steps; when the structure gives none (no section table,
@@ -143,6 +143,9 @@ export function parseModuleInfo(raw) {
   const lines = raw.length === 0 ? [] : splitLines(raw);
   let last = null;
   for (const bytes of lines) {
+    // The linker writes an empty line after each "=>" line (seen on prometheus, terraform):
+    // nothing to read there.
+    if (bytes.length === 0) continue;
     let line;
     try {
       line = UTF8.decode(bytes);

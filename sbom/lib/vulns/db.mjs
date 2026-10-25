@@ -193,6 +193,17 @@ export function openVulnDb(dir) {
   }
   if (snapshot.format !== INDEX_FORMAT || typeof snapshot.id !== "string")
     return err("vulndb-invalid", "SNAPSHOT.json has an unknown format");
+  // SNAPSHOT.json is committed; the index is not. A fresh clone has the first without the second.
+  const missing = Object.keys(OSV_ECOSYSTEM).filter(
+    (ecosystem) =>
+      snapshot.archives?.[OSV_ECOSYSTEM[ecosystem]] !== undefined &&
+      !existsSync(join(dir, "index", `${ecosystem}.dir`)),
+  );
+  if (missing.length > 0)
+    return err(
+      "vulndb-missing",
+      `${join(dir, "index")}: no index for ${missing.join(", ")} (run make vulndb)`,
+    );
   const loaded = new Map();
   let loadNs = 0n;
   const directoryOf = (ecosystem) => {

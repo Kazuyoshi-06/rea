@@ -1,0 +1,148 @@
+[
+  {
+    "id": "stringer",
+    "ecosystem": "golang",
+    "path": "go/stringer",
+    "pin": "golang.org/x/tools/cmd/stringer@v0.26.0 (go install)",
+    "bytes": 7400333,
+    "reader": {
+      "identical": true,
+      "deps": 2,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 2,
+      "oracle": 2,
+      "common": 2,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "unknowns": []
+    }
+  },
+  {
+    "id": "yq",
+    "ecosystem": "golang",
+    "path": "go/yq",
+    "pin": "github.com/mikefarah/yq/v4@v4.44.3 (go install)",
+    "bytes": 16257348,
+    "reader": {
+      "identical": true,
+      "deps": 21,
+      "replacements": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 21,
+      "oracle": 21,
+      "common": 21,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "unknowns": []
+    }
+  },
+  {
+    "id": "prometheus",
+    "ecosystem": "golang",
+    "path": "go/prometheus",
+    "pin": "github.com/prometheus/prometheus@v0.54.1 ./cmd/prometheus (go build; replace k8s.io/klog → klog-gokit)",
+    "bytes": 136617940,
+    "reader": {
+      "identical": true,
+      "deps": 176,
+      "replacements": 2,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 176,
+      "oracle": 176,
+      "common": 176,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "unknowns": []
+    }
+  },
+  {
+    "id": "terraform",
+    "ecosystem": "golang",
+    "path": "go/terraform",
+    "pin": "github.com/hashicorp/terraform@v1.9.8 (go build; 9 replace → local directories)",
+    "bytes": 124452395,
+    "reader": {
+      "identical": true,
+      "deps": 217,
+      "replacements": 9,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 208,
+      "oracle": 208,
+      "common": 208,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": [],
+      "unknowns": [
+        "github.com/hashicorp/terraform/internal/backend/remote-state/azure: replaced by local directory \"./internal/backend/remote-state/azure\"",
+        "github.com/hashicorp/terraform/internal/backend/remote-state/consul: replaced by local directory \"./internal/backend/remote-state/consul\"",
+        "github.com/hashicorp/terraform/internal/backend/remote-state/cos: replaced by local directory \"./internal/backend/remote-state/cos\"",
+        "github.com/hashicorp/terraform/internal/backend/remote-state/gcs: replaced by local directory \"./internal/backend/remote-state/gcs\"",
+        "github.com/hashicorp/terraform/internal/backend/remote-state/kubernetes: replaced by local directory \"./internal/backend/remote-state/kubernetes\"",
+        "github.com/hashicorp/terraform/internal/backend/remote-state/oss: replaced by local directory \"./internal/backend/remote-state/oss\"",
+        "github.com/hashicorp/terraform/internal/backend/remote-state/pg: replaced by local directory \"./internal/backend/remote-state/pg\"",
+        "github.com/hashicorp/terraform/internal/backend/remote-state/s3: replaced by local directory \"./internal/backend/remote-state/s3\"",
+        "github.com/hashicorp/terraform/internal/legacy: replaced by local directory \"./internal/legacy\""
+      ]
+    }
+  },
+  {
+    "id": "ripgrep",
+    "ecosystem": "cargo",
+    "path": "cargo/bin/rg",
+    "pin": "ripgrep@14.1.1 (cargo auditable install --locked)",
+    "bytes": 29448808,
+    "reader": {
+      "identical": true,
+      "packages": 33,
+      "build": 0,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 32,
+      "oracle": 32,
+      "common": 32,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": []
+    }
+  },
+  {
+    "id": "fd",
+    "ecosystem": "cargo",
+    "path": "cargo/bin/fd",
+    "pin": "fd-find@10.2.0 (cargo auditable install --locked)",
+    "bytes": 3979488,
+    "reader": {
+      "identical": true,
+      "packages": 66,
+      "build": 11,
+      "diffs": []
+    },
+    "sbom": {
+      "found": 54,
+      "oracle": 54,
+      "common": 54,
+      "precision": 1,
+      "recall": 1,
+      "extra": [],
+      "missing": []
+    }
+  }
+]

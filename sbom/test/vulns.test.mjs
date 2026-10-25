@@ -192,6 +192,10 @@ test("index: lookups use the model identity (PEP 503, NuGet case) and verify the
     openVulnDb(join(scratch, "nowhere")).error.tag,
     "vulndb-missing",
   );
+  // A fresh clone: committed SNAPSHOT.json, no index.
+  const bare = join(scratch, "snapshot-only");
+  cpSync(join(DB_DIR, "SNAPSHOT.json"), join(bare, "SNAPSHOT.json"));
+  assert.equal(openVulnDb(bare).error.tag, "vulndb-missing");
 });
 
 test("index: binary search finds every key of a large directory and nothing else", () => {

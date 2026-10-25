@@ -79,11 +79,11 @@ for (const target of targets) {
               rea.readCargoAuditable(target.path),
               RUST_FIELDS,
             ];
-      // An unknown binary is compared only where at least one reader finds something.
-      if (target.ecosystem === null && !ours.ok && !theirs.ok) continue;
+      // Both readers refusing the same binary is agreement (e.g. rust-audit-info, which names
+      // .dep-v0 in its code but was not built with cargo auditable).
       compare(ours, theirs, fields);
       compared += 1;
     }
-    assert.ok(compared > 0, "neither reader recognized the binary");
+    assert.ok(compared > 0);
   });
 }
