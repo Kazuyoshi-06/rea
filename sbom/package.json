@@ -1,0 +1,22 @@
+{
+  "name": "rea-sbom",
+  "version": "0.2.0",
+  "private": true,
+  "description": "SBOM core (S2): component model, purl, CycloneDX 1.6 export, Go/Rust/npm adapters",
+  "type": "module",
+  "bin": {
+    "sbom-scan": "bin/sbom-scan"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test 'test/*.test.mjs'"
+  },
+  "devDependencies": {
+    "@electron/asar": "3.2.17",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "ajv-formats-draft2019": "1.6.1"
+  }
+}

@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+// sbom-scan <artifact> [--format cyclonedx|model] [--output FILE] [--timestamp ISO|EPOCH]
+// Detects Go binaries, Rust (cargo-auditable) binaries, ASAR archives and node_modules roots.
+// The timestamp defaults to SOURCE_DATE_EPOCH when set, otherwise to the current time.
+import("../lib/cli.mjs").then(({ main }) => main(process.argv.slice(2)));

@@ -1,0 +1,580 @@
+{
+  "runs_per_target": 4,
+  "node": "v24.22.1",
+  "results": [
+    {
+      "fixture": "go-uuid",
+      "what": "rea inspect-go-binary",
+      "cold": {
+        "elapsed_s": 1.35,
+        "cpu_s": 1.84,
+        "peak_rss_mib": 357.6,
+        "output_bytes": 4448
+      },
+      "warm_median": {
+        "elapsed_s": 1.39,
+        "cpu_s": 1.99,
+        "peak_rss_mib": 355.2
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.35,
+          "cpu_s": 1.84,
+          "peak_rss_mib": 357.6,
+          "output_bytes": 4448
+        },
+        {
+          "elapsed_s": 1.39,
+          "cpu_s": 1.99,
+          "peak_rss_mib": 333.6,
+          "output_bytes": 4448
+        },
+        {
+          "elapsed_s": 1.32,
+          "cpu_s": 1.78,
+          "peak_rss_mib": 355.2,
+          "output_bytes": 4448
+        },
+        {
+          "elapsed_s": 1.53,
+          "cpu_s": 1.99,
+          "peak_rss_mib": 355.8,
+          "output_bytes": 4448
+        }
+      ]
+    },
+    {
+      "fixture": "go-uuid",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 1.52,
+        "cpu_s": 1.99,
+        "peak_rss_mib": 359.1,
+        "output_bytes": 7677
+      },
+      "warm_median": {
+        "elapsed_s": 1.42,
+        "cpu_s": 1.89,
+        "peak_rss_mib": 357.3
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.52,
+          "cpu_s": 1.99,
+          "peak_rss_mib": 359.1,
+          "output_bytes": 7677
+        },
+        {
+          "elapsed_s": 1.58,
+          "cpu_s": 2.05,
+          "peak_rss_mib": 359.6,
+          "output_bytes": 7677
+        },
+        {
+          "elapsed_s": 1.41,
+          "cpu_s": 1.89,
+          "peak_rss_mib": 357.3,
+          "output_bytes": 7677
+        },
+        {
+          "elapsed_s": 1.42,
+          "cpu_s": 1.87,
+          "peak_rss_mib": 356.8,
+          "output_bytes": 7677
+        }
+      ]
+    },
+    {
+      "fixture": "go-uuid-stripped",
+      "what": "rea inspect-go-binary",
+      "cold": {
+        "elapsed_s": 1.48,
+        "cpu_s": 1.93,
+        "peak_rss_mib": 357.6,
+        "output_bytes": 4484
+      },
+      "warm_median": {
+        "elapsed_s": 1.38,
+        "cpu_s": 1.86,
+        "peak_rss_mib": 355.6
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.48,
+          "cpu_s": 1.93,
+          "peak_rss_mib": 357.6,
+          "output_bytes": 4484
+        },
+        {
+          "elapsed_s": 1.54,
+          "cpu_s": 2.13,
+          "peak_rss_mib": 333.4,
+          "output_bytes": 4484
+        },
+        {
+          "elapsed_s": 1.38,
+          "cpu_s": 1.86,
+          "peak_rss_mib": 355.6,
+          "output_bytes": 4484
+        },
+        {
+          "elapsed_s": 1.29,
+          "cpu_s": 1.76,
+          "peak_rss_mib": 358.2,
+          "output_bytes": 4484
+        }
+      ]
+    },
+    {
+      "fixture": "go-uuid-stripped",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 1.47,
+        "cpu_s": 1.94,
+        "peak_rss_mib": 356.9,
+        "output_bytes": 7722
+      },
+      "warm_median": {
+        "elapsed_s": 1.55,
+        "cpu_s": 2.02,
+        "peak_rss_mib": 355.5
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.47,
+          "cpu_s": 1.94,
+          "peak_rss_mib": 356.9,
+          "output_bytes": 7722
+        },
+        {
+          "elapsed_s": 1.5,
+          "cpu_s": 1.98,
+          "peak_rss_mib": 355.4,
+          "output_bytes": 7722
+        },
+        {
+          "elapsed_s": 1.6,
+          "cpu_s": 2.09,
+          "peak_rss_mib": 357.2,
+          "output_bytes": 7722
+        },
+        {
+          "elapsed_s": 1.55,
+          "cpu_s": 2.02,
+          "peak_rss_mib": 355.5,
+          "output_bytes": 7722
+        }
+      ]
+    },
+    {
+      "fixture": "go-jwt",
+      "what": "rea inspect-go-binary",
+      "cold": {
+        "elapsed_s": 1.47,
+        "cpu_s": 1.93,
+        "peak_rss_mib": 357.2,
+        "output_bytes": 4067
+      },
+      "warm_median": {
+        "elapsed_s": 1.42,
+        "cpu_s": 1.9,
+        "peak_rss_mib": 357.6
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.47,
+          "cpu_s": 1.93,
+          "peak_rss_mib": 357.2,
+          "output_bytes": 4067
+        },
+        {
+          "elapsed_s": 1.51,
+          "cpu_s": 2.01,
+          "peak_rss_mib": 357.6,
+          "output_bytes": 4067
+        },
+        {
+          "elapsed_s": 1.42,
+          "cpu_s": 1.88,
+          "peak_rss_mib": 357.3,
+          "output_bytes": 4067
+        },
+        {
+          "elapsed_s": 1.41,
+          "cpu_s": 1.9,
+          "peak_rss_mib": 366.3,
+          "output_bytes": 4067
+        }
+      ]
+    },
+    {
+      "fixture": "go-jwt",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 1.53,
+        "cpu_s": 1.99,
+        "peak_rss_mib": 358.6,
+        "output_bytes": 6234
+      },
+      "warm_median": {
+        "elapsed_s": 1.45,
+        "cpu_s": 1.91,
+        "peak_rss_mib": 358.7
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.53,
+          "cpu_s": 1.99,
+          "peak_rss_mib": 358.6,
+          "output_bytes": 6234
+        },
+        {
+          "elapsed_s": 1.45,
+          "cpu_s": 1.91,
+          "peak_rss_mib": 358.7,
+          "output_bytes": 6234
+        },
+        {
+          "elapsed_s": 1.44,
+          "cpu_s": 1.89,
+          "peak_rss_mib": 356.1,
+          "output_bytes": 6234
+        },
+        {
+          "elapsed_s": 1.53,
+          "cpu_s": 1.98,
+          "peak_rss_mib": 359.6,
+          "output_bytes": 6234
+        }
+      ]
+    },
+    {
+      "fixture": "go-jwt-stripped",
+      "what": "rea inspect-go-binary",
+      "cold": {
+        "elapsed_s": 1.37,
+        "cpu_s": 1.81,
+        "peak_rss_mib": 356.1,
+        "output_bytes": 4103
+      },
+      "warm_median": {
+        "elapsed_s": 1.39,
+        "cpu_s": 1.83,
+        "peak_rss_mib": 357.4
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.37,
+          "cpu_s": 1.81,
+          "peak_rss_mib": 356.1,
+          "output_bytes": 4103
+        },
+        {
+          "elapsed_s": 1.39,
+          "cpu_s": 1.84,
+          "peak_rss_mib": 357.5,
+          "output_bytes": 4103
+        },
+        {
+          "elapsed_s": 1.31,
+          "cpu_s": 1.76,
+          "peak_rss_mib": 357,
+          "output_bytes": 4103
+        },
+        {
+          "elapsed_s": 1.4,
+          "cpu_s": 1.83,
+          "peak_rss_mib": 357.4,
+          "output_bytes": 4103
+        }
+      ]
+    },
+    {
+      "fixture": "go-jwt-stripped",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 1.41,
+        "cpu_s": 1.99,
+        "peak_rss_mib": 365.2,
+        "output_bytes": 6270
+      },
+      "warm_median": {
+        "elapsed_s": 1.44,
+        "cpu_s": 1.89,
+        "peak_rss_mib": 356.6
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.41,
+          "cpu_s": 1.99,
+          "peak_rss_mib": 365.2,
+          "output_bytes": 6270
+        },
+        {
+          "elapsed_s": 1.4,
+          "cpu_s": 1.87,
+          "peak_rss_mib": 357.3,
+          "output_bytes": 6270
+        },
+        {
+          "elapsed_s": 1.46,
+          "cpu_s": 1.92,
+          "peak_rss_mib": 356.6,
+          "output_bytes": 6270
+        },
+        {
+          "elapsed_s": 1.44,
+          "cpu_s": 1.89,
+          "peak_rss_mib": 353.8,
+          "output_bytes": 6270
+        }
+      ]
+    },
+    {
+      "fixture": "rust-small",
+      "what": "rea inspect-rust-binary",
+      "cold": {
+        "elapsed_s": 1.47,
+        "cpu_s": 2.01,
+        "peak_rss_mib": 364.5,
+        "output_bytes": 5143
+      },
+      "warm_median": {
+        "elapsed_s": 1.4,
+        "cpu_s": 1.85,
+        "peak_rss_mib": 359.9
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.47,
+          "cpu_s": 2.01,
+          "peak_rss_mib": 364.5,
+          "output_bytes": 5143
+        },
+        {
+          "elapsed_s": 1.5,
+          "cpu_s": 1.99,
+          "peak_rss_mib": 361.3,
+          "output_bytes": 5143
+        },
+        {
+          "elapsed_s": 1.4,
+          "cpu_s": 1.85,
+          "peak_rss_mib": 358.3,
+          "output_bytes": 5143
+        },
+        {
+          "elapsed_s": 1.39,
+          "cpu_s": 1.84,
+          "peak_rss_mib": 359.9,
+          "output_bytes": 5143
+        }
+      ]
+    },
+    {
+      "fixture": "rust-small",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 1.55,
+        "cpu_s": 2.02,
+        "peak_rss_mib": 358.2,
+        "output_bytes": 11181
+      },
+      "warm_median": {
+        "elapsed_s": 1.52,
+        "cpu_s": 2.03,
+        "peak_rss_mib": 361.3
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.55,
+          "cpu_s": 2.02,
+          "peak_rss_mib": 358.2,
+          "output_bytes": 11181
+        },
+        {
+          "elapsed_s": 1.52,
+          "cpu_s": 2.03,
+          "peak_rss_mib": 361.3,
+          "output_bytes": 11181
+        },
+        {
+          "elapsed_s": 1.57,
+          "cpu_s": 2.04,
+          "peak_rss_mib": 360.2,
+          "output_bytes": 11181
+        },
+        {
+          "elapsed_s": 1.5,
+          "cpu_s": 2.01,
+          "peak_rss_mib": 361.3,
+          "output_bytes": 11181
+        }
+      ]
+    },
+    {
+      "fixture": "rust-vuln",
+      "what": "rea inspect-rust-binary",
+      "cold": {
+        "elapsed_s": 1.43,
+        "cpu_s": 2.03,
+        "peak_rss_mib": 330.1,
+        "output_bytes": 3903
+      },
+      "warm_median": {
+        "elapsed_s": 1.36,
+        "cpu_s": 1.85,
+        "peak_rss_mib": 355
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.43,
+          "cpu_s": 2.03,
+          "peak_rss_mib": 330.1,
+          "output_bytes": 3903
+        },
+        {
+          "elapsed_s": 1.32,
+          "cpu_s": 1.78,
+          "peak_rss_mib": 356.5,
+          "output_bytes": 3903
+        },
+        {
+          "elapsed_s": 1.36,
+          "cpu_s": 1.85,
+          "peak_rss_mib": 354.7,
+          "output_bytes": 3903
+        },
+        {
+          "elapsed_s": 2.05,
+          "cpu_s": 2.56,
+          "peak_rss_mib": 355,
+          "output_bytes": 3903
+        }
+      ]
+    },
+    {
+      "fixture": "rust-vuln",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 1.61,
+        "cpu_s": 2.1,
+        "peak_rss_mib": 356.5,
+        "output_bytes": 5800
+      },
+      "warm_median": {
+        "elapsed_s": 1.49,
+        "cpu_s": 1.97,
+        "peak_rss_mib": 356
+      },
+      "runs": [
+        {
+          "elapsed_s": 1.61,
+          "cpu_s": 2.1,
+          "peak_rss_mib": 356.5,
+          "output_bytes": 5800
+        },
+        {
+          "elapsed_s": 1.49,
+          "cpu_s": 1.97,
+          "peak_rss_mib": 356,
+          "output_bytes": 5800
+        },
+        {
+          "elapsed_s": 1.56,
+          "cpu_s": 2.05,
+          "peak_rss_mib": 356.2,
+          "output_bytes": 5800
+        },
+        {
+          "elapsed_s": 1.46,
+          "cpu_s": 1.94,
+          "peak_rss_mib": 351.8,
+          "output_bytes": 5800
+        }
+      ]
+    },
+    {
+      "fixture": "npm-electron",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 0.06,
+        "cpu_s": 0.06,
+        "peak_rss_mib": 55.3,
+        "output_bytes": 4706
+      },
+      "warm_median": {
+        "elapsed_s": 0.06,
+        "cpu_s": 0.06,
+        "peak_rss_mib": 55
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 55.3,
+          "output_bytes": 4706
+        },
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 54.2,
+          "output_bytes": 4706
+        },
+        {
+          "elapsed_s": 0.05,
+          "cpu_s": 0.05,
+          "peak_rss_mib": 55.2,
+          "output_bytes": 4706
+        },
+        {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 55,
+          "output_bytes": 4706
+        }
+      ]
+    },
+    {
+      "fixture": "npm-cli",
+      "what": "sbom-scan",
+      "cold": {
+        "elapsed_s": 0.06,
+        "cpu_s": 0.06,
+        "peak_rss_mib": 53.8,
+        "output_bytes": 11577
+      },
+      "warm_median": {
+        "elapsed_s": 0.05,
+        "cpu_s": 0.05,
+        "peak_rss_mib": 53.8
+      },
+      "runs": [
+        {
+          "elapsed_s": 0.06,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 53.8,
+          "output_bytes": 11577
+        },
+        {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 53.8,
+          "output_bytes": 11577
+        },
+        {
+          "elapsed_s": 0.05,
+          "cpu_s": 0.05,
+          "peak_rss_mib": 53.7,
+          "output_bytes": 11577
+        },
+        {
+          "elapsed_s": 0.05,
+          "cpu_s": 0.05,
+          "peak_rss_mib": 53.9,
+          "output_bytes": 11577
+        }
+      ]
+    }
+  ]
+}

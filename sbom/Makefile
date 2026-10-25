@@ -16,7 +16,7 @@ STAMP := $(OUT)/.built
 REA_DIST := $(REPO)/dist/cli-runtime
 OXFMT := $(REPO)/node_modules/.bin/oxfmt
 
-.PHONY: all corpus truth rea baseline repro clean
+.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-measure
 all: baseline
 
 $(STAMP):
@@ -52,3 +52,23 @@ repro:
 
 clean:
 	rm -rf $(OUT) .work
+
+# --- S2: SBOM core (Go, Rust, npm). `make sbom-test` from a clean clone, inside sbom/. ---
+S2_STAMP := $(OUT)/.built-s2
+
+# Go, Rust and npm fixtures only (.NET / PyInstaller are S3 and need other toolchains).
+$(S2_STAMP):
+	scripts/build_corpus.sh go rust npm
+	node scripts/check_s2_digests.mjs
+	touch $@
+
+# Test-only dependencies (Ajv + formats, @electron/asar for synthetic archives).
+node_modules/.package-lock.json: package.json package-lock.json
+	npm ci --no-audit --no-fund
+
+sbom-test: $(S2_STAMP) $(REA_DIST) node_modules/.package-lock.json
+	SBOM_REQUIRE_FIXTURES=1 node --test 'test/*.test.mjs'
+
+# Time and peak RSS per REA call and per sbom-scan run (writes s2/measurements.json).
+sbom-measure: $(S2_STAMP) $(REA_DIST)
+	node scripts/measure_s2.mjs
