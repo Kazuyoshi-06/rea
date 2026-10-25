@@ -1,0 +1,36 @@
+{
+  "affected": [
+    {
+      "ecosystem_specific": {
+        "imports": [
+          {
+            "goarch": ["arm64"],
+            "goos": ["linux"],
+            "path": "syscall"
+          }
+        ]
+      },
+      "package": {
+        "ecosystem": "Go",
+        "name": "stdlib"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "9.0.0"
+            }
+          ],
+          "type": "SEMVER"
+        }
+      ]
+    }
+  ],
+  "aliases": [],
+  "id": "REA-PLAT-0005",
+  "modified": "2026-01-01T00:00:00Z",
+  "summary": "synthetic REA-PLAT-0005"
+}

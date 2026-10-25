@@ -15,6 +15,17 @@
 // vulnerable symbols are linked or called. `excludeRuntime` drops the alerts on language-runtime
 // components (Go stdlib) and counts them.
 //
+// Platform filter (format-version 4, Go only): an OSV Go entry may restrict the vulnerable
+// imports to some GOOS / GOARCH (ecosystem_specific.imports[].goos / goarch, indexed as
+// `platforms`). Given the target platforms of the binary (GOOS / GOARCH build settings; one per
+// slice of a fat file), a record is platform-excluded when EVERY matched entry has
+// restrictions and EVERY import of it excludes EVERY target platform (an import excludes a
+// platform when it lists goos without the target's GOOS, or goarch without its GOARCH; an
+// unknown GOOS or GOARCH excludes nothing). A group is removed only when all of its records are
+// platform-excluded: one record of the same vulnerability without platform information (often
+// the GHSA twin of a GO- record) keeps the whole group. Removed groups stay listed
+// (platformFiltered); `allPlatforms` or no target platform disables the filter.
+//
 // Grouping (format-version 3): OSV publishes one vulnerability under several records (GO-, GHSA-,
 // PYSEC-, RUSTSEC-…) that list each other in `aliases`. Alerts whose {id} ∪ aliases overlap,
 // transitively, form one group; `related` is not an alias and never links records. The primary id
@@ -24,13 +35,15 @@ import { evaluateAffected, osvVersion } from "./osv.mjs";
 
 /**
  * Match finalized `scan.components` against `db`. Returns
- * {alerts, unevaluated, stats, failures} with alerts sorted by (advisory id, component).
- * alert: {id, aliases, summary, modified, component, via, fixed[], confidence}
+ * {alerts, groups, platform, unevaluated, stats, failures} with alerts sorted by (advisory id,
+ * component). alert: {id, aliases, summary, modified, component, via, fixed[], confidence,
+ * platformExcluded, requires}. platform: {filter: "applied" | "disabled" | "no-platform",
+ * targets, filtered: groups removed by the platform filter}. `platforms`: [{goos, goarch}].
  */
 export function matchComponents(
   components,
   db,
-  { excludeRuntime = false } = {},
+  { excludeRuntime = false, platforms = [], allPlatforms = false } = {},
 ) {
   const alerts = [];
   const unevaluated = [];
@@ -66,6 +79,7 @@ export function matchComponents(
       );
       const matched = results.filter((r) => r.affected);
       if (matched.length > 0) {
+        const entries = advisory.affected.filter((_, i) => results[i].affected);
         if (excludeRuntime && component.role === "language-runtime") {
           stats.runtimeAlertsExcluded += 1;
           continue;
@@ -82,6 +96,10 @@ export function matchComponents(
             compareStrings,
           ),
           confidence: component.confidence,
+          platformExcluded:
+            component.ecosystem === "golang" &&
+            platformExcluded(entries, platforms),
+          requires: platformRequirements(entries),
         });
         continue;
       }
@@ -100,12 +118,59 @@ export function matchComponents(
     compareStrings(componentKey(a.component), componentKey(b.component));
   alerts.sort(order);
   unevaluated.sort(order);
+  const filter = allPlatforms
+    ? "disabled"
+    : platforms.length === 0
+      ? "no-platform"
+      : "applied";
+  const all = groupAlerts(alerts);
+  const removed =
+    filter === "applied"
+      ? all.filter((g) => g.alerts.every((a) => a.platformExcluded))
+      : [];
+  const dropped = new Set(removed.flatMap((g) => g.alerts));
   return {
-    alerts,
-    groups: groupAlerts(alerts),
+    alerts: alerts.filter((a) => !dropped.has(a)),
+    groups: all.filter((g) => !removed.includes(g)),
+    platform: { filter, targets: platforms, filtered: removed },
     unevaluated,
     stats,
     failures: [...failures].sort(),
+  };
+}
+
+/** An import restricted to `only` cannot be linked into a binary built for `target`. */
+const excludes = (only, target) =>
+  (only.goos !== undefined &&
+    typeof target.goos === "string" &&
+    !only.goos.includes(target.goos)) ||
+  (only.goarch !== undefined &&
+    typeof target.goarch === "string" &&
+    !only.goarch.includes(target.goarch));
+
+/** True when every matched entry restricts its imports to platforms other than all targets. */
+export function platformExcluded(entries, targets) {
+  if (targets.length === 0) return false;
+  return entries.every(
+    (e) =>
+      Array.isArray(e.platforms) &&
+      e.platforms.every((only) => targets.every((t) => excludes(only, t))),
+  );
+}
+
+/** Union of the goos / goarch restrictions of the matched entries (null: none recorded). */
+function platformRequirements(entries) {
+  const goos = new Set();
+  const goarch = new Set();
+  for (const e of entries)
+    for (const only of e.platforms ?? []) {
+      for (const o of only.goos ?? []) goos.add(o);
+      for (const a of only.goarch ?? []) goarch.add(a);
+    }
+  if (goos.size === 0 && goarch.size === 0) return null;
+  return {
+    ...(goos.size > 0 ? { goos: [...goos].sort() } : {}),
+    ...(goarch.size > 0 ? { goarch: [...goarch].sort() } : {}),
   };
 }
 

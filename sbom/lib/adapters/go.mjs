@@ -88,6 +88,26 @@ function limitationsOf(facts) {
   return out;
 }
 
+/**
+ * Target platforms of the binary from its GOOS / GOARCH build settings, one per slice of a fat
+ * file, sorted; a platform with neither setting is dropped (unknown, never assumed).
+ */
+export function targetPlatforms(facts) {
+  const settingsList = facts.slices
+    ? facts.slices.map((s) => s.settings)
+    : [facts.settings ?? []];
+  const seen = new Map();
+  for (const settings of settingsList) {
+    const get = (key) => settings.find((s) => s.key === key)?.value ?? null;
+    const platform = { goos: get("GOOS"), goarch: get("GOARCH") };
+    if (platform.goos === null && platform.goarch === null) continue;
+    seen.set(`${platform.goos}/${platform.goarch}`, platform);
+  }
+  return [...seen.entries()]
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([, p]) => p);
+}
+
 /** Pure mapping from Go build-information facts to the scan model. */
 export function goScanFromFacts(facts, artifact, moduleSha256) {
   const evidence = {
@@ -136,6 +156,7 @@ export function goScanFromFacts(facts, artifact, moduleSha256) {
     unknowns,
     exclusions: [],
     limitations: limitationsOf(facts),
+    platforms: targetPlatforms(facts),
   };
 }
 

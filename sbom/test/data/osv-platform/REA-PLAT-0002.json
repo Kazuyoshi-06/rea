@@ -1,0 +1,27 @@
+{
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "Go",
+        "name": "stdlib"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "9.0.0"
+            }
+          ],
+          "type": "SEMVER"
+        }
+      ]
+    }
+  ],
+  "aliases": ["REA-PLAT-0001"],
+  "id": "REA-PLAT-0002",
+  "modified": "2026-01-01T00:00:00Z",
+  "summary": "synthetic REA-PLAT-0002"
+}

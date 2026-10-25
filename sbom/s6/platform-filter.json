@@ -1,0 +1,538 @@
+[
+  {
+    "target": "corpus",
+    "tool": "go-uuid",
+    "before": 60,
+    "after": 58,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.0.0-20220715151400-c0bba94af5f8)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 58,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "corpus",
+    "tool": "go-jwt",
+    "before": 63,
+    "after": 62,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 62,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-amd64",
+    "tool": "stringer",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-amd64",
+    "tool": "yq",
+    "before": 73,
+    "after": 71,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 71,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-amd64",
+    "tool": "prometheus",
+    "before": 120,
+    "after": 118,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 117,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "linux-amd64",
+    "tool": "terraform",
+    "before": 121,
+    "after": 119,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.20.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 118,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2026-63209 (github.com/klauspost/compress@v1.15.11)"
+    ]
+  },
+  {
+    "target": "darwin-amd64",
+    "tool": "prometheus",
+    "before": 119,
+    "after": 116,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 115,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "darwin-amd64",
+    "tool": "stringer",
+    "before": 61,
+    "after": 59,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 59,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "darwin-amd64",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 59,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 59,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "darwin-amd64",
+    "tool": "yq",
+    "before": 73,
+    "after": 70,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 70,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "prometheus",
+    "before": 119,
+    "after": 116,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 115,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "stringer",
+    "before": 61,
+    "after": 59,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 59,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 59,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 59,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "darwin-arm64",
+    "tool": "yq",
+    "before": 73,
+    "after": 70,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 70,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-386",
+    "tool": "prometheus",
+    "before": 120,
+    "after": 118,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 117,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "linux-386",
+    "tool": "stringer",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-386",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-386",
+    "tool": "yq",
+    "before": 73,
+    "after": 71,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 71,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "prometheus",
+    "before": 120,
+    "after": 118,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 117,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "stringer",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-arm64",
+    "tool": "yq",
+    "before": 73,
+    "after": 71,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 71,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "prometheus",
+    "before": 120,
+    "after": 118,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 117,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "stringer",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-ppc64",
+    "tool": "yq",
+    "before": 73,
+    "after": 71,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 71,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "prometheus",
+    "before": 120,
+    "after": 118,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 117,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "stringer",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-56857 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "linux-s390x",
+    "tool": "yq",
+    "before": 73,
+    "after": 71,
+    "filtered": [
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheck": 71,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "prometheus",
+    "before": 119,
+    "after": 118,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 117,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "stringer",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "windows-amd64",
+    "tool": "yq",
+    "before": 73,
+    "after": 72,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 72,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "prometheus",
+    "before": 119,
+    "after": 118,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 117,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": [
+      "CVE-2025-54410 (github.com/docker/docker@v27.0.3+incompatible)"
+    ]
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "stringer",
+    "before": 61,
+    "after": 60,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 60,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "windows-arm64",
+    "tool": "yq",
+    "before": 73,
+    "after": 72,
+    "filtered": ["CVE-2026-32282 (stdlib@1.24.7)"],
+    "govulncheck": 72,
+    "govulncheckMissingAfter": [],
+    "falseNegativesFromFilter": [],
+    "oursNotInGovulncheck": []
+  },
+  {
+    "target": "darwin-fat",
+    "tool": "stringer",
+    "before": 61,
+    "after": 59,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheckError": "/home/user/rea/sbom/.work/real/tools/govulncheck -mode binary -scan symbol -format json /home/user/rea/sbom/.work/fat/stringer → 1: govulncheck: unrecognized binary format | "
+  },
+  {
+    "target": "darwin-fat",
+    "tool": "stringer-stripped",
+    "before": 61,
+    "after": 59,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheckError": "/home/user/rea/sbom/.work/real/tools/govulncheck -mode binary -scan symbol -format json /home/user/rea/sbom/.work/fat/stringer-stripped → 1: govulncheck: unrecognized binary format | "
+  },
+  {
+    "target": "darwin-fat",
+    "tool": "yq",
+    "before": 73,
+    "after": 70,
+    "filtered": [
+      "CVE-2026-32282 (stdlib@1.24.7)",
+      "CVE-2026-39824 (golang.org/x/sys@v0.22.0)",
+      "CVE-2026-56857 (stdlib@1.24.7)"
+    ],
+    "govulncheckError": "/home/user/rea/sbom/.work/real/tools/govulncheck -mode binary -scan symbol -format json /home/user/rea/sbom/.work/fat/yq → 1: govulncheck: unrecognized binary format | "
+  }
+]

@@ -241,11 +241,12 @@ section). Sans table de sections, les marqueurs d'octets décident. Un exécutab
 `metadata.properties` porte `rea-sbom:format-version` (entier), incrémenté à chaque changement
 cassant pour un consommateur. Historique :
 
-| Version | Session | Changements cassants                                                                                                                                                                                                                                                |
-| ------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1       | S2 / S3 | Format initial (propriété non émise à l'époque) : `rea-sbom:artifact-path`, confiance `observed` / `inferred` (Go, Rust, npm) et `high` / `medium` / `low` (NuGet, PyPI)                                                                                            |
-| 2       | S4      | `rea-sbom:artifact-path` remplacé par `rea-sbom:artifact-name` (nom de base) ; une seule échelle de confiance `high` / `medium` / `low` ; version PyPI = forme normale PEP 440 ; section `vulnerabilities` (un enregistrement OSV par entrée) (propriété non émise) |
-| 3       | S5      | `vulnerabilities[]` regroupées par alias (id = CVE / GHSA / premier) ; `rea-sbom:vuln-count` compte les groupes ; `analysis.state = in_triage` sur confiance `low` ; `rea-sbom:scope`, `rea-sbom:osv-record` ; lecteurs Go/Rust maison (`rea-sbom:reader` change)   |
+| Version | Session | Changements cassants                                                                                                                                                                                                                                                                                                                                                               |
+| ------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1       | S2 / S3 | Format initial (propriété non émise à l'époque) : `rea-sbom:artifact-path`, confiance `observed` / `inferred` (Go, Rust, npm) et `high` / `medium` / `low` (NuGet, PyPI)                                                                                                                                                                                                           |
+| 2       | S4      | `rea-sbom:artifact-path` remplacé par `rea-sbom:artifact-name` (nom de base) ; une seule échelle de confiance `high` / `medium` / `low` ; version PyPI = forme normale PEP 440 ; section `vulnerabilities` (un enregistrement OSV par entrée) (propriété non émise)                                                                                                                |
+| 3       | S5      | `vulnerabilities[]` regroupées par alias (id = CVE / GHSA / premier) ; `rea-sbom:vuln-count` compte les groupes ; `analysis.state = in_triage` sur confiance `low` ; `rea-sbom:scope`, `rea-sbom:osv-record` ; lecteurs Go/Rust maison (`rea-sbom:reader` change)                                                                                                                  |
+| 4       | S6      | Index OSV `rea-sbom-osv-index/2` (à reconstruire : `make vulndb VULNDB_FLAGS=--no-download`) ; alertes Go filtrées par plateforme par défaut (voir S6) ; nouvelles propriétés `rea-sbom:target-platform`, `rea-sbom:platform-filter`, `rea-sbom:platform-filtered-count`, `rea-sbom:platform-filtered` ; un fat Mach-O aux tranches différentes est une erreur `fat-slices-differ` |
 
 ## S6 — validation sur binaires réels multi-plateformes, filtre de plateforme, intégrité
 
@@ -291,4 +292,28 @@ scripts/build_cross.sh        # cross-compilations Go épinglées → .work/cros
 scripts/build_rust_cross.sh   # cargo auditable windows-gnu / aarch64 → .work/rust-cross/
 node scripts/make_fat.mjs .work/fat/stringer .work/cross/darwin-{amd64,arm64}/stringer
 node scripts/cross_binaries.mjs   # → s6/cross-binaries.json, s6/fat-binaries.json, s6/rust-cross-binaries.json
+```
+
+### Filtre de plateforme des alertes Go (`--vulns`)
+
+Le buildinfo Go porte `GOOS` et `GOARCH` (lignes `build`) : `rea-sbom:target-platform` les
+reprend (une valeur par tranche d'un fat). Un enregistrement OSV Go peut restreindre ses imports
+vulnérables (`affected[].ecosystem_specific.imports[].goos` / `goarch`). Règle :
+
+- un enregistrement est exclu pour ce binaire quand **chaque** entrée `affected` appariée a des
+  imports restreints et que **chaque** import exclut **toutes** les plateformes cibles (liste
+  `goos` sans le GOOS du binaire, ou liste `goarch` sans son GOARCH) ; un import sans
+  restriction, un GOOS ou GOARCH inconnu, ou l'absence de `GOOS`/`GOARCH` dans le binaire
+  n'excluent rien ;
+- une alerte (groupe d'alias) n'est retirée que si **tous** ses enregistrements sont exclus ;
+- rien n'est silencieux : `rea-sbom:platform-filter` (`applied` / `disabled` / `no-platform`),
+  `rea-sbom:platform-filtered-count` et une propriété `rea-sbom:platform-filtered` par alerte
+  retirée (id, enregistrements, composants, plateformes exigées) ;
+- `--all-platforms` désactive le filtre (`rea-sbom:platform-filter = disabled`).
+
+Mesure contre govulncheck 1.1.4 (mode binaire, 38 binaires réels sur 9 plateformes) : aucune
+vulnérabilité que govulncheck signale n'est retirée par le filtre (S6_REPORT.md, partie B).
+
+```sh
+node scripts/platform_filter_s6.mjs   # avant / après filtre vs govulncheck → s6/platform-filter.json
 ```

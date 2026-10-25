@@ -371,7 +371,7 @@ for (const fx of FIXTURES) {
       );
     }
     const meta = new Map(bom.metadata.properties.map((p) => [p.name, p.value]));
-    assert.equal(meta.get("rea-sbom:format-version"), "3");
+    assert.equal(meta.get("rea-sbom:format-version"), "4");
     assert.equal(meta.get("rea-sbom:vulndb-snapshot"), SNAPSHOT.id);
     assert.equal(
       meta.get("rea-sbom:vuln-count"),

@@ -23,6 +23,12 @@
 //                            rea-sbom:scope=language-runtime for Go stdlib alerts; the index
 //                            snapshot id and archive dates go to metadata.properties
 //                            (rea-sbom:vulndb-*)
+//   target platform (Go)   → metadata.properties rea-sbom:target-platform "GOOS/GOARCH" (one per
+//                            slice of a fat file), from the build settings
+//   platform filter (Go)   → with --vulns: rea-sbom:platform-filter (applied | disabled |
+//                            no-platform), rea-sbom:platform-filtered-count (groups removed)
+//                            and one rea-sbom:platform-filtered per removed group (id, records,
+//                            affected refs, required goos / goarch); --all-platforms disables it
 //   format version         → metadata.properties rea-sbom:format-version (integer)
 // No dependency graph is emitted: absence of "dependencies" means unknown, not none.
 import { createHash } from "node:crypto";
@@ -35,7 +41,7 @@ const SBOM_PACKAGE = JSON.parse(
 export const TOOL_VERSION = SBOM_PACKAGE.version;
 // Version of the BOM layout (properties, ids, grouping) that consumers rely on; bumped on every
 // breaking change, listed in README.md ("Format du BOM").
-export const FORMAT_VERSION = 3;
+export const FORMAT_VERSION = 4;
 const URL_NAMESPACE = "6ba7b811-9dad-11d1-80b4-00c04fd430c8"; // RFC 4122 URL namespace
 
 /** RFC 4122 version-5 (SHA-1, name-based) UUID. */
@@ -204,7 +210,43 @@ function metadataProperties(scan, refs) {
       prop("rea-sbom:excluded-component", compact(x)),
     ),
     ...scan.limitations.map((l) => prop("rea-sbom:limitation", l)),
+    ...(scan.platforms ?? []).map((p) =>
+      prop("rea-sbom:target-platform", `${p.goos ?? "?"}/${p.goarch ?? "?"}`),
+    ),
     ...vulnDbProperties(scan.vulnerabilities, refs),
+    ...(scan.ecosystems.includes("golang")
+      ? platformFilterProperties(scan.vulnerabilities, refs)
+      : []),
+  ];
+}
+
+function platformFilterProperties(vulns, refs) {
+  if (!vulns) return [];
+  const { filter, filtered } = vulns.platform;
+  return [
+    prop("rea-sbom:platform-filter", filter),
+    prop("rea-sbom:platform-filtered-count", filtered.length),
+    ...filtered.map((g) => {
+      const requires = { goos: new Set(), goarch: new Set() };
+      for (const a of g.alerts)
+        for (const key of ["goos", "goarch"])
+          for (const v of a.requires?.[key] ?? []) requires[key].add(v);
+      return prop(
+        "rea-sbom:platform-filtered",
+        compact({
+          id: g.id,
+          records: g.records,
+          affects: [
+            ...new Set(g.alerts.map((a) => refs.get(a.component))),
+          ].sort(),
+          requires: Object.fromEntries(
+            Object.entries(requires)
+              .filter(([, set]) => set.size > 0)
+              .map(([key, set]) => [key, [...set].sort()]),
+          ),
+        }),
+      );
+    }),
   ];
 }
 

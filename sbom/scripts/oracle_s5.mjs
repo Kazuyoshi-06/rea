@@ -66,9 +66,16 @@ function jsonStream(text) {
 }
 
 /** Our vulnerabilities: [{id, ids:Set, scope, components:[name@version]}]. */
-function ours(path) {
+export function ours(path, extra = []) {
   const bom = JSON.parse(
-    run(process.execPath, [SCAN_BIN, path, "--vulns", "--timestamp", "0"]),
+    run(process.execPath, [
+      SCAN_BIN,
+      path,
+      "--vulns",
+      "--timestamp",
+      "0",
+      ...extra,
+    ]),
   );
   const refs = new Map(bom.components.map((c) => [c["bom-ref"], c]));
   return bom.vulnerabilities.map((v) => ({
@@ -81,7 +88,7 @@ function ours(path) {
   }));
 }
 
-function govulncheck(path) {
+export function govulncheck(path) {
   const findings = jsonStream(
     run(GOVULNCHECK, [
       "-mode",
@@ -187,30 +194,34 @@ function cargoAudit(id, path) {
   };
 }
 
-const result = {
-  tools: {
-    govulncheck: existsSync(GOVULNCHECK)
-      ? run(GOVULNCHECK, ["-version"]).trim().split("\n")
-      : null,
-    cargoAudit: existsSync(CARGO_AUDIT)
-      ? run(CARGO_AUDIT, ["--version"]).trim()
-      : null,
-  },
-  go: existsSync(GOVULNCHECK)
-    ? GO.map(([id, p]) => compareGo(id, p))
-    : "govulncheck not installed",
-  rust: RUST.map(([id, p]) => cargoAudit(id, p)),
-};
-mkdirSync(join(SBOM, "s5"), { recursive: true });
-writeFileSync(
-  join(SBOM, "s5/oracle.json"),
-  `${JSON.stringify(result, null, 2)}\n`,
-);
-for (const g of Array.isArray(result.go) ? result.go : [])
-  console.log(
-    `${g.id}\tours ${g.ours} (runtime ${g.oursRuntime})\tgovulncheck ${g.govulncheck} ${JSON.stringify(g.govulncheckLevels)}\tmissing ${g.govulncheckMissingFromOurs.length}\tsymbol-level ${g.oursAtSymbolLevel}\tgap ${g.gapReachability}`,
+function main() {
+  const result = {
+    tools: {
+      govulncheck: existsSync(GOVULNCHECK)
+        ? run(GOVULNCHECK, ["-version"]).trim().split("\n")
+        : null,
+      cargoAudit: existsSync(CARGO_AUDIT)
+        ? run(CARGO_AUDIT, ["--version"]).trim()
+        : null,
+    },
+    go: existsSync(GOVULNCHECK)
+      ? GO.map(([id, p]) => compareGo(id, p))
+      : "govulncheck not installed",
+    rust: RUST.map(([id, p]) => cargoAudit(id, p)),
+  };
+  mkdirSync(join(SBOM, "s5"), { recursive: true });
+  writeFileSync(
+    join(SBOM, "s5/oracle.json"),
+    `${JSON.stringify(result, null, 2)}\n`,
   );
-for (const r of result.rust)
-  console.log(
-    `${r.id}\t${r.status}\t${r.reason ?? `ours ${r.ours} cargo-audit ${r.cargoAudit} common ${r.common}`}`,
-  );
+  for (const g of Array.isArray(result.go) ? result.go : [])
+    console.log(
+      `${g.id}\tours ${g.ours} (runtime ${g.oursRuntime})\tgovulncheck ${g.govulncheck} ${JSON.stringify(g.govulncheckLevels)}\tmissing ${g.govulncheckMissingFromOurs.length}\tsymbol-level ${g.oursAtSymbolLevel}\tgap ${g.gapReachability}`,
+    );
+  for (const r of result.rust)
+    console.log(
+      `${r.id}\t${r.status}\t${r.reason ?? `ours ${r.ours} cargo-audit ${r.cargoAudit} common ${r.common}`}`,
+    );
+}
+
+if (import.meta.main) main();

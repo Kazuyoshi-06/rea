@@ -116,6 +116,7 @@ function emptyScan(artifact, ecosystems) {
     unknowns: [],
     exclusions: [],
     limitations: [],
+    platforms: [],
     calls: [],
   };
 }
@@ -126,6 +127,7 @@ function absorb(scan, part) {
   scan.unknowns.push(...part.unknowns);
   scan.exclusions.push(...part.exclusions);
   scan.limitations.push(...part.limitations);
+  scan.platforms.push(...(part.platforms ?? []));
   scan.calls.push(...(part.calls ?? []));
 }
 

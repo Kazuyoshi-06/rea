@@ -11,7 +11,8 @@
 // <eco> is the model ecosystem (golang, cargo, npm, nuget, pypi). The package key is the
 // model's identityName (NuGet lowercased, PyPI PEP 503, others exact), so lookups use the same
 // identity rule as component merging.
-// Compact advisory: {id, aliases[], summary, modified, withdrawn?, affected: [{ranges, versions?, fixed[]}]}
+// Compact advisory: {id, aliases[], summary, modified, withdrawn?,
+//                    affected: [{ranges, versions?, fixed[], platforms?: [{goos?, goarch?}]}]}
 // with only the `affected[]` entries of this ecosystem and package.
 import { createHash } from "node:crypto";
 import {
@@ -28,7 +29,8 @@ import { identityName } from "../model.mjs";
 import { err, ok } from "../result.mjs";
 import { OSV_ECOSYSTEM } from "./osv.mjs";
 
-export const INDEX_FORMAT = "rea-sbom-osv-index/1";
+// /2 (S6): affected entries keep their platform restrictions (`platforms`).
+export const INDEX_FORMAT = "rea-sbom-osv-index/2";
 const SUMMARY_MAX = 240;
 
 function summaryOf(doc) {
@@ -39,6 +41,32 @@ function summaryOf(doc) {
   return first.length > SUMMARY_MAX
     ? `${first.slice(0, SUMMARY_MAX - 1)}…`
     : first;
+}
+
+const stringList = (v) =>
+  Array.isArray(v) && v.length > 0 && v.every((x) => typeof x === "string")
+    ? [...v].sort()
+    : null;
+
+/**
+ * Platform restrictions of an affected entry (Go: ecosystem_specific.imports[].goos / goarch),
+ * one {goos?, goarch?} per import, kept only when at least one import names a platform (an
+ * import without goos / goarch applies everywhere and is kept as {}). Null: no restriction
+ * recorded, the entry applies to every platform. A goos / goarch that is not a non-empty list
+ * of strings is not a restriction (fail open: the alert stays).
+ */
+function importPlatforms(entry) {
+  const imports = entry?.ecosystem_specific?.imports;
+  if (!Array.isArray(imports) || imports.length === 0) return null;
+  const platforms = imports.map((i) => {
+    const out = {};
+    const goos = stringList(i?.goos);
+    const goarch = stringList(i?.goarch);
+    if (goos) out.goos = goos;
+    if (goarch) out.goarch = goarch;
+    return out;
+  });
+  return platforms.some((p) => p.goos || p.goarch) ? platforms : null;
 }
 
 /**
@@ -72,6 +100,8 @@ export function indexAdvisories(docs, ecosystem) {
       const compact = { ranges, fixed: [...new Set(fixed)] };
       if (Array.isArray(entry.versions) && entry.versions.length > 0)
         compact.versions = entry.versions;
+      const platforms = importPlatforms(entry);
+      if (platforms !== null) compact.platforms = platforms;
       if (!byKey.has(key)) byKey.set(key, []);
       byKey.get(key).push(compact);
     }
