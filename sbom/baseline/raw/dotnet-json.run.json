@@ -1,0 +1,27 @@
+{
+  "fixture": "dotnet-json",
+  "runs": [
+    {
+      "target": "Newtonsoft.Json.dll",
+      "command": "rea inspect-managed-artifact corpus/out/dotnet-json/Newtonsoft.Json.dll --format json",
+      "exit_code": 0,
+      "output_file": "dotnet-json.Newtonsoft.Json.dll.json.gz",
+      "output_bytes": 460145,
+      "elapsed_ms": 2462,
+      "cpu_ms": 3260,
+      "peak_rss_kb": 416844,
+      "stderr_tail": []
+    },
+    {
+      "target": "dotnet-json.dll",
+      "command": "rea inspect-managed-artifact corpus/out/dotnet-json/dotnet-json.dll --format json",
+      "exit_code": 0,
+      "output_file": "dotnet-json.dotnet-json.dll.json.gz",
+      "output_bytes": 8154,
+      "elapsed_ms": 2290,
+      "cpu_ms": 3190,
+      "peak_rss_kb": 407076,
+      "stderr_tail": []
+    }
+  ]
+}

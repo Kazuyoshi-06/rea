@@ -1,0 +1,12 @@
+[
+  {
+    "ecosystem": "nuget",
+    "name": "Serilog",
+    "version": "3.1.1"
+  },
+  {
+    "ecosystem": "nuget",
+    "name": "Serilog.Sinks.Console",
+    "version": "5.0.1"
+  }
+]

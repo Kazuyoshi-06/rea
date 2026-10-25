@@ -1,0 +1,16 @@
+{
+  "fixture": "rust-vuln",
+  "runs": [
+    {
+      "target": "rust-vuln",
+      "command": "rea inspect-rust-binary corpus/out/rust-vuln/rust-vuln --format json",
+      "exit_code": 0,
+      "output_file": "rust-vuln.json.gz",
+      "output_bytes": 3903,
+      "elapsed_ms": 1751,
+      "cpu_ms": 2300,
+      "peak_rss_kb": 365372,
+      "stderr_tail": []
+    }
+  ]
+}

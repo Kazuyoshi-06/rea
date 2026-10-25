@@ -1,0 +1,37 @@
+[
+  {
+    "ecosystem": "npm",
+    "name": "ansi-styles",
+    "version": "4.3.0"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "chalk",
+    "version": "4.1.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "color-convert",
+    "version": "2.0.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "color-name",
+    "version": "1.1.4"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "has-flag",
+    "version": "4.0.0"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "minimist",
+    "version": "1.2.5"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "supports-color",
+    "version": "7.2.0"
+  }
+]

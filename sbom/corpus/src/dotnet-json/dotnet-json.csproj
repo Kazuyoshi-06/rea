@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- 12.0.1: GHSA-5crp-9r3c-p9vr (deep nesting DoS), fixed in 13.0.1 -->
+    <PackageReference Include="Newtonsoft.Json" Version="[12.0.1]" />
+  </ItemGroup>
+</Project>

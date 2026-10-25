@@ -1,0 +1,16 @@
+{
+  "fixture": "go-uuid",
+  "runs": [
+    {
+      "target": "go-uuid",
+      "command": "rea inspect-go-binary corpus/out/go-uuid/go-uuid --format json",
+      "exit_code": 0,
+      "output_file": "go-uuid.json.gz",
+      "output_bytes": 4448,
+      "elapsed_ms": 1849,
+      "cpu_ms": 2370,
+      "peak_rss_kb": 366300,
+      "stderr_tail": []
+    }
+  ]
+}

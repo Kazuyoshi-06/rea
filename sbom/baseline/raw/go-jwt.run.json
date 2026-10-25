@@ -1,0 +1,16 @@
+{
+  "fixture": "go-jwt",
+  "runs": [
+    {
+      "target": "go-jwt",
+      "command": "rea inspect-go-binary corpus/out/go-jwt/go-jwt --format json",
+      "exit_code": 0,
+      "output_file": "go-jwt.json.gz",
+      "output_bytes": 4067,
+      "elapsed_ms": 2033,
+      "cpu_ms": 2770,
+      "peak_rss_kb": 378728,
+      "stderr_tail": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "fixture": "go-uuid-stripped",
+  "runs": [
+    {
+      "target": "go-uuid",
+      "command": "rea inspect-go-binary corpus/out/go-uuid-stripped/go-uuid --format json",
+      "exit_code": 0,
+      "output_file": "go-uuid-stripped.json.gz",
+      "output_bytes": 4484,
+      "elapsed_ms": 2039,
+      "cpu_ms": 2600,
+      "peak_rss_kb": 372860,
+      "stderr_tail": []
+    }
+  ]
+}

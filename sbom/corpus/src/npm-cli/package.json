@@ -1,0 +1,10 @@
+{
+  "name": "npm-cli",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "minimist": "1.2.5",
+    "chalk": "4.1.2"
+  }
+}

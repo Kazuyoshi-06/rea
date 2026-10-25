@@ -1,0 +1,12 @@
+[
+  {
+    "ecosystem": "cargo",
+    "name": "regex",
+    "version": "1.5.4"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "regex-syntax",
+    "version": "0.6.29"
+  }
+]

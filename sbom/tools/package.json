@@ -1,0 +1,8 @@
+{
+  "name": "sbom-corpus-tools",
+  "private": true,
+  "description": "Pinned build tools for the SBOM S1 corpus (not shipped in fixtures)",
+  "devDependencies": {
+    "@electron/asar": "3.2.17"
+  }
+}

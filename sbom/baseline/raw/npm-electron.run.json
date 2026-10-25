@@ -1,0 +1,16 @@
+{
+  "fixture": "npm-electron",
+  "runs": [
+    {
+      "target": "app.asar",
+      "command": "rea analyze-javascript-application corpus/out/npm-electron/app.asar --format json",
+      "exit_code": 0,
+      "output_file": "npm-electron.json.gz",
+      "output_bytes": 97274703,
+      "elapsed_ms": 226217,
+      "cpu_ms": 262960,
+      "peak_rss_kb": 979084,
+      "stderr_tail": []
+    }
+  ]
+}

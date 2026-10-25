@@ -1,0 +1,12 @@
+[
+  {
+    "ecosystem": "npm",
+    "name": "lodash",
+    "version": "4.17.20"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "ms",
+    "version": "2.1.3"
+  }
+]

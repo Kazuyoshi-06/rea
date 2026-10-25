@@ -1,0 +1,7 @@
+# Built fixtures exceed the 25 MB commit budget (~36 MB): rebuilt by `make corpus`,
+# identities recorded in corpus/DIGESTS.txt.
+corpus/out/
+.work/
+tools/node_modules/
+# Raw REA outputs are stored gzipped; npm ones (2–18 MB compressed) are not committed.
+baseline/raw/npm-*.json.gz

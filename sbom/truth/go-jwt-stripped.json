@@ -1,0 +1,12 @@
+[
+  {
+    "ecosystem": "golang",
+    "name": "github.com/dgrijalva/jwt-go",
+    "version": "v3.2.0+incompatible"
+  },
+  {
+    "ecosystem": "golang",
+    "name": "golang.org/x/text",
+    "version": "v0.3.7"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "ecosystem": "golang",
+    "name": "github.com/google/uuid",
+    "version": "v1.6.0"
+  },
+  {
+    "ecosystem": "golang",
+    "name": "github.com/sirupsen/logrus",
+    "version": "v1.9.3"
+  },
+  {
+    "ecosystem": "golang",
+    "name": "golang.org/x/sys",
+    "version": "v0.0.0-20220715151400-c0bba94af5f8"
+  }
+]

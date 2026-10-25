@@ -1,0 +1,7 @@
+[
+  {
+    "ecosystem": "nuget",
+    "name": "Newtonsoft.Json",
+    "version": "12.0.1"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "fixture": "py-yaml",
+  "runs": [
+    {
+      "target": "py-yaml",
+      "command": "rea inspect-artifact corpus/out/py-yaml/py-yaml --format json",
+      "exit_code": 0,
+      "output_file": "py-yaml.json.gz",
+      "output_bytes": 287828,
+      "elapsed_ms": 2943,
+      "cpu_ms": 4240,
+      "peak_rss_kb": 507372,
+      "stderr_tail": []
+    }
+  ]
+}

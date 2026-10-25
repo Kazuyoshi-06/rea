@@ -1,0 +1,27 @@
+[
+  {
+    "ecosystem": "pypi",
+    "name": "certifi",
+    "version": "2023.7.22"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "charset-normalizer",
+    "version": "3.3.0"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "idna",
+    "version": "3.4"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "requests",
+    "version": "2.31.0"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "urllib3",
+    "version": "1.26.17"
+  }
+]
