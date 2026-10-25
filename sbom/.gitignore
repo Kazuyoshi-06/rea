@@ -7,3 +7,6 @@ tools/node_modules/
 baseline/raw/npm-*.json.gz
 # S2 test dependencies (ajv) installed by `make sbom-test`.
 node_modules/
+# S4: OSV archives and index (rebuilt by `make vulndb`); only the snapshot record is committed.
+vulndb/*
+!vulndb/SNAPSHOT.json

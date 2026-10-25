@@ -1,0 +1,27 @@
+{
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "crates.io",
+        "name": "regex"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "1.x"
+            }
+          ],
+          "type": "SEMVER"
+        }
+      ]
+    }
+  ],
+  "id": "REA-TEST-0005",
+  "modified": "2026-01-01T00:00:00Z",
+  "schema_version": "1.6.0",
+  "summary": "synthetic test record REA-TEST-0005"
+}

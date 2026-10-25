@@ -1,0 +1,72 @@
+{
+  "format": "rea-sbom-osv-index/1",
+  "id": "osv-72f8333dd7306195",
+  "source": "OSV per-ecosystem exports (https://google.github.io/osv.dev/data/#data-dumps)",
+  "archives": {
+    "Go": {
+      "url": "https://osv-vulnerabilities.storage.googleapis.com/Go/all.zip",
+      "lastModified": "2026-10-24T03:03:12.000Z",
+      "downloadedAt": "2026-10-25T16:13:48.449Z",
+      "sha256": "aeb7314796b4b412c888173d9955876457058e9342ada0464659cf26055d70ce",
+      "bytes": 12594328,
+      "zipEntries": 9779,
+      "osvRecords": 9779,
+      "unreadableRecords": 0,
+      "indexedAdvisories": 9779,
+      "withdrawnAdvisories": 182,
+      "packages": 1662
+    },
+    "NuGet": {
+      "url": "https://osv-vulnerabilities.storage.googleapis.com/NuGet/all.zip",
+      "lastModified": "2026-10-21T12:18:07.000Z",
+      "downloadedAt": "2026-10-25T16:13:49.265Z",
+      "sha256": "3ee198b4ca72eaf3bf4ef039f5e6e55f195fd385bb82bf2ccb3b6dbc53955e62",
+      "bytes": 2676989,
+      "zipEntries": 1965,
+      "osvRecords": 1965,
+      "unreadableRecords": 0,
+      "indexedAdvisories": 1965,
+      "withdrawnAdvisories": 41,
+      "packages": 1393
+    },
+    "PyPI": {
+      "url": "https://osv-vulnerabilities.storage.googleapis.com/PyPI/all.zip",
+      "lastModified": "2026-10-25T11:33:01.000Z",
+      "downloadedAt": "2026-10-25T16:13:49.697Z",
+      "sha256": "03b09356ec07a18531c49eff6ea469eef3c981c0ed9e2a32f8f30b36549e916b",
+      "bytes": 37065123,
+      "zipEntries": 26613,
+      "osvRecords": 26613,
+      "unreadableRecords": 0,
+      "indexedAdvisories": 26613,
+      "withdrawnAdvisories": 622,
+      "packages": 13641
+    },
+    "crates.io": {
+      "url": "https://osv-vulnerabilities.storage.googleapis.com/crates.io/all.zip",
+      "lastModified": "2026-10-24T08:47:51.000Z",
+      "downloadedAt": "2026-10-25T16:13:49.029Z",
+      "sha256": "4ea1d249e9074935bda06611809a01a3fa05c58142e2f4efd8c701c4ed75f9b5",
+      "bytes": 3654719,
+      "zipEntries": 2969,
+      "osvRecords": 2969,
+      "unreadableRecords": 0,
+      "indexedAdvisories": 2969,
+      "withdrawnAdvisories": 124,
+      "packages": 1682
+    },
+    "npm": {
+      "url": "https://osv-vulnerabilities.storage.googleapis.com/npm/all.zip",
+      "lastModified": "2026-10-25T15:32:59.000Z",
+      "downloadedAt": "2026-10-25T16:13:51.429Z",
+      "sha256": "5b10fc74f013ca11e2faffe969e78e0544a07595d70c3a634440d633d710bbcc",
+      "bytes": 219092980,
+      "zipEntries": 230777,
+      "osvRecords": 230777,
+      "unreadableRecords": 0,
+      "indexedAdvisories": 230777,
+      "withdrawnAdvisories": 737,
+      "packages": 226135
+    }
+  }
+}

@@ -1,0 +1,457 @@
+{
+  "runs": 5,
+  "node": "v24.22.1",
+  "index_load": {
+    "golang": {
+      "cold_ms": 0.6,
+      "warm_median_ms": 0.6
+    },
+    "cargo": {
+      "cold_ms": 0.1,
+      "warm_median_ms": 0.1
+    },
+    "npm": {
+      "cold_ms": 12.1,
+      "warm_median_ms": 13.9
+    },
+    "nuget": {
+      "cold_ms": 0.3,
+      "warm_median_ms": 0.4
+    },
+    "pypi": {
+      "cold_ms": 1.7,
+      "warm_median_ms": 2.4
+    }
+  },
+  "scans": [
+    {
+      "target": "go-uuid",
+      "components": 4,
+      "alerts": 60,
+      "output_bytes": 96847,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 1.78,
+          "cpu_s": 2.41,
+          "peak_rss_mib": 335.1,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 1.67,
+          "cpu_s": 2.21,
+          "peak_rss_mib": 361.7,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 1.57,
+          "cpu_s": 2.1,
+          "peak_rss_mib": 359.2,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 6
+        },
+        "warm_median": {
+          "elapsed_s": 1.63,
+          "cpu_s": 2.18,
+          "peak_rss_mib": 361.2,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 7
+        }
+      }
+    },
+    {
+      "target": "go-jwt",
+      "components": 3,
+      "alerts": 65,
+      "output_bytes": 102337,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 1.56,
+          "cpu_s": 2.05,
+          "peak_rss_mib": 367.7,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 1.56,
+          "cpu_s": 2.06,
+          "peak_rss_mib": 362.2,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 1.58,
+          "cpu_s": 2.11,
+          "peak_rss_mib": 362.3,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 8
+        },
+        "warm_median": {
+          "elapsed_s": 1.72,
+          "cpu_s": 2.21,
+          "peak_rss_mib": 363.6,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 7
+        }
+      }
+    },
+    {
+      "target": "rust-small",
+      "components": 5,
+      "alerts": 0,
+      "output_bytes": 12354,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 1.59,
+          "cpu_s": 2.14,
+          "peak_rss_mib": 363.3,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 1.66,
+          "cpu_s": 2.19,
+          "peak_rss_mib": 363.3,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 1.61,
+          "cpu_s": 2.11,
+          "peak_rss_mib": 360.8,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 1
+        },
+        "warm_median": {
+          "elapsed_s": 1.64,
+          "cpu_s": 2.13,
+          "peak_rss_mib": 363.4,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 1
+        }
+      }
+    },
+    {
+      "target": "rust-vuln",
+      "components": 2,
+      "alerts": 2,
+      "output_bytes": 9856,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 1.85,
+          "cpu_s": 2.44,
+          "peak_rss_mib": 356.4,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 1.78,
+          "cpu_s": 2.37,
+          "peak_rss_mib": 359.6,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 1.66,
+          "cpu_s": 2.18,
+          "peak_rss_mib": 356,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 1
+        },
+        "warm_median": {
+          "elapsed_s": 1.68,
+          "cpu_s": 2.21,
+          "peak_rss_mib": 362.1,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 2
+        }
+      }
+    },
+    {
+      "target": "npm-cli",
+      "components": 7,
+      "alerts": 1,
+      "output_bytes": 14085,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 56.6,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 56.6,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 70,
+          "vulndb_load_ms": 13,
+          "vuln_match_ms": 15
+        },
+        "warm_median": {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 70.2,
+          "vulndb_load_ms": 13,
+          "vuln_match_ms": 15
+        }
+      }
+    },
+    {
+      "target": "npm-electron",
+      "components": 2,
+      "alerts": 5,
+      "output_bytes": 11927,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 58.2,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 58.2,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 70.5,
+          "vulndb_load_ms": 13,
+          "vuln_match_ms": 15
+        },
+        "warm_median": {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 70.5,
+          "vulndb_load_ms": 12,
+          "vuln_match_ms": 14
+        }
+      }
+    },
+    {
+      "target": "dotnet-json",
+      "components": 1,
+      "alerts": 1,
+      "output_bytes": 6042,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 56.1,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 56.2,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 56.4,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 2
+        },
+        "warm_median": {
+          "elapsed_s": 0.09,
+          "cpu_s": 0.09,
+          "peak_rss_mib": 56.5,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 2
+        }
+      }
+    },
+    {
+      "target": "dotnet-serilog",
+      "components": 2,
+      "alerts": 0,
+      "output_bytes": 6295,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.06,
+          "peak_rss_mib": 56.1,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 0.08,
+          "cpu_s": 0.08,
+          "peak_rss_mib": 56.1,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 56.4,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 1
+        },
+        "warm_median": {
+          "elapsed_s": 0.07,
+          "cpu_s": 0.07,
+          "peak_rss_mib": 56.5,
+          "vulndb_load_ms": 0,
+          "vuln_match_ms": 1
+        }
+      }
+    },
+    {
+      "target": "py-requests-meta",
+      "components": 5,
+      "alerts": 32,
+      "output_bytes": 55988,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 59,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 59,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.12,
+          "peak_rss_mib": 61.6,
+          "vulndb_load_ms": 1,
+          "vuln_match_ms": 8
+        },
+        "warm_median": {
+          "elapsed_s": 0.12,
+          "cpu_s": 0.12,
+          "peak_rss_mib": 61.7,
+          "vulndb_load_ms": 1,
+          "vuln_match_ms": 11
+        }
+      }
+    },
+    {
+      "target": "py-requests",
+      "components": 5,
+      "alerts": 32,
+      "output_bytes": 56391,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 59.8,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 59.8,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 0.12,
+          "cpu_s": 0.13,
+          "peak_rss_mib": 61.8,
+          "vulndb_load_ms": 1,
+          "vuln_match_ms": 12
+        },
+        "warm_median": {
+          "elapsed_s": 0.13,
+          "cpu_s": 0.14,
+          "peak_rss_mib": 62,
+          "vulndb_load_ms": 1,
+          "vuln_match_ms": 12
+        }
+      }
+    },
+    {
+      "target": "py-yaml",
+      "components": 1,
+      "alerts": 2,
+      "output_bytes": 8260,
+      "identical_bytes_across_runs": true,
+      "without_vulns": {
+        "cold": {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 59.6,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        },
+        "warm_median": {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 59.6,
+          "vulndb_load_ms": null,
+          "vuln_match_ms": null
+        }
+      },
+      "with_vulns": {
+        "cold": {
+          "elapsed_s": 0.1,
+          "cpu_s": 0.1,
+          "peak_rss_mib": 59,
+          "vulndb_load_ms": 1,
+          "vuln_match_ms": 3
+        },
+        "warm_median": {
+          "elapsed_s": 0.11,
+          "cpu_s": 0.11,
+          "peak_rss_mib": 59.1,
+          "vulndb_load_ms": 1,
+          "vuln_match_ms": 4
+        }
+      }
+    }
+  ]
+}

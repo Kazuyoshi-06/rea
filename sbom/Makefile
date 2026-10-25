@@ -16,7 +16,7 @@ STAMP := $(OUT)/.built
 REA_DIST := $(REPO)/dist/cli-runtime
 OXFMT := $(REPO)/node_modules/.bin/oxfmt
 
-.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-measure sbom-measure-s3 stdlib-names
+.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
 all: baseline
 
 $(STAMP):
@@ -82,3 +82,19 @@ sbom-measure-s3: $(TEST_STAMP) node_modules/.package-lock.json
 # Record sys.stdlib_module_names of the fixtures' Python as data/stdlib-module-names-<X.Y>.json.
 stdlib-names:
 	node scripts/gen_stdlib_names.mjs python3
+
+# --- S4: offline vulnerability matching (OSV). ---
+# Download the OSV exports of Go, crates.io, npm, NuGet and PyPI into vulndb/ (gitignored, ~275 MB)
+# and build the index; vulndb/SNAPSHOT.json (committed) records each archive's date and sha256.
+# VULNDB_FLAGS=--no-download rebuilds the index from the archives already present.
+vulndb:
+	node scripts/vulndb.mjs $(VULNDB_FLAGS)
+
+# Index load time, scan time and peak RSS with --vulns (/usr/bin/time -v) → s4/measurements.json.
+sbom-measure-s4: $(TEST_STAMP)
+	node scripts/measure_s4.mjs
+
+# Independent oracles (osv-scanner, npm audit, pip-audit, dotnet list package --vulnerable) against
+# --vulns on every vulnerable fixture → s4/oracle.json (needs network for the oracles).
+sbom-oracle: $(TEST_STAMP)
+	node scripts/oracle_s4.mjs

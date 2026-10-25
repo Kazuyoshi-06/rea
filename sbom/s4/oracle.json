@@ -1,0 +1,780 @@
+{
+  "generatedFor": "S4 B5",
+  "fixtures": [
+    {
+      "id": "go-jwt",
+      "ecosystem": "golang",
+      "ours": 65,
+      "oursByConfidence": {
+        "high": 65
+      },
+      "expectedS1": [
+        {
+          "id": "CVE-2020-26160",
+          "confirmed": true
+        },
+        {
+          "id": "CVE-2022-32149",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins go/binary",
+          "input": "/home/user/rea/sbom/corpus/out/go-jwt/go-jwt",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 63,
+            "oracle": 63,
+            "common": 63,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 63,
+            "oracle": 63,
+            "common": 63,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "go-uuid",
+      "ecosystem": "golang",
+      "ours": 60,
+      "oursByConfidence": {
+        "high": 60
+      },
+      "expectedS1": [],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins go/binary",
+          "input": "/home/user/rea/sbom/corpus/out/go-uuid/go-uuid",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 60,
+            "oracle": 60,
+            "common": 60,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 60,
+            "oracle": 60,
+            "common": 60,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "rust-vuln",
+      "ecosystem": "cargo",
+      "ours": 2,
+      "oursByConfidence": {
+        "high": 2
+      },
+      "expectedS1": [
+        {
+          "id": "RUSTSEC-2022-0013",
+          "confirmed": true
+        },
+        {
+          "id": "CVE-2022-24713",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins rust/cargoauditable",
+          "input": "/home/user/rea/sbom/corpus/out/rust-vuln/rust-vuln",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "rust-small",
+      "ecosystem": "cargo",
+      "ours": 0,
+      "oursByConfidence": {},
+      "expectedS1": [],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins rust/cargoauditable",
+          "input": "/home/user/rea/sbom/corpus/out/rust-small/rust-small",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "npm-cli",
+      "ecosystem": "npm",
+      "ours": 1,
+      "oursByConfidence": {
+        "high": 1
+      },
+      "expectedS1": [
+        {
+          "id": "CVE-2021-44906",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner -L",
+          "input": "/home/user/rea/sbom/corpus/src/npm-cli/package-lock.json",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "npm audit --package-lock-only --omit=dev",
+          "input": "/home/user/rea/sbom/corpus/src/npm-cli",
+          "executed": true,
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "npm-electron",
+      "ecosystem": "npm",
+      "ours": 5,
+      "oursByConfidence": {
+        "high": 5
+      },
+      "expectedS1": [
+        {
+          "id": "CVE-2021-23337",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner -L",
+          "input": "/home/user/rea/sbom/corpus/src/npm-electron/package-lock.json",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 5,
+            "oracle": 53,
+            "common": 5,
+            "precision": 1,
+            "recall": 0.09433962264150944,
+            "onlyOurs": [],
+            "onlyOracle": [
+              "electron: GHSA-2p8c-gr87-2676",
+              "electron: GHSA-3c8v-cfp5-9885",
+              "electron: GHSA-3qxv-5xgr-q7w9",
+              "electron: GHSA-4f78-qhmw-8j8m",
+              "electron: GHSA-4p4r-m79c-wq3v",
+              "electron: GHSA-532v-xpq5-8h95",
+              "electron: GHSA-5c9j-mhmv-5xgx",
+              "electron: GHSA-5rqw-r77c-jp79",
+              "electron: GHSA-8337-3p73-46f4",
+              "electron: GHSA-8x5q-pvf5-64mp",
+              "electron: GHSA-9899-m83m-qhpj",
+              "electron: GHSA-98mx-cjp9-gchm",
+              "electron: GHSA-997q-gvvc-jwmx",
+              "electron: GHSA-9f4c-93c8-jc8g",
+              "electron: GHSA-9pf5-hg6p-4pwp",
+              "electron: GHSA-9qh4-3jw8-366w",
+              "electron: GHSA-9w97-2464-8783",
+              "electron: GHSA-9wfr-w7mm-pc7f",
+              "electron: GHSA-f2r8-jv7c-xqmp",
+              "electron: GHSA-f37v-82c4-4x64",
+              "electron: GHSA-f3pv-wv63-48x8",
+              "electron: GHSA-ff2p-hmqr-hxm4",
+              "electron: GHSA-fw47-9c62-h3vw",
+              "electron: GHSA-gr2m-v5gq-v685",
+              "electron: GHSA-h3v5-h239-pg29",
+              "electron: GHSA-h7rp-cf8h-j98x",
+              "electron: GHSA-hq2x-r82h-9wj4",
+              "electron: GHSA-j84w-jfhq-vhvj",
+              "electron: GHSA-jfqx-fxh3-c62j",
+              "electron: GHSA-jjp3-mq3x-295m",
+              "electron: GHSA-jm7p-cc5g-qwxx",
+              "electron: GHSA-jr5w-w6x2-84p9",
+              "electron: GHSA-m55f-7gqj-fr98",
+              "electron: GHSA-mwmh-mq4g-g6gr",
+              "electron: GHSA-p2rr-rvmm-c5fp",
+              "electron: GHSA-pfmc-3mgc-p6fp",
+              "electron: GHSA-r5p7-gp4j-qhrx",
+              "electron: GHSA-v3j7-r9gq-3gjw",
+              "electron: GHSA-v64r-4m7r-3mvq",
+              "electron: GHSA-v93f-fgjr-hjrj",
+              "electron: GHSA-vmqv-hx8q-j7mg",
+              "electron: GHSA-vv43-5jgx-7qv8",
+              "electron: GHSA-x562-297c-g43g",
+              "electron: GHSA-x8rc-wpg4-grpf",
+              "electron: GHSA-xj5x-m3f3-5x3h",
+              "electron: GHSA-xwr5-m59h-vwqr",
+              "extract-zip: GHSA-7pqw-9j4j-h8q3",
+              "extract-zip: GHSA-jmr9-qjv8-65gv"
+            ]
+          },
+          "inScope": {
+            "ours": 5,
+            "oracle": 5,
+            "common": 5,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "npm audit --package-lock-only --omit=dev",
+          "input": "/home/user/rea/sbom/corpus/src/npm-electron",
+          "executed": true,
+          "all": {
+            "ours": 5,
+            "oracle": 5,
+            "common": 5,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 5,
+            "oracle": 5,
+            "common": 5,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "dotnet-json",
+      "ecosystem": "nuget",
+      "ours": 1,
+      "oursByConfidence": {
+        "high": 1
+      },
+      "expectedS1": [
+        {
+          "id": "GHSA-5crp-9r3c-p9vr",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins dotnet/depsjson",
+          "input": "/home/user/rea/sbom/corpus/out/dotnet-json/dotnet-json.deps.json",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "dotnet list package --vulnerable --include-transitive",
+          "input": "/home/user/rea/sbom/corpus/src/dotnet-json",
+          "executed": true,
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "dotnet-serilog",
+      "ecosystem": "nuget",
+      "ours": 0,
+      "oursByConfidence": {},
+      "expectedS1": [],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins dotnet/depsjson",
+          "input": "/home/user/rea/sbom/corpus/out/dotnet-serilog/dotnet-serilog.deps.json",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "dotnet list package --vulnerable --include-transitive",
+          "input": "/home/user/rea/sbom/corpus/src/dotnet-serilog",
+          "executed": true,
+          "all": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-requests",
+      "ecosystem": "pypi",
+      "ours": 32,
+      "oursByConfidence": {
+        "low": 32
+      },
+      "expectedS1": [
+        {
+          "id": "CVE-2024-35195",
+          "confirmed": true
+        },
+        {
+          "id": "CVE-2023-45803",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner -L",
+          "input": "/home/user/rea/sbom/corpus/src/py-requests/requirements.txt",
+          "executed": true,
+          "warnings": [
+            "failed resolution for home/user/rea/sbom/corpus/src/py-requests/requirements.txt: max retries exhausted: failed after 4 attempts: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: failed to do connect handshake, response: \\\"HTTP/1.1 403 Forbidden\\\\r\\\\nConnection: close\\\\r\\\\nContent-Length: 70\\\\r\\\\nContent-Type: text/plain; charset=utf-8\\\\r\\\\nX-Content-Type-Options: nosniff\\\\r\\\\n\\\\r\\\\nrequest blocked: no rule or allowlist entry allows host \\\\\\\"api.deps.dev\\\\\\\"\\\"\"",
+            "Error during extraction: (extracting as transitivedependency/requirements) failed resolution for home/user/rea/sbom/corpus/src/py-requests/requirements.txt: max retries exhausted: failed after 4 attempts: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: failed to do connect handshake, response: \\\"HTTP/1.1 403 Forbidden\\\\r\\\\nConnection: close\\\\r\\\\nContent-Length: 70\\\\r\\\\nContent-Type: text/plain; charset=utf-8\\\\r\\\\nX-Content-Type-Options: nosniff\\\\r\\\\n\\\\r\\\\nrequest blocked: no rule or allowlist entry allows host \\\\\\\"api.deps.dev\\\\\\\"\\\"\""
+          ],
+          "all": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "pip-audit -r --no-deps --disable-pip (source: pypi)",
+          "input": "/home/user/rea/sbom/corpus/src/py-requests/requirements.txt",
+          "executed": true,
+          "all": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-requests-meta",
+      "ecosystem": "pypi",
+      "ours": 32,
+      "oursByConfidence": {
+        "high": 32
+      },
+      "expectedS1": [
+        {
+          "id": "CVE-2024-35195",
+          "confirmed": true
+        },
+        {
+          "id": "CVE-2023-45803",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner -L",
+          "input": "/home/user/rea/sbom/corpus/src/py-requests-meta/requirements.txt",
+          "executed": true,
+          "warnings": [
+            "failed resolution for home/user/rea/sbom/corpus/src/py-requests-meta/requirements.txt: max retries exhausted: failed after 4 attempts: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: failed to do connect handshake, response: \\\"HTTP/1.1 403 Forbidden\\\\r\\\\nConnection: close\\\\r\\\\nContent-Length: 70\\\\r\\\\nContent-Type: text/plain; charset=utf-8\\\\r\\\\nX-Content-Type-Options: nosniff\\\\r\\\\n\\\\r\\\\nrequest blocked: no rule or allowlist entry allows host \\\\\\\"api.deps.dev\\\\\\\"\\\"\"",
+            "Error during extraction: (extracting as transitivedependency/requirements) failed resolution for home/user/rea/sbom/corpus/src/py-requests-meta/requirements.txt: max retries exhausted: failed after 4 attempts: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: failed to do connect handshake, response: \\\"HTTP/1.1 403 Forbidden\\\\r\\\\nConnection: close\\\\r\\\\nContent-Length: 70\\\\r\\\\nContent-Type: text/plain; charset=utf-8\\\\r\\\\nX-Content-Type-Options: nosniff\\\\r\\\\n\\\\r\\\\nrequest blocked: no rule or allowlist entry allows host \\\\\\\"api.deps.dev\\\\\\\"\\\"\""
+          ],
+          "all": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "pip-audit -r --no-deps --disable-pip (source: pypi)",
+          "input": "/home/user/rea/sbom/corpus/src/py-requests-meta/requirements.txt",
+          "executed": true,
+          "all": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 16,
+            "oracle": 16,
+            "common": 16,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "py-yaml",
+      "ecosystem": "pypi",
+      "ours": 2,
+      "oursByConfidence": {
+        "low": 2
+      },
+      "expectedS1": [
+        {
+          "id": "CVE-2020-14343",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner -L",
+          "input": "/home/user/rea/sbom/corpus/src/py-yaml/requirements.txt",
+          "executed": true,
+          "warnings": [
+            "failed resolution for home/user/rea/sbom/corpus/src/py-yaml/requirements.txt: max retries exhausted: failed after 4 attempts: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: failed to do connect handshake, response: \\\"HTTP/1.1 403 Forbidden\\\\r\\\\nConnection: close\\\\r\\\\nContent-Length: 70\\\\r\\\\nContent-Type: text/plain; charset=utf-8\\\\r\\\\nX-Content-Type-Options: nosniff\\\\r\\\\n\\\\r\\\\nrequest blocked: no rule or allowlist entry allows host \\\\\\\"api.deps.dev\\\\\\\"\\\"\"",
+            "Error during extraction: (extracting as transitivedependency/requirements) failed resolution for home/user/rea/sbom/corpus/src/py-yaml/requirements.txt: max retries exhausted: failed after 4 attempts: rpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: failed to do connect handshake, response: \\\"HTTP/1.1 403 Forbidden\\\\r\\\\nConnection: close\\\\r\\\\nContent-Length: 70\\\\r\\\\nContent-Type: text/plain; charset=utf-8\\\\r\\\\nX-Content-Type-Options: nosniff\\\\r\\\\n\\\\r\\\\nrequest blocked: no rule or allowlist entry allows host \\\\\\\"api.deps.dev\\\\\\\"\\\"\""
+          ],
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "pip-audit -r --no-deps --disable-pip (source: pypi)",
+          "input": "/home/user/rea/sbom/corpus/src/py-yaml/requirements.txt",
+          "executed": true,
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "dotnet-json-nodeps",
+      "ecosystem": "nuget",
+      "ours": 1,
+      "oursByConfidence": {
+        "medium": 1
+      },
+      "expectedS1": [
+        {
+          "id": "GHSA-5crp-9r3c-p9vr",
+          "confirmed": true
+        }
+      ],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins dotnet/depsjson",
+          "input": "/home/user/rea/sbom/corpus/out/dotnet-json/dotnet-json.deps.json",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "dotnet list package --vulnerable --include-transitive",
+          "input": "/home/user/rea/sbom/corpus/src/dotnet-json",
+          "executed": true,
+          "all": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 1,
+            "oracle": 1,
+            "common": 1,
+            "precision": 1,
+            "recall": 1,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "dotnet-serilog-nodeps",
+      "ecosystem": "nuget",
+      "ours": 0,
+      "oursByConfidence": {},
+      "expectedS1": [],
+      "comparisons": [
+        {
+          "tool": "osv-scanner --x-plugins dotnet/depsjson",
+          "input": "/home/user/rea/sbom/corpus/out/dotnet-serilog/dotnet-serilog.deps.json",
+          "executed": true,
+          "warnings": [],
+          "all": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        },
+        {
+          "tool": "dotnet list package --vulnerable --include-transitive",
+          "input": "/home/user/rea/sbom/corpus/src/dotnet-serilog",
+          "executed": true,
+          "all": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          },
+          "inScope": {
+            "ours": 0,
+            "oracle": 0,
+            "common": 0,
+            "precision": null,
+            "recall": null,
+            "onlyOurs": [],
+            "onlyOracle": []
+          }
+        }
+      ]
+    }
+  ]
+}

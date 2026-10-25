@@ -1,11 +1,16 @@
 // Command-line adapter for sbom/bin/sbom-scan. Exit codes: 0 ok, 1 scan failure, 2 usage.
 import { writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { serializeBom, toCycloneDx } from "./cyclonedx.mjs";
 import { scanArtifact } from "./scan.mjs";
+import { openVulnDb } from "./vulns/db.mjs";
+import { matchComponents } from "./vulns/match.mjs";
+
+const DEFAULT_DB = fileURLToPath(new URL("../vulndb", import.meta.url));
 
 const USAGE =
-  "usage: sbom-scan <artifact> [--format cyclonedx|model] [--output FILE] [--timestamp ISO|EPOCH] [--timings]";
+  "usage: sbom-scan <artifact> [--format cyclonedx|model] [--vulns [--db DIR]] [--output FILE] [--timestamp ISO|EPOCH] [--timings]";
 
 function timestampOption(value) {
   if (value !== undefined) return /^\d+$/.test(value) ? Number(value) : value;
@@ -17,7 +22,25 @@ function timestampOption(value) {
 
 function render(scan, values) {
   if (values.format === "model") {
-    const { calls: _calls, ...model } = scan;
+    const { calls: _calls, vulnerabilities, ...model } = scan;
+    if (vulnerabilities) {
+      const describe = (c) => ({
+        ecosystem: c.ecosystem,
+        name: c.name,
+        version: c.version,
+      });
+      model.vulnerabilities = {
+        ...vulnerabilities,
+        alerts: vulnerabilities.alerts.map((a) => ({
+          ...a,
+          component: describe(a.component),
+        })),
+        unevaluated: vulnerabilities.unevaluated.map((u) => ({
+          ...u,
+          component: describe(u.component),
+        })),
+      };
+    }
     return `${JSON.stringify(model, null, 2)}\n`;
   }
   return serializeBom(
@@ -36,6 +59,8 @@ export function main(argv) {
         output: { type: "string" },
         timestamp: { type: "string" },
         timings: { type: "boolean", default: false },
+        vulns: { type: "boolean", default: false },
+        db: { type: "string" },
       },
     });
   } catch (error) {
@@ -46,7 +71,8 @@ export function main(argv) {
   const { values, positionals } = parsed;
   if (
     positionals.length !== 1 ||
-    !["cyclonedx", "model"].includes(values.format)
+    !["cyclonedx", "model"].includes(values.format) ||
+    (values.db !== undefined && !values.vulns)
   ) {
     process.stderr.write(`${USAGE}\n`);
     process.exitCode = 2;
@@ -59,6 +85,30 @@ export function main(argv) {
     );
     process.exitCode = 1;
     return;
+  }
+  if (values.vulns) {
+    const db = openVulnDb(values.db ?? DEFAULT_DB);
+    if (!db.ok) {
+      process.stderr.write(`sbom-scan: ${db.error.tag}: ${db.error.message}\n`);
+      process.exitCode = 1;
+      return;
+    }
+    const started = process.hrtime.bigint();
+    const matched = matchComponents(result.value.components, db.value);
+    result.value.vulnerabilities = {
+      snapshot: {
+        id: db.value.snapshot.id,
+        archives: db.value.snapshot.archives,
+      },
+      ...matched,
+    };
+    result.value.calls.push(
+      { command: "vulndb-load", elapsedMs: Math.round(db.value.loadMs()) },
+      {
+        command: "vuln-match (incl. load)",
+        elapsedMs: Math.round(Number(process.hrtime.bigint() - started) / 1e6),
+      },
+    );
   }
   let text;
   try {

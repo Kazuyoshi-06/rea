@@ -1,0 +1,27 @@
+{
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "Go",
+        "name": "example.com/mod"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "2.0.1-0.20200101000000-abcdefabcdef+incompatible"
+            }
+          ],
+          "type": "SEMVER"
+        }
+      ]
+    }
+  ],
+  "id": "REA-TEST-0006",
+  "modified": "2026-01-01T00:00:00Z",
+  "schema_version": "1.6.0",
+  "summary": "synthetic test record REA-TEST-0006"
+}

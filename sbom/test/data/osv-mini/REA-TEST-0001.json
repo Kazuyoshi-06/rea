@@ -1,0 +1,45 @@
+{
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "multi"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "2.0.0"
+            },
+            {
+              "last_affected": "2.1.0"
+            },
+            {
+              "introduced": "1.0.0"
+            },
+            {
+              "fixed": "1.2.0"
+            }
+          ],
+          "type": "SEMVER"
+        },
+        {
+          "events": [
+            {
+              "introduced": "3.0.0"
+            },
+            {
+              "limit": "3.5.0"
+            }
+          ],
+          "type": "SEMVER"
+        }
+      ]
+    }
+  ],
+  "aliases": ["CVE-0000-0001"],
+  "id": "REA-TEST-0001",
+  "modified": "2026-01-01T00:00:00Z",
+  "schema_version": "1.6.0",
+  "summary": "synthetic test record REA-TEST-0001"
+}

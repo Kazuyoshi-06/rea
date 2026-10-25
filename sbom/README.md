@@ -143,3 +143,28 @@ Python 3.13 avec `venv` et accès PyPI. Les tests qui compilent des extraits Pyt
 - **Chemin de l'artefact** : le BOM ne contient plus le chemin donné en argument, seulement le nom de
   base (`rea-sbom:artifact-name`) et le sha256 ; le même fichier scanné depuis deux répertoires donne
   les mêmes octets (`test/path-independence.test.mjs`).
+
+## S4 — appariement aux vulnérabilités connues, hors ligne
+
+`bin/sbom-scan <artefact> --format cyclonedx --vulns [--db sbom/vulndb]` ajoute la section
+`vulnerabilities` de CycloneDX 1.6, à partir d'un index local construit depuis les exports OSV.
+Aucun appel réseau au moment du scan. Détails, mesures, oracles indépendants, limites :
+[`S4_REPORT.md`](S4_REPORT.md) ; joignabilité des sources : [`PROBE_S4.md`](PROBE_S4.md).
+
+| Fichier                                           | Rôle                                                                                 |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `lib/versions/{semver,nuget,pep440}.mjs`          | Comparaison de versions en Node pur (SemVer/Go, NuGet, PEP 440)                      |
+| `lib/vulns/osv.mjs`                               | Évaluation des plages OSV (SEMVER, ECOSYSTEM, listes `versions` ; GIT ignoré)        |
+| `lib/vulns/db.mjs`                                | Index par paquet (`vulndb/index/`), écriture et lecture par recherche dichotomique   |
+| `lib/vulns/match.mjs`                             | Appariement des composants (jamais des unknowns), confiance héritée                  |
+| `lib/readers/zip.mjs`                             | Lecteur ZIP minimal (ZIP64) pour les exports OSV                                     |
+| `scripts/vulndb.mjs`                              | `make vulndb` : téléchargement, index, `vulndb/SNAPSHOT.json` (seul fichier commité) |
+| `scripts/oracle_s4.mjs`, `scripts/measure_s4.mjs` | Comparaison aux oracles → `s4/oracle.json` ; mesures → `s4/measurements.json`        |
+| `test/data/osv-mini/`                             | Mini corpus au format OSV pour les tests hors ligne                                  |
+
+```sh
+make vulndb             # ~275 Mo d'archives OSV dans vulndb/ (gitignoré) + index ; VULNDB_FLAGS=--no-download pour réindexer
+make sbom-test          # inclut les tests hors ligne ; les tests de bornes sur la vraie snapshot tournent si l'index existe
+make sbom-measure-s4    # temps / CPU / RSS avec et sans --vulns → s4/measurements.json
+make sbom-oracle        # osv-scanner, npm audit, pip-audit, dotnet list package --vulnerable → s4/oracle.json
+```

@@ -1,0 +1,28 @@
+{
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "PyPI",
+        "name": "Some_Pkg"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            },
+            {
+              "fixed": "abc123"
+            }
+          ],
+          "repo": "https://example.invalid/x",
+          "type": "GIT"
+        }
+      ]
+    }
+  ],
+  "id": "REA-TEST-0002",
+  "modified": "2026-01-01T00:00:00Z",
+  "schema_version": "1.6.0",
+  "summary": "synthetic test record REA-TEST-0002"
+}

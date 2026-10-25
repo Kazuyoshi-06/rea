@@ -14,6 +14,11 @@
 //                            match a versionless component against every version
 //   exclusions             → metadata.properties "rea-sbom:excluded-component" (JSON value)
 //   evidence               → components[].evidence (identity + occurrences)
+//   vulnerability matches  → vulnerabilities[] (with --vulns): one entry per (OSV advisory,
+//                            component), id = OSV id, aliases as references, fixed versions as
+//                            affects[].versions with status "unaffected", rea-sbom:confidence
+//                            inherited from the component; the index snapshot id and archive
+//                            dates go to metadata.properties (rea-sbom:vulndb-*)
 // No dependency graph is emitted: absence of "dependencies" means unknown, not none.
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -104,12 +109,22 @@ function componentProperties(c) {
   return props;
 }
 
-function bomComponents(scan) {
-  const refs = new Set();
-  return scan.components.map((c) => {
+/** bom-ref of every component (Map component → ref), unique within the BOM. */
+function componentRefs(components) {
+  const used = new Set();
+  const refs = new Map();
+  for (const c of components) {
     let ref = c.purl ?? `${c.ecosystem}:${c.name}@${c.version}`;
-    if (refs.has(ref)) ref = `${c.ecosystem}:${c.role}:${c.name}@${c.version}`;
-    refs.add(ref);
+    if (used.has(ref)) ref = `${c.ecosystem}:${c.role}:${c.name}@${c.version}`;
+    used.add(ref);
+    refs.set(c, ref);
+  }
+  return refs;
+}
+
+function bomComponents(scan, refs) {
+  return scan.components.map((c) => {
+    const ref = refs.get(c);
     const out = {
       type: "library",
       "bom-ref": ref,
@@ -151,7 +166,7 @@ function rootComponent(scan) {
   return out;
 }
 
-function metadataProperties(scan) {
+function metadataProperties(scan, refs) {
   const readers = new Set(
     scan.components.flatMap((c) => c.evidence.map((e) => e.reader?.command)),
   );
@@ -180,11 +195,88 @@ function metadataProperties(scan) {
       prop("rea-sbom:excluded-component", compact(x)),
     ),
     ...scan.limitations.map((l) => prop("rea-sbom:limitation", l)),
+    ...vulnDbProperties(scan.vulnerabilities, refs),
   ];
+}
+
+function vulnDbProperties(vulns, refs) {
+  if (!vulns) return [];
+  const archives = vulns.snapshot.archives ?? {};
+  return [
+    prop("rea-sbom:vulndb-snapshot", vulns.snapshot.id),
+    ...Object.keys(archives)
+      .sort()
+      .map((name) =>
+        prop(
+          "rea-sbom:vulndb-archive",
+          compact({
+            ecosystem: name,
+            lastModified: archives[name].lastModified,
+            sha256: archives[name].sha256,
+          }),
+        ),
+      ),
+    prop("rea-sbom:vuln-count", vulns.alerts.length),
+    prop("rea-sbom:vuln-unevaluated-count", vulns.unevaluated.length),
+    ...vulns.unevaluated.map((u) =>
+      prop(
+        "rea-sbom:vuln-unevaluated",
+        compact({ id: u.id, ref: refs.get(u.component), reasons: u.reasons }),
+      ),
+    ),
+    ...vulns.failures.map((f) => prop("rea-sbom:vuln-failure", f)),
+  ];
+}
+
+const ALIAS_URL = [
+  [/^CVE-/, "NVD", (id) => `https://nvd.nist.gov/vuln/detail/${id}`],
+  [
+    /^GHSA-/,
+    "GitHub Advisory Database",
+    (id) => `https://github.com/advisories/${id}`,
+  ],
+  [/./, "OSV", (id) => `https://osv.dev/vulnerability/${id}`],
+];
+
+function aliasSource(id) {
+  const [, name, url] = ALIAS_URL.find(([re]) => re.test(id));
+  return { name, url: url(id) };
+}
+
+function bomVulnerabilities(vulns, refs) {
+  return vulns.alerts.map((a) => {
+    const ref = refs.get(a.component);
+    const out = {
+      "bom-ref": `rea-sbom:vuln:${a.id}:${ref}`,
+      id: a.id,
+      source: { name: "OSV", url: `https://osv.dev/vulnerability/${a.id}` },
+    };
+    if (a.aliases.length > 0)
+      out.references = a.aliases.map((id) => ({ id, source: aliasSource(id) }));
+    if (a.summary) out.description = a.summary;
+    if (a.fixed.length > 0)
+      out.recommendation = `Fixed in: ${a.fixed.join(", ")}`;
+    if (a.modified) out.updated = formatTimestamp(a.modified);
+    out.affects = [
+      {
+        ref,
+        versions: [
+          { version: a.component.version, status: "affected" },
+          ...a.fixed.map((version) => ({ version, status: "unaffected" })),
+        ],
+      },
+    ];
+    out.properties = [
+      prop("rea-sbom:confidence", a.confidence),
+      ...a.via.map((v) => prop("rea-sbom:matched-by", v)),
+    ];
+    return out;
+  });
 }
 
 /** Build the CycloneDX 1.6 BOM object for a finalized scan. */
 export function toCycloneDx(scan, { timestamp = new Date() } = {}) {
+  const refs = componentRefs(scan.components);
   const bom = {
     $schema: "http://cyclonedx.org/schema/bom-1.6.schema.json",
     bomFormat: "CycloneDX",
@@ -200,10 +292,12 @@ export function toCycloneDx(scan, { timestamp = new Date() } = {}) {
         ],
       },
       component: rootComponent(scan),
-      properties: metadataProperties(scan),
+      properties: metadataProperties(scan, refs),
     },
-    components: bomComponents(scan),
+    components: bomComponents(scan, refs),
   };
+  if (scan.vulnerabilities)
+    bom.vulnerabilities = bomVulnerabilities(scan.vulnerabilities, refs);
   const { serialNumber: _serial, ...content } = bom;
   const digest = createHash("sha256")
     .update(JSON.stringify(content))

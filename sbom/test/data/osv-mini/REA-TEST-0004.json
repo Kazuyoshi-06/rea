@@ -1,0 +1,40 @@
+{
+  "affected": [
+    {
+      "package": {
+        "ecosystem": "NuGet",
+        "name": "serilog"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            }
+          ],
+          "type": "ECOSYSTEM"
+        }
+      ]
+    },
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "serilog"
+      },
+      "ranges": [
+        {
+          "events": [
+            {
+              "introduced": "0"
+            }
+          ],
+          "type": "SEMVER"
+        }
+      ]
+    }
+  ],
+  "id": "REA-TEST-0004",
+  "modified": "2026-01-01T00:00:00Z",
+  "schema_version": "1.6.0",
+  "summary": "synthetic test record REA-TEST-0004"
+}
