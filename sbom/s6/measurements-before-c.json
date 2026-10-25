@@ -1,0 +1,60 @@
+{
+  "label": "before-c",
+  "node": "v24.22.1",
+  "rows": [
+    {
+      "id": "go-uuid",
+      "bytes": 3088475,
+      "coldWall": 0.07,
+      "warmWall": 0.07,
+      "warmCpu": 0.06999999999999999,
+      "warmRssMiB": 57.5,
+      "sha256FileMs": 3.2
+    },
+    {
+      "id": "rust-small",
+      "bytes": 4480648,
+      "coldWall": 0.07,
+      "warmWall": 0.08499999999999999,
+      "warmCpu": 0.085,
+      "warmRssMiB": 57.7,
+      "sha256FileMs": 4.7
+    },
+    {
+      "id": "stringer",
+      "bytes": 7400333,
+      "coldWall": 0.09,
+      "warmWall": 0.09,
+      "warmCpu": 0.09,
+      "warmRssMiB": 57.6,
+      "sha256FileMs": 7.4
+    },
+    {
+      "id": "ripgrep",
+      "bytes": 29448808,
+      "coldWall": 0.16,
+      "warmWall": 0.14500000000000002,
+      "warmCpu": 0.14,
+      "warmRssMiB": 58,
+      "sha256FileMs": 28
+    },
+    {
+      "id": "prometheus",
+      "bytes": 136617940,
+      "coldWall": 0.43,
+      "warmWall": 0.405,
+      "warmCpu": 0.4,
+      "warmRssMiB": 59.1,
+      "sha256FileMs": 120.9
+    },
+    {
+      "id": "terraform",
+      "bytes": 124452395,
+      "coldWall": 0.38,
+      "warmWall": 0.38,
+      "warmCpu": 0.38,
+      "warmRssMiB": 60.1,
+      "sha256FileMs": 111.8
+    }
+  ]
+}

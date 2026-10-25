@@ -102,7 +102,7 @@ export function parseAuditJson(text) {
  * Read the cargo-auditable section of the file at `path`.
  * Result tags: not-executable, malformed-executable, packed-executable, no-cargo-auditable,
  * cargo-auditable-too-large, malformed-cargo-auditable, fat-slices-differ.
- * Value: {reader, artifactBytes, section: {name, offset, bytes, formatVersion}, packages[], call}
+ * Value: {reader, section: {name, offset, bytes, formatVersion}, packages[], call}
  */
 export function readCargoAuditable(path) {
   const started = process.hrtime.bigint();
@@ -164,7 +164,6 @@ function readSection(source, hit) {
   if (!parsed.ok) return parsed;
   return ok({
     reader: READER,
-    artifactBytes: source.size,
     section: {
       name: section.name,
       offset: section.offset,

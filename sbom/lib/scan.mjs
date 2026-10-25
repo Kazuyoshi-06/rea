@@ -15,6 +15,11 @@
 // Without a section table (sstrip, unknown container) the markers decide. A packed executable
 // (UPX) is unsupported-artifact with that reason: its sections are compressed.
 // Markers are byte matches: a match only selects a reader; the reader decides.
+// Integrity (S6 C): the sha256 and size of the fingerprint pass identify the artifact in the
+// BOM. Adapters reopen the file afterwards, so once they are done the file is hashed again; a
+// different size or sha256 fails the scan (artifact-changed) instead of describing bytes that
+// the reported sha256 does not identify. A change undone before the second hash (A → B → A) is
+// not seen; a change after it does not affect the BOM, which describes the verified bytes.
 import { createHash } from "node:crypto";
 import { readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -23,7 +28,7 @@ import { scanGo } from "./adapters/go.mjs";
 import { scanNpm } from "./adapters/npm.mjs";
 import { scanPyInstaller } from "./adapters/pyinstaller.mjs";
 import { scanRust } from "./adapters/rust.mjs";
-import { forEachChunk, withSource } from "./files.mjs";
+import { forEachChunk, sha256File, withSource } from "./files.mjs";
 import { finalizeScan } from "./model.mjs";
 import { err, ok } from "./result.mjs";
 import { isManagedPe } from "./readers/cli-metadata.mjs";
@@ -188,8 +193,59 @@ function scanDirectory(path) {
   return ok(finalizeScan(scan));
 }
 
-/** Scan a file or directory. Returns Result<scan model>. */
-export function scanArtifact(path) {
+/** artifact-changed unless the file still has the size and sha256 of the fingerprint pass. */
+function verifyUnchanged(artifact) {
+  let now;
+  try {
+    now = sha256File(artifact.path);
+  } catch (error) {
+    return err(
+      "artifact-changed",
+      `artifact unreadable after the scan: ${error.message}`,
+    );
+  }
+  if (now.bytes !== artifact.bytes)
+    return err(
+      "artifact-changed",
+      `artifact size changed during the scan (${artifact.bytes} → ${now.bytes} bytes)`,
+    );
+  if (now.sha256 !== artifact.sha256)
+    return err(
+      "artifact-changed",
+      `artifact content changed during the scan (sha256 ${artifact.sha256} → ${now.sha256})`,
+    );
+  return ok(artifact);
+}
+
+/** The scan result, unless the artifact changed while it was read. */
+const verified = (artifact, result) => {
+  if (!result.ok) return result;
+  const check = verifyUnchanged(artifact);
+  return check.ok ? result : check;
+};
+
+/**
+ * Scan a file or directory. Returns Result<scan model>.
+ * `hooks.afterFingerprint(fingerprint)` runs between detection and the adapters (tests).
+ */
+export function scanArtifact(path, hooks = {}) {
+  const progress = { fingerprinted: false };
+  try {
+    return scanPath(path, hooks, progress);
+  } catch (error) {
+    // System errors (ENOENT, EACCES, EIO…) from a read: before the fingerprint the file is
+    // unreadable; after it, the file changed under the scan. Programming errors propagate.
+    if (typeof error?.code !== "string") throw error;
+    return progress.fingerprinted
+      ? err(
+          "artifact-changed",
+          `artifact unreadable during the scan: ${error.message}`,
+        )
+      : err("unreadable-artifact", error.message);
+  }
+}
+
+function scanPath(path, hooks, progress) {
   let stat;
   try {
     stat = statSync(path);
@@ -198,6 +254,8 @@ export function scanArtifact(path) {
   }
   if (stat.isDirectory()) return scanDirectory(path);
   const print = fingerprint(path);
+  progress.fingerprinted = true;
+  hooks.afterFingerprint?.(print);
   const artifact = {
     path,
     sha256: print.sha256,
@@ -205,10 +263,13 @@ export function scanArtifact(path) {
     kind: print.kind,
   };
   if (print.kind !== "asar")
-    return scanBinary(artifact, print.ecosystems, print.container);
+    return verified(
+      artifact,
+      scanBinary(artifact, print.ecosystems, print.container),
+    );
   const tree = asarTree(path);
   if (!tree.ok) return tree;
   const scan = emptyScan(artifact, ["npm"]);
   absorb(scan, scanNpm(artifact, tree.value));
-  return ok(finalizeScan(scan));
+  return verified(artifact, ok(finalizeScan(scan)));
 }

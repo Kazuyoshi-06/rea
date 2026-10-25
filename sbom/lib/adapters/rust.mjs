@@ -9,7 +9,7 @@
 import { readRange, sha256 } from "../files.mjs";
 import { makeComponent, makeUnknown } from "../model.mjs";
 import { cargoPurl } from "../purl.mjs";
-import { err, ok } from "../result.mjs";
+import { ok } from "../result.mjs";
 import { readCargoAuditable } from "../readers/cargoauditable.mjs";
 
 export const LIMITATIONS = [
@@ -110,9 +110,6 @@ export function scanRust(artifact, read = readCargoAuditable) {
   const facts = read(artifact.path);
   if (!facts.ok) return facts;
   const value = facts.value;
-  // The reader reopens the file after the fingerprint pass: a size change means it changed.
-  if (value.artifactBytes !== artifact.bytes)
-    return err("artifact-changed", "artifact size changed during the scan");
   const { offset, bytes } = value.section;
   const section =
     Number.isSafeInteger(offset) && Number.isSafeInteger(bytes)

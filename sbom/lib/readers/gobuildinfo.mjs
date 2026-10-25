@@ -251,7 +251,6 @@ function readAt(source, candidate) {
   const parsed = parseModuleInfo(text);
   return ok({
     reader: READER,
-    artifactBytes: source.size,
     headerOffset: candidate.offset,
     locatedBy: candidate.locatedBy,
     pointerSize,
@@ -320,7 +319,7 @@ function agreeingSlices(allImages, images, read) {
  * Result tags: packed-executable, no-go-buildinfo, go-buildinfo-pointer-format,
  * malformed-go-buildinfo, fat-slices-differ. Value: facts with the fields of the former REA adapter (goVersion,
  * moduleLocation, main, dependencies with replacements, complete, unparsedLines,
- * unparsedBinaryLines) plus headerOffset, locatedBy, settings and artifactBytes; a fat Mach-O
+ * unparsedBinaryLines) plus headerOffset, locatedBy and settings; a fat Mach-O
  * adds `slices` (see agreeingSlices).
  */
 export function readGoBuildInfo(path) {
