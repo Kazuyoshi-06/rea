@@ -28,7 +28,7 @@ function scan(path) {
   return res.stdout;
 }
 
-// One fixture per reader: Go, Rust (REA), ASAR, .NET directory, PyInstaller onefile.
+// One fixture per reader: Go, Rust, ASAR, .NET directory, PyInstaller onefile.
 const FIXTURES = [
   S2_FIXTURES.find((f) => f.id === "go-jwt"),
   S2_FIXTURES.find((f) => f.id === "rust-vuln"),

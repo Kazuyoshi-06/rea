@@ -1,12 +1,14 @@
-// The only module that knows REA exists. Adapters see readGoBuildInfo / readCargoAuditable and
-// the REA-independent facts they return, so an in-house reader can replace REA here later.
+// REA as a comparison oracle only (S5): never imported by bin/ or lib/. The in-house readers
+// (lib/readers/gobuildinfo.mjs, cargoauditable.mjs) replaced it; test/differential.test.mjs
+// (make sbom-test-diff) checks that both give the same facts, and scripts/measure_s2.mjs reuses
+// the exact REA invocation.
 //
 // REA is invoked through its public CLI (scripts/rea.mjs of this repository, built with
 // `npm ci && npm run build:cached`). Overrides: REA_CLI (entry script), REA_NODE (Node binary).
 import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { err, ok } from "./result.mjs";
+import { err, ok } from "../lib/result.mjs";
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const MAX_REPORT_BYTES = 32 << 20; // REA bounds these reports to 8 MiB.
@@ -124,6 +126,7 @@ export function parseCargoAuditableReport(report) {
       version: p.version,
       source: p.source,
       kind: p.kind,
+      dependencies: p.dependencies ?? [],
       root: p.root === true,
     })),
   });

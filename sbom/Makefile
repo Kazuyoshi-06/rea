@@ -16,7 +16,7 @@ STAMP := $(OUT)/.built
 REA_DIST := $(REPO)/dist/cli-runtime
 OXFMT := $(REPO)/node_modules/.bin/oxfmt
 
-.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
+.PHONY: all corpus truth rea baseline repro clean sbom-test sbom-test-diff sbom-measure sbom-measure-s3 stdlib-names vulndb sbom-measure-s4 sbom-oracle
 all: baseline
 
 $(STAMP):
@@ -67,8 +67,14 @@ $(TEST_STAMP):
 node_modules/.package-lock.json: package.json package-lock.json
 	npm ci --no-audit --no-fund
 
-sbom-test: $(TEST_STAMP) $(REA_DIST) node_modules/.package-lock.json
+# S5: no REA needed (in-house Go buildinfo and cargo-auditable readers).
+sbom-test: $(TEST_STAMP) node_modules/.package-lock.json
 	SBOM_REQUIRE_FIXTURES=1 node --test 'test/*.test.mjs'
+
+# S5: differential test, in-house readers vs REA (oracle/rea.mjs) on every Go and Rust fixture,
+# stripped ones included, plus test/data/real-binaries.txt when present. Needs REA built.
+sbom-test-diff: $(TEST_STAMP) $(REA_DIST) node_modules/.package-lock.json
+	SBOM_REQUIRE_FIXTURES=1 SBOM_REQUIRE_REA=1 node --test 'test/differential/*.test.mjs'
 
 # Time and peak RSS per REA call and per sbom-scan run (writes s2/measurements.json).
 sbom-measure: $(TEST_STAMP) $(REA_DIST)

@@ -91,7 +91,7 @@ contenant `node_modules`. Détails, décisions et mesures : [`S2_REPORT.md`](S2_
 | ----------------------------- | ------------------------------------------------------------------------- |
 | `lib/model.mjs`               | Composants, unknowns, exclusions, evidence ; fusion et tri                |
 | `lib/purl.mjs`                | purl `pkg:golang`, `pkg:cargo`, `pkg:npm`                                 |
-| `lib/rea.mjs`                 | Seul point de contact avec REA (`readGoBuildInfo`, `readCargoAuditable`)  |
+| `oracle/rea.mjs`              | REA comme oracle de comparaison uniquement (S5 : plus importé par `lib/`) |
 | `lib/tree.mjs`                | Lecteur ASAR minimal et arborescence répertoire                           |
 | `lib/adapters/*.mjs`          | Go, Rust, npm → modèle                                                    |
 | `lib/cyclonedx.mjs`           | Export CycloneDX 1.6                                                      |
@@ -204,6 +204,30 @@ Détails, mesures et limites : [`S5_REPORT.md`](S5_REPORT.md).
   moins d'avis que le seuil de `test/data/osv-guard.json` (80 % de la snapshot de référence) ou si
   un avis connu (≥ 3 par écosystème) n'est plus indexé sous son paquet. Ce garde-fou détecte un
   changement grossier du format, pas un changement de sens d'un champ.
+
+### Lecteurs maison (partie B) : plus de dépendance runtime à REA
+
+`bin/sbom-scan` n'appelle plus REA. Les faits Go et Rust viennent de lecteurs écrits depuis la
+description des formats (sources lues : [`NOTICE.md`](NOTICE.md)) :
+
+| Fichier                              | Rôle                                                                                                  |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `lib/readers/executable.mjs`         | Tables de sections ELF (32/64, LE/BE), PE/COFF, Mach-O (32/64) et fat ; détection UPX                 |
+| `lib/readers/gobuildinfo.mjs`        | Buildinfo Go à chaînes inline (Go ≥ 1.18) ; format par pointeurs (< 1.18) refusé avec une raison      |
+| `lib/readers/cargoauditable.mjs`     | Section `.dep-v0` / `__dep_v0`, zlib borné, JSON validé                                               |
+| `oracle/rea.mjs`                     | REA via sa CLI, seulement pour `make sbom-test-diff` et les scripts de mesure S1/S2                   |
+| `test/differential/readers.test.mjs` | Lecteurs maison = REA champ par champ (fixtures Go/Rust, strippées comprises, + `SBOM_DIFF_BINARIES`) |
+
+```sh
+make sbom-test        # n'a plus besoin de REA
+make sbom-test-diff   # construit REA si absent, compare les lecteurs maison à REA
+```
+
+La détection (`lib/scan.mjs`) lit d'abord la structure : un ELF ou Mach-O avec table de sections
+est Go seulement s'il a `.go.buildinfo` / `__go_buildinfo`, et Rust seulement s'il a `.dep-v0` /
+`__dep_v0` (le binaire `go` contient la chaîne magique en constante, `rust-audit-info` le nom de
+section). Sans table de sections, les marqueurs d'octets décident. Un exécutable UPX est
+`unsupported-artifact` avec la raison.
 
 ### Format du BOM (`rea-sbom:format-version`)
 

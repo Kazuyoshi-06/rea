@@ -6,6 +6,14 @@
 // A directory is scanned as an npm install root (its node_modules).
 //   PyInstaller  cookie magic "MEI\014\013\012\013\016" (the bootloader embeds it too; the reader validates)
 //   .NET         PE file ("MZ") with a CLI header; a directory with *.deps.json or managed top-level files
+// Then the container structure (lib/readers/executable.mjs) decides Go and Rust when it can:
+//   Go    ELF / Mach-O with a section table: a ".go.buildinfo" / "__go_buildinfo" section, whatever
+//         the bytes say (the go command itself embeds the magic as a string constant); PE: the
+//         marker (the header lives in .data, the reader searches it there)
+//   Rust  any container with a section table: a ".dep-v0" / "__dep_v0" section (a tool that only
+//         mentions the name, such as rust-audit-info, is not a match)
+// Without a section table (sstrip, unknown container) the markers decide. A packed executable
+// (UPX) is unsupported-artifact with that reason: its sections are compressed.
 // Markers are byte matches: a match only selects a reader; the reader decides.
 import { createHash } from "node:crypto";
 import { readdirSync, statSync } from "node:fs";
@@ -15,10 +23,11 @@ import { scanGo } from "./adapters/go.mjs";
 import { scanNpm } from "./adapters/npm.mjs";
 import { scanPyInstaller } from "./adapters/pyinstaller.mjs";
 import { scanRust } from "./adapters/rust.mjs";
-import { forEachChunk } from "./files.mjs";
+import { forEachChunk, withSource } from "./files.mjs";
 import { finalizeScan } from "./model.mjs";
 import { err, ok } from "./result.mjs";
 import { isManagedPe } from "./readers/cli-metadata.mjs";
+import { findSections, readExecutable } from "./readers/executable.mjs";
 import { COOKIE_MAGIC } from "./readers/pyinstaller.mjs";
 import { asarTree, directoryTree, looksLikeAsar } from "./tree.mjs";
 
@@ -49,12 +58,46 @@ export function fingerprint(path) {
   const asar = prefix !== null && looksLikeAsar(prefix, size);
   if (!asar && prefix?.[0] === 0x4d && prefix[1] === 0x5a && isManagedPe(path))
     found.add("nuget");
+  const structure = asar ? null : containerStructure(path);
+  if (structure !== null)
+    for (const [ecosystem, present] of Object.entries(structure.decides))
+      if (present) found.add(ecosystem);
+      else found.delete(ecosystem);
   return {
     sha256: hash.digest("hex"),
     bytes: size,
     kind: asar ? "asar" : "binary",
     ecosystems: asar ? ["npm"] : [...found].sort(),
+    container: structure?.summary ?? null,
   };
+}
+
+const GO_SECTIONS = { elf: ".go.buildinfo", macho: "__go_buildinfo" };
+const RUST_SECTIONS = { elf: ".dep-v0", pe: ".dep-v0", macho: "__dep_v0" };
+
+/**
+ * What the executable structure says about Go and Rust: `decides` maps an ecosystem to
+ * true / false only where the structure is conclusive (see the header); `summary` is the
+ * container format, packer, or why the structure could not be read.
+ */
+function containerStructure(path) {
+  const exe = withSource(path, readExecutable);
+  if (!exe.ok) return { decides: {}, summary: { error: exe.error } };
+  const { format, packer, images } = exe.value;
+  const summary = { format, packer };
+  if (packer !== null) return { decides: {}, summary };
+  const decides = {};
+  const sectioned = images.every((im) => im.sections.length > 0);
+  if (!sectioned) return { decides, summary };
+  const has = (table) =>
+    images.some(
+      (im) =>
+        table[im.format] !== undefined &&
+        findSections({ images: [im] }, table[im.format]).length > 0,
+    );
+  if (format !== "pe") decides.golang = has(GO_SECTIONS);
+  decides.cargo = has(RUST_SECTIONS);
+  return { decides, summary };
 }
 
 const BINARY_ADAPTERS = {
@@ -86,11 +129,16 @@ function absorb(scan, part) {
   scan.calls.push(...(part.calls ?? []));
 }
 
-function scanBinary(artifact, ecosystems) {
+function scanBinary(artifact, ecosystems, container) {
+  if (container?.packer)
+    return err(
+      "unsupported-artifact",
+      `${container.packer.toUpperCase()}-packed ${container.format} executable: its sections are compressed and are not unpacked (unpack it first, e.g. upx -d)`,
+    );
   if (ecosystems.length === 0)
     return err(
       "unsupported-artifact",
-      "no ASAR header, Go build information, cargo-auditable section, PyInstaller cookie or .NET assembly found",
+      `no ASAR header, Go build information, cargo-auditable section, PyInstaller cookie or .NET assembly found${container?.error ? ` (container: ${container.error.tag}: ${container.error.message})` : ""}`,
     );
   const scan = emptyScan(artifact, ecosystems);
   const failures = [];
@@ -154,7 +202,8 @@ export function scanArtifact(path) {
     bytes: print.bytes,
     kind: print.kind,
   };
-  if (print.kind !== "asar") return scanBinary(artifact, print.ecosystems);
+  if (print.kind !== "asar")
+    return scanBinary(artifact, print.ecosystems, print.container);
   const tree = asarTree(path);
   if (!tree.ok) return tree;
   const scan = emptyScan(artifact, ["npm"]);

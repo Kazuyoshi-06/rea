@@ -1,6 +1,6 @@
 // File reads shared by detection, adapters and evidence: bounded, positional, no whole-file loads.
 import { createHash } from "node:crypto";
-import { closeSync, openSync, readdirSync, readSync } from "node:fs";
+import { closeSync, fstatSync, openSync, readdirSync, readSync } from "node:fs";
 import { join } from "node:path";
 
 const CHUNK = 1 << 20;
@@ -50,6 +50,50 @@ export function readRange(path, offset, length) {
     return buffer;
   } finally {
     closeSync(fd);
+  }
+}
+
+/**
+ * Positional reader over one open file. `size` comes from fstat of the same descriptor, and
+ * every read is checked against it before any allocation: a header that announces an offset or
+ * a length past the end of the file yields null, never a large buffer. Call close() when done.
+ */
+export function openSource(path) {
+  const fd = openSync(path, "r");
+  const size = fstatSync(fd).size;
+  return {
+    path,
+    size,
+    /** Exactly `length` bytes at `offset`, or null when the range is not inside the file. */
+    read(offset, length) {
+      if (
+        !Number.isSafeInteger(offset) ||
+        !Number.isSafeInteger(length) ||
+        offset < 0 ||
+        length < 0 ||
+        offset + length > size
+      )
+        return null;
+      const buffer = Buffer.alloc(length);
+      let done = 0;
+      while (done < length) {
+        const read = readSync(fd, buffer, done, length - done, offset + done);
+        if (read === 0) return null;
+        done += read;
+      }
+      return buffer;
+    },
+    close: () => closeSync(fd),
+  };
+}
+
+/** Run fn(source) with a source open on `path`; the descriptor is always closed. */
+export function withSource(path, fn) {
+  const source = openSource(path);
+  try {
+    return fn(source);
+  } finally {
+    source.close();
   }
 }
 

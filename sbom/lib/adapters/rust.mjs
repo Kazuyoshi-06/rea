@@ -10,7 +10,7 @@ import { readRange, sha256 } from "../files.mjs";
 import { makeComponent, makeUnknown } from "../model.mjs";
 import { cargoPurl } from "../purl.mjs";
 import { err, ok } from "../result.mjs";
-import { readCargoAuditable } from "../rea.mjs";
+import { readCargoAuditable } from "../readers/cargoauditable.mjs";
 
 export const LIMITATIONS = [
   "cargo: cargo-auditable never records [dev-dependencies] (e.g. itoa in rust-vuln is absent); they are not linked into release binaries, so nothing is lost for the shipped artifact, but their absence is not observable evidence.",
@@ -41,7 +41,7 @@ function packageEntry(pkg, evidence) {
       ecosystem: "cargo",
       name: pkg.name,
       version: pkg.version,
-      source: "rea:inspect-rust-binary",
+      source: "cargo-auditable",
       evidence: ev,
       noPurl:
         pkg.source === "crates.io"
@@ -110,8 +110,9 @@ export function scanRust(artifact, read = readCargoAuditable) {
   const facts = read(artifact.path);
   if (!facts.ok) return facts;
   const value = facts.value;
-  if (value.artifactSha256 !== null && value.artifactSha256 !== artifact.sha256)
-    return err("artifact-changed", "artifact sha256 changed during the scan");
+  // The reader reopens the file after the fingerprint pass: a size change means it changed.
+  if (value.artifactBytes !== artifact.bytes)
+    return err("artifact-changed", "artifact size changed during the scan");
   const { offset, bytes } = value.section;
   const section =
     Number.isSafeInteger(offset) && Number.isSafeInteger(bytes)

@@ -1,5 +1,6 @@
-// Go and Rust adapters on REA reports recorded by S1 (baseline/raw) and on synthetic facts.
-// No REA process runs here; corpus.test.mjs covers the live REA path.
+// Go and Rust adapters on REA reports recorded by S1 (baseline/raw, parsed by the oracle module)
+// and on synthetic facts. No REA process runs here: the adapters are fed facts, whichever reader
+// produced them; corpus.test.mjs covers the in-house readers end to end.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -10,7 +11,7 @@ import { rustScanFromFacts } from "../lib/adapters/rust.mjs";
 import {
   parseCargoAuditableReport,
   parseGoBuildInfoReport,
-} from "../lib/rea.mjs";
+} from "../oracle/rea.mjs";
 import { SBOM, readTruth } from "./support.mjs";
 
 const recorded = (id) =>

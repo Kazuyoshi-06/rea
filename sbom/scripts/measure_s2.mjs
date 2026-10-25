@@ -9,7 +9,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { reaInvocation } from "../lib/rea.mjs";
+import { reaInvocation } from "../oracle/rea.mjs";
 import { S2_FIXTURES, SCAN_BIN, fixturePath } from "../test/support.mjs";
 
 const SBOM = join(dirname(fileURLToPath(import.meta.url)), "..");

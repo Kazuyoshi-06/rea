@@ -11,7 +11,7 @@ import { readRange, sha256 } from "../files.mjs";
 import { makeComponent, makeUnknown } from "../model.mjs";
 import { golangPurl } from "../purl.mjs";
 import { err, ok } from "../result.mjs";
-import { readGoBuildInfo } from "../rea.mjs";
+import { readGoBuildInfo } from "../readers/gobuildinfo.mjs";
 
 const DEVEL = "(devel)";
 const hasVersion = (v) => typeof v === "string" && v !== "" && v !== DEVEL;
@@ -39,7 +39,7 @@ function dependency(dep, evidence) {
       ecosystem: "golang",
       name: target.path,
       version: target.version,
-      source: "rea:inspect-go-binary",
+      source: "go-buildinfo",
       evidence: ev,
     }),
   };
@@ -61,7 +61,7 @@ function stdlib(goVersion, evidence) {
       ecosystem: "golang",
       name: "stdlib",
       version: match[1],
-      source: "rea:inspect-go-binary",
+      source: "go-buildinfo",
       role: "language-runtime",
       evidence: { ...evidence, goVersion },
     }),
@@ -73,7 +73,9 @@ function limitationsOf(facts) {
     "golang: build information lists linked modules only; it carries no dependency graph, so none is exported.",
   ];
   if (!facts.complete)
-    out.push("golang: REA reported the module metadata as incomplete.");
+    out.push(
+      "golang: the module information is incomplete (sentinels missing or misplaced); no module was read.",
+    );
   const other = facts.unparsedLines.filter((l) => !/^(dep|=>)\t/.test(l));
   if (other.length > 0)
     out.push(
@@ -141,8 +143,9 @@ export function scanGo(artifact, read = readGoBuildInfo) {
   const facts = read(artifact.path);
   if (!facts.ok) return facts;
   const value = facts.value;
-  if (value.artifactSha256 !== null && value.artifactSha256 !== artifact.sha256)
-    return err("artifact-changed", "artifact sha256 changed during the scan");
+  // The reader reopens the file after the fingerprint pass: a size change means it changed.
+  if (value.artifactBytes !== artifact.bytes)
+    return err("artifact-changed", "artifact size changed during the scan");
   const loc = value.moduleLocation;
   const bytes = loc ? readRange(artifact.path, loc.offset, loc.bytes) : null;
   return ok({

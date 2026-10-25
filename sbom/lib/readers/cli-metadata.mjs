@@ -9,12 +9,12 @@
 //
 // Attribute types are resolved through MemberRef → TypeRef (namespace + name); the constructor
 // signature must be (string). Anything else is reported as absent, never guessed.
-import { readRange, sha256 } from "../files.mjs";
+import { readRange, sha256, withSource } from "../files.mjs";
 import { err, ok } from "../result.mjs";
+import { readExecutable } from "./executable.mjs";
 
 // Resource guards, not format limits.
 const MAX_METADATA_BYTES = 256 << 20;
-const MAX_SECTIONS = 96;
 
 const SERIALIZED_ATTRIBUTES = {
   "System.Reflection.AssemblyInformationalVersionAttribute":
@@ -125,51 +125,33 @@ function rvaToOffset(sections, rva) {
   return null;
 }
 
-/** PE headers → {sections, clr: {rva, size} | null}. Err "not-pe" when this is not a PE file. */
+/**
+ * PE headers → {sections, clr: {rva, size} | null}. Err "not-pe" when this is not a PE file.
+ * The container structure is owned by executable.mjs; this keeps the CLI view of it.
+ */
 function readPe(path) {
-  const dos = readRange(path, 0, 64);
-  if (dos === null || dos[0] !== 0x4d || dos[1] !== 0x5a)
-    return err("not-pe", "no MZ header");
-  const peOffset = dos.readUInt32LE(0x3c);
-  const head = read(path, peOffset, 24, "PE header");
-  if (!head.ok) return err("not-pe", head.error.message);
-  const h = head.value;
-  if (h.readUInt32LE(0) !== 0x00004550) return err("not-pe", "no PE signature");
-  const sectionCount = h.readUInt16LE(6);
-  const optionalSize = h.readUInt16LE(20);
-  if (sectionCount > MAX_SECTIONS)
-    return malformed(`${sectionCount} PE sections`);
-  const rest = read(
-    path,
-    peOffset + 24,
-    optionalSize + sectionCount * 40,
-    "PE optional header and sections",
-  );
-  if (!rest.ok) return rest;
-  const optional = rest.value.subarray(0, optionalSize);
-  const magic = optional.length >= 2 ? optional.readUInt16LE(0) : 0;
-  const dirBase = magic === 0x10b ? 96 : magic === 0x20b ? 112 : null;
-  if (dirBase === null) return malformed(`optional header magic ${magic}`);
-  const sections = [];
-  for (let i = 0; i < sectionCount; i += 1) {
-    const s = rest.value.subarray(
-      optionalSize + i * 40,
-      optionalSize + i * 40 + 40,
-    );
-    sections.push({
-      virtualSize: s.readUInt32LE(8),
-      virtualAddress: s.readUInt32LE(12),
-      rawSize: s.readUInt32LE(16),
-      rawPointer: s.readUInt32LE(20),
-    });
-  }
-  const dirCount =
-    optional.length >= dirBase ? optional.readUInt32LE(dirBase - 4) : 0;
-  const clrEntry = dirBase + 14 * 8;
-  const hasClr = dirCount > 14 && optional.length >= clrEntry + 8;
-  const rva = hasClr ? optional.readUInt32LE(clrEntry) : 0;
-  const size = hasClr ? optional.readUInt32LE(clrEntry + 4) : 0;
-  return ok({ sections, clr: rva === 0 ? null : { rva, size } });
+  const exe = withSource(path, readExecutable);
+  if (!exe.ok)
+    return exe.error.tag === "not-executable"
+      ? err("not-pe", exe.error.message)
+      : malformed(exe.error.message);
+  if (exe.value.format !== "pe")
+    return err("not-pe", `${exe.value.format} file, not PE`);
+  const image = exe.value.images[0];
+  const magic = image.pe.optionalMagic;
+  if (magic !== 0x10b && magic !== 0x20b)
+    return malformed(`optional header magic ${magic}`);
+  const sections = image.sections.map((s) => ({
+    virtualSize: s.virtualSize,
+    virtualAddress: s.address,
+    rawSize: s.rawSize,
+    rawPointer: s.offset,
+  }));
+  const clr = image.pe.dataDirectories[14];
+  return ok({
+    sections,
+    clr: clr === undefined || clr.rva === 0 ? null : clr,
+  });
 }
 
 function parseStreams(root) {
